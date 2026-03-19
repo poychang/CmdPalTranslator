@@ -1,0 +1,18 @@
+﻿<Project Sdk="MSTest.Sdk/4.0.2">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="..\CmdPalTranslator\Models\LanguageCatalog.cs" Link="Shared\Models\LanguageCatalog.cs" />
+        <Compile Include="..\CmdPalTranslator\Models\TranslationModels.cs" Link="Shared\Models\TranslationModels.cs" />
+        <Compile Include="..\CmdPalTranslator\Providers\ITranslatorProvider.cs" Link="Shared\Providers\ITranslatorProvider.cs" />
+        <Compile Include="..\CmdPalTranslator\Providers\BingTranslatorProvider.cs" Link="Shared\Providers\BingTranslatorProvider.cs" />
+        <Compile Include="..\CmdPalTranslator\Providers\GoogleTranslatorProvider.cs" Link="Shared\Providers\GoogleTranslatorProvider.cs" />
+    </ItemGroup>
+
+</Project>
