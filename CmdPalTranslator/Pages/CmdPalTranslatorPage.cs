@@ -2,24 +2,187 @@
 // The Microsoft Corporation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using CmdPalTranslator.Commands;
+using CmdPalTranslator.Filters;
+using CmdPalTranslator.Models;
+using CmdPalTranslator.Pages;
+using CmdPalTranslator.Providers;
+using CmdPalTranslator.Services;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CmdPalTranslator;
 
-internal sealed partial class CmdPalTranslatorPage : ListPage
+internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 {
-    public CmdPalTranslatorPage()
+    private readonly TranslatorService _translatorService;
+    private readonly LanguageReferencePage _languageReferencePage;
+
+    public CmdPalTranslatorPage(TranslatorService translatorService, LanguageReferencePage languageReferencePage)
     {
+        _translatorService = translatorService;
+        _languageReferencePage = languageReferencePage;
+        _languageReferencePage = languageReferencePage;
+
         Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
         Title = "Translator";
         Name = "Open";
+        ShowDetails = true;
+
+        TranslatorProviderFilters filters = new(_translatorService);
+        filters.PropChanged += (_, _) => RaiseItemsChanged();
+        Filters = filters;
+    }
+
+    public override void UpdateSearchText(string oldSearch, string newSearch)
+    {
+        RaiseItemsChanged();
     }
 
     public override IListItem[] GetItems()
     {
-        return [
-            new ListItem(new NoOpCommand()) { Title = "TODO: Implement your extension here" }
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            return BuildHelpItems();
+        }
+
+        ParsedTranslationQuery query = _translatorService.ParseQuery(SearchText);
+        ITranslatorProvider provider = _translatorService.GetProvider(GetSelectedProviderId());
+
+        try
+        {
+            TranslationResponse translation = provider.Translate(query, default);
+            return translation.Entries
+                .Select(entry => BuildTranslationItem(entry, translation, query))
+                .Cast<IListItem>()
+                .ToArray();
+        }
+        catch (Exception ex)
+        {
+            return
+            [
+                new ListItem(new LocalNoOpCommand())
+                {
+                    Title = $"{provider.DisplayName} translation failed",
+                    Subtitle = ex.Message,
+                    Details = new Details
+                    {
+                        Title = $"{provider.DisplayName} translation failed",
+                        Body = $"Query: {query.SourceText}\nTarget: {query.TargetLanguage.DisplayName}\n\n{ex}",
+                    },
+                },
+            ];
+        }
+    }
+
+    private IListItem[] BuildHelpItems()
+    {
+        return
+        [
+            new ListItem(new LocalNoOpCommand())
+            {
+                Title = "Type text to translate",
+                Subtitle = "Use the provider filter above to switch between Bing and Google.",
+                Icon = new IconInfo("\uE721"),
+            },
+            new ListItem(new LocalCopyTextCommand("hello world -> zht", "Copied sample query"))
+            {
+                Title = "Specify a target language",
+                Subtitle = "Append `-> languageCode`, for example `hello world -> zht`.",
+                Icon = new IconInfo("\uE72A"),
+                Details = new Details
+                {
+                    Title = "Target Language Syntax",
+                    Body = "Use `text -> languageCode` when you want to override the default target language.\nExample: `open source software -> ja`",
+                },
+            },
+            new ListItem(_languageReferencePage)
+            {
+                Title = "Browse supported languages",
+                Subtitle = "Open the language reference page and copy a language code.",
+            },
+            new ListItem(new LocalNoOpCommand())
+            {
+                Title = "Default target language",
+                Subtitle = $"{LanguageCatalog.DefaultTarget.DisplayName} ({LanguageCatalog.DefaultTarget.Id})",
+            },
+
+            // Test commands to show the Command Palette's capabilities
+            new ListItem(new ShowMessageCommand()),
+            new ListItem(new OpenUrlCommand("https://learn.microsoft.com/windows/powertoys/command-palette/adding-commands"))
+            {
+                Title = "Open the Command Palette documentation",
+            },
+            new ListItem(new NoOpCommand())
+            {
+                Title = "Do nothing command"
+            },
         ];
+    }
+
+    private ListItem BuildTranslationItem(TranslationEntry entry, TranslationResponse response, ParsedTranslationQuery query)
+    {
+        string subtitle = string.IsNullOrWhiteSpace(entry.Subtitle)
+            ? response.ProviderDisplayName
+            : $"{entry.Subtitle} · {response.ProviderDisplayName}";
+
+        List<CommandContextItem> moreCommands =
+        [
+            new CommandContextItem(new LocalCopyTextCommand(query.SourceText, "Copied source text"))
+            {
+                Title = "Copy source text",
+            },
+        ];
+
+        if (response.WebUri is not null)
+        {
+            moreCommands.Add(new CommandContextItem(new OpenUrlCommand(response.WebUri.ToString()))
+            {
+                Title = $"Open in {response.ProviderDisplayName}",
+            });
+        }
+
+        return new ListItem(new LocalCopyTextCommand(entry.CopyText, "Copied translation"))
+        {
+            Title = entry.Title,
+            Subtitle = subtitle,
+            MoreCommands = moreCommands.ToArray(),
+            Details = new Details
+            {
+                Title = entry.Title,
+                Body = entry.Description ?? $"{entry.Title}\n{query.SourceText}",
+                Metadata =
+                [
+                    new DetailsElement()
+                    {
+                        Key = "Provider",
+                        Data = new DetailsLink() { Text = response.ProviderDisplayName },
+                    },
+                    new DetailsElement()
+                    {
+                        Key = "Language Pair",
+                        Data = new DetailsLink() { Text = $"{LanguageCatalog.ToDisplayName(response.SourceLanguage)} -> {LanguageCatalog.ToDisplayName(response.TargetLanguage)}" },
+                    },
+                    new DetailsElement()
+                    {
+                        Key = "Category",
+                        Data = new DetailsLink() { Text = entry.Category ?? "Translation" },
+                    },
+                ],
+            },
+        };
+    }
+
+    private string GetSelectedProviderId()
+    {
+        if (Filters is TranslatorProviderFilters providerFilters && !string.IsNullOrWhiteSpace(providerFilters.CurrentFilterId))
+        {
+            return providerFilters.CurrentFilterId;
+        }
+
+        return TranslatorService.DefaultProviderId;
     }
 }
