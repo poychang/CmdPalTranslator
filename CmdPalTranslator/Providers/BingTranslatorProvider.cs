@@ -210,5 +210,4 @@ namespace CmdPalTranslator.Providers
             public string? To { get; set; }
         }
     }
-
 }

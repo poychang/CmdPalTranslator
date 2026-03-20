@@ -61,7 +61,7 @@ namespace CmdPalTranslator.Providers
                 CopyText: translatedText,
                 Description: $"{translatedText}\n{query.SourceText}",
                 Category: "Translation"),
-        ];
+            ];
 
             foreach (GoogleDictionaryEntry dictionaryEntry in payload.Dict ?? [])
             {
@@ -139,5 +139,4 @@ namespace CmdPalTranslator.Providers
             public string[]? Terms { get; set; }
         }
     }
-
 }

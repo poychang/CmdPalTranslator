@@ -31,5 +31,4 @@ namespace CmdPalTranslator.Pages
                 .ToArray<IListItem>();
         }
     }
-
 }

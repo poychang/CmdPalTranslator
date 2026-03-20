@@ -109,17 +109,18 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                 Title = "Default target language",
                 Subtitle = $"{LanguageCatalog.DefaultTarget.DisplayName} ({LanguageCatalog.DefaultTarget.Id})",
             },
-
+            // ------------------------------------------------------------
             // Test commands to show the Command Palette's capabilities
-            new ListItem(new ShowMessageCommand()),
-            new ListItem(new OpenUrlCommand("https://learn.microsoft.com/windows/powertoys/command-palette/adding-commands"))
-            {
-                Title = "Open the Command Palette documentation",
-            },
-            new ListItem(new NoOpCommand())
-            {
-                Title = "Do nothing command"
-            },
+            // ------------------------------------------------------------
+            //new ListItem(new ShowMessageCommand()),
+            //new ListItem(new OpenUrlCommand("https://learn.microsoft.com/windows/powertoys/command-palette/adding-commands"))
+            //{
+            //    Title = "Open the Command Palette documentation",
+            //},
+            //new ListItem(new NoOpCommand())
+            //{
+            //    Title = "Do nothing command"
+            //},
         ];
     }
 

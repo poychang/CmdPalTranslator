@@ -24,9 +24,9 @@ public partial class CmdPalTranslatorCommandsProvider : CommandProvider
 
         DisplayName = "Translator";
         Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
-        
+
         _commands = [
-                        new CommandItem(_translatorPage)
+            new CommandItem(new CmdPalTranslatorPage(_translatorService))
             {
                 Title = "Translator",
                 Subtitle = "即時翻譯文字，並用篩選器切換 Bing、Google",
