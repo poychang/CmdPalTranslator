@@ -11,15 +11,11 @@ using System.Threading;
 
 namespace CmdPalTranslator.Providers
 {
-    internal sealed class GoogleTranslatorProvider : ITranslatorProvider
+    internal sealed partial class GoogleTranslatorProvider : ITranslatorProvider
     {
-        private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
         private readonly HttpClient _httpClient;
 
-        public GoogleTranslatorProvider()
-            : this(CreateHttpClient())
-        {
-        }
+        public GoogleTranslatorProvider() : this(CreateHttpClient()) { }
 
         internal GoogleTranslatorProvider(HttpClient httpClient)
         {
@@ -46,7 +42,7 @@ namespace CmdPalTranslator.Providers
 
             string content = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             Debug.WriteLine($"Translate response: {content}");
-            GoogleTranslatePayload payload = JsonSerializer.Deserialize<GoogleTranslatePayload>(content, JsonOptions)
+            GoogleTranslatePayload payload = JsonSerializer.Deserialize<GoogleTranslatePayload>(content, GoogleJsonContext.Default.GoogleTranslatePayload)
                 ?? throw new InvalidOperationException("Google translation returned an empty response.");
 
             string translatedText = string.Concat(payload.Sentences?.Select(sentence => sentence.Trans) ?? []);
@@ -140,5 +136,13 @@ namespace CmdPalTranslator.Providers
             [JsonPropertyName("terms")]
             public string[]? Terms { get; set; }
         }
+
+        // 使用 NativeAOT 建置應用程式時，會需要標註序列化會涉及的型別，讓應用程式可以正確序列化和反序列化這些型別。
+        [JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
+        [JsonSerializable(typeof(GoogleTranslatePayload))]
+        [JsonSerializable(typeof(GoogleTranslatePayload[]))]
+        [JsonSerializable(typeof(GoogleSentence))]
+        [JsonSerializable(typeof(GoogleDictionaryEntry))]
+        private partial class GoogleJsonContext : JsonSerializerContext { }
     }
 }

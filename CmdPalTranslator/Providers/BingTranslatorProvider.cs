@@ -14,7 +14,6 @@ namespace CmdPalTranslator.Providers
 {
     internal sealed partial class BingTranslatorProvider : ITranslatorProvider
     {
-        private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
         private static readonly Regex AbuseRegex = MyAbuseRegex();
         private static readonly Regex IgRegex = MyIgRegex();
         private static readonly Regex IidRegex = MyIidRegex();
@@ -22,13 +21,6 @@ namespace CmdPalTranslator.Providers
         private readonly object _authLock = new();
         private BingAuth? _cachedAuth;
         private DateTimeOffset _authExpiresAt = DateTimeOffset.MinValue;
-
-        [GeneratedRegex(@"params_AbusePreventionHelper\s*=\s*\[(?<key>\d+),""(?<token>[^""]+)""(?:,\d+)?\]", RegexOptions.Compiled)]
-        private static partial Regex MyAbuseRegex();
-        [GeneratedRegex(@"IG:""(?<ig>[^""]+)""", RegexOptions.Compiled)]
-        private static partial Regex MyIgRegex();
-        [GeneratedRegex(@"data-iid=""(?<iid>[^""]+)""", RegexOptions.Compiled)]
-        private static partial Regex MyIidRegex();
 
         public BingTranslatorProvider() : this(CreateHttpClient()) { }
 
@@ -95,7 +87,7 @@ namespace CmdPalTranslator.Providers
 
             string content = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
             Debug.WriteLine($"Translate response: {content}");
-            BingTranslatePayload[] payload = JsonSerializer.Deserialize<BingTranslatePayload[]>(content, JsonOptions)
+            BingTranslatePayload[] payload = JsonSerializer.Deserialize<BingTranslatePayload[]>(content, BingJsonContext.Default.BingTranslatePayloadArray)
                 ?? throw new InvalidOperationException("Bing translation returned an empty response.");
 
             BingTranslatePayload first = payload.FirstOrDefault()
@@ -215,5 +207,21 @@ namespace CmdPalTranslator.Providers
             [JsonPropertyName("to")]
             public string? To { get; set; }
         }
+
+        // 使用正則表達式從 Bing 翻譯頁面 HTML 中提取認證相關的資訊，包括 token、key、IG 和 IID。
+        [GeneratedRegex(@"params_AbusePreventionHelper\s*=\s*\[(?<key>\d+),""(?<token>[^""]+)""(?:,\d+)?\]", RegexOptions.Compiled)]
+        private static partial Regex MyAbuseRegex();
+        [GeneratedRegex(@"IG:""(?<ig>[^""]+)""", RegexOptions.Compiled)]
+        private static partial Regex MyIgRegex();
+        [GeneratedRegex(@"data-iid=""(?<iid>[^""]+)""", RegexOptions.Compiled)]
+        private static partial Regex MyIidRegex();
+
+        // 使用 NativeAOT 建置應用程式時，會需要標註序列化會涉及的型別，讓應用程式可以正確序列化和反序列化這些型別。
+        [JsonSourceGenerationOptions(JsonSerializerDefaults.Web)]
+        [JsonSerializable(typeof(BingTranslatePayload))]
+        [JsonSerializable(typeof(BingTranslatePayload[]))]
+        [JsonSerializable(typeof(BingDetectedLanguage))]
+        [JsonSerializable(typeof(BingTranslation))]
+        private partial class BingJsonContext : JsonSerializerContext { }
     }
 }
