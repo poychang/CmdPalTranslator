@@ -19,13 +19,10 @@ namespace CmdPalTranslator;
 internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 {
     private readonly TranslatorService _translatorService;
-    private readonly LanguageReferencePage _languageReferencePage;
 
-    public CmdPalTranslatorPage(TranslatorService translatorService, LanguageReferencePage languageReferencePage)
+    public CmdPalTranslatorPage(TranslatorService translatorService)
     {
         _translatorService = translatorService;
-        _languageReferencePage = languageReferencePage;
-        _languageReferencePage = languageReferencePage;
 
         Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
         Title = "Translator";
@@ -78,7 +75,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         }
     }
 
-    private IListItem[] BuildHelpItems()
+    private static IListItem[] BuildHelpItems()
     {
         return
         [
@@ -99,15 +96,17 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                     Body = "Use `text -> languageCode` when you want to override the default target language.\nExample: `open source software -> ja`",
                 },
             },
-            new ListItem(_languageReferencePage)
+            new ListItem(new LanguageReferencePage())
             {
                 Title = "Browse supported languages",
                 Subtitle = "Open the language reference page and copy a language code.",
+                Icon = new IconInfo("\uE909"),
             },
             new ListItem(new LocalNoOpCommand())
             {
                 Title = "Default target language",
                 Subtitle = $"{LanguageCatalog.DefaultTarget.DisplayName} ({LanguageCatalog.DefaultTarget.Id})",
+                Icon = new IconInfo("\uE909"),
             },
             // ------------------------------------------------------------
             // Test commands to show the Command Palette's capabilities
@@ -124,7 +123,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         ];
     }
 
-    private ListItem BuildTranslationItem(TranslationEntry entry, TranslationResponse response, ParsedTranslationQuery query)
+    private static ListItem BuildTranslationItem(TranslationEntry entry, TranslationResponse response, ParsedTranslationQuery query)
     {
         string subtitle = string.IsNullOrWhiteSpace(entry.Subtitle)
             ? response.ProviderDisplayName
