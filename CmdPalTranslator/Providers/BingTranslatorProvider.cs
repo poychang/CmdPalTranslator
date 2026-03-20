@@ -1,6 +1,7 @@
 ﻿using CmdPalTranslator.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -11,21 +12,25 @@ using System.Threading;
 
 namespace CmdPalTranslator.Providers
 {
-    internal sealed class BingTranslatorProvider : ITranslatorProvider
+    internal sealed partial class BingTranslatorProvider : ITranslatorProvider
     {
         private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
-        private static readonly Regex AbuseRegex = new(@"params_AbusePreventionHelper\s*=\s*\[(?<key>\d+),""(?<token>[^""]+)""(?:,\d+)?\]", RegexOptions.Compiled);
-        private static readonly Regex IgRegex = new(@"IG:""(?<ig>[^""]+)""", RegexOptions.Compiled);
-        private static readonly Regex IidRegex = new(@"data-iid=""(?<iid>[^""]+)""", RegexOptions.Compiled);
+        private static readonly Regex AbuseRegex = MyAbuseRegex();
+        private static readonly Regex IgRegex = MyIgRegex();
+        private static readonly Regex IidRegex = MyIidRegex();
         private readonly HttpClient _httpClient;
         private readonly object _authLock = new();
         private BingAuth? _cachedAuth;
         private DateTimeOffset _authExpiresAt = DateTimeOffset.MinValue;
 
-        public BingTranslatorProvider()
-            : this(CreateHttpClient())
-        {
-        }
+        [GeneratedRegex(@"params_AbusePreventionHelper\s*=\s*\[(?<key>\d+),""(?<token>[^""]+)""(?:,\d+)?\]", RegexOptions.Compiled)]
+        private static partial Regex MyAbuseRegex();
+        [GeneratedRegex(@"IG:""(?<ig>[^""]+)""", RegexOptions.Compiled)]
+        private static partial Regex MyIgRegex();
+        [GeneratedRegex(@"data-iid=""(?<iid>[^""]+)""", RegexOptions.Compiled)]
+        private static partial Regex MyIidRegex();
+
+        public BingTranslatorProvider() : this(CreateHttpClient()) { }
 
         internal BingTranslatorProvider(HttpClient httpClient)
         {
@@ -89,6 +94,7 @@ namespace CmdPalTranslator.Providers
             response.EnsureSuccessStatusCode();
 
             string content = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
+            Debug.WriteLine($"Translate response: {content}");
             BingTranslatePayload[] payload = JsonSerializer.Deserialize<BingTranslatePayload[]>(content, JsonOptions)
                 ?? throw new InvalidOperationException("Bing translation returned an empty response.");
 

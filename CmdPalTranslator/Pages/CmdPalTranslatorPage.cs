@@ -52,10 +52,9 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         try
         {
             TranslationResponse translation = provider.Translate(query, default);
-            return translation.Entries
+            return [.. translation.Entries
                 .Select(entry => BuildTranslationItem(entry, translation, query))
-                .Cast<IListItem>()
-                .ToArray();
+                .Cast<IListItem>()];
         }
         catch (Exception ex)
         {
@@ -149,7 +148,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         {
             Title = entry.Title,
             Subtitle = subtitle,
-            MoreCommands = moreCommands.ToArray(),
+            MoreCommands = [.. moreCommands],
             Details = new Details
             {
                 Title = entry.Title,

@@ -17,7 +17,7 @@ namespace CmdPalTranslator.Pages
 
         public override IListItem[] GetItems()
         {
-            return LanguageCatalog.All
+            return [.. LanguageCatalog.All
                 .Select(language => new ListItem(new LocalCopyTextCommand(language.Id, $"Copied `{language.Id}`"))
                 {
                     Title = language.DisplayName,
@@ -27,8 +27,7 @@ namespace CmdPalTranslator.Pages
                         Title = $"{language.DisplayName} ({language.Id})",
                         Body = $"Use `{language.Id}` as the target language suffix.\nExample query: `hello world -> {language.Id}`",
                     },
-                })
-                .ToArray<IListItem>();
+                })];
         }
     }
 }

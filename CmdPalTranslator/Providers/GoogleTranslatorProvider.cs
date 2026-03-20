@@ -1,6 +1,7 @@
 ﻿using CmdPalTranslator.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -44,6 +45,7 @@ namespace CmdPalTranslator.Providers
             response.EnsureSuccessStatusCode();
 
             string content = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
+            Debug.WriteLine($"Translate response: {content}");
             GoogleTranslatePayload payload = JsonSerializer.Deserialize<GoogleTranslatePayload>(content, JsonOptions)
                 ?? throw new InvalidOperationException("Google translation returned an empty response.");
 
