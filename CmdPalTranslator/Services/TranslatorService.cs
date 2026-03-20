@@ -6,31 +6,35 @@ using System.Linq;
 
 namespace CmdPalTranslator.Services
 {
-    internal sealed class TranslatorService : IDisposable
+    internal sealed partial class TranslatorService : IDisposable
     {
         public const string DefaultProviderId = "bing";
+        private readonly TranslatorSettingsService _settings;
         private readonly IReadOnlyList<ITranslatorProvider> _providers;
-        private readonly IReadOnlyDictionary<string, ITranslatorProvider> _providerMap;
+        private readonly Dictionary<string, ITranslatorProvider> _providerMap;
 
-        public TranslatorService()
+        public TranslatorService(TranslatorSettingsService? settings = null)
         {
+            _settings = settings ?? new TranslatorSettingsService();
             _providers =
             [
                 new BingTranslatorProvider(),
-            new GoogleTranslatorProvider(),
-        ];
+                new GoogleTranslatorProvider(),
+            ];
 
             _providerMap = _providers.ToDictionary(provider => provider.Id, StringComparer.OrdinalIgnoreCase);
         }
 
         public IReadOnlyList<ITranslatorProvider> Providers => _providers;
 
+        public TranslatorSettingsService Settings => _settings;
+
         public ParsedTranslationQuery ParseQuery(string searchText)
         {
             string trimmed = searchText.Trim();
             if (string.IsNullOrWhiteSpace(trimmed))
             {
-                return new ParsedTranslationQuery(string.Empty, LanguageCatalog.AutoDetect, LanguageCatalog.DefaultTarget, false);
+                return new ParsedTranslationQuery(string.Empty, LanguageCatalog.AutoDetect, _settings.TargetLanguage, false);
             }
 
             int splitIndex = trimmed.LastIndexOf("->", StringComparison.Ordinal);
@@ -44,7 +48,7 @@ namespace CmdPalTranslator.Services
                 }
             }
 
-            return new ParsedTranslationQuery(trimmed, LanguageCatalog.AutoDetect, LanguageCatalog.DefaultTarget, false);
+            return new ParsedTranslationQuery(trimmed, LanguageCatalog.AutoDetect, _settings.TargetLanguage, false);
         }
 
         public ITranslatorProvider GetProvider(string? providerId)
@@ -65,5 +69,4 @@ namespace CmdPalTranslator.Services
             }
         }
     }
-
 }

@@ -19,10 +19,13 @@ namespace CmdPalTranslator;
 internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 {
     private readonly TranslatorService _translatorService;
+    private readonly TranslatorSettingsPage _settingsPage;
 
     public CmdPalTranslatorPage(TranslatorService translatorService)
     {
         _translatorService = translatorService;
+        _settingsPage = new TranslatorSettingsPage(_translatorService.Settings);
+        _translatorService.Settings.SettingsChanged += (_, _) => RaiseItemsChanged();
 
         Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
         Title = "Translator";
@@ -74,8 +77,10 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         }
     }
 
-    private static IListItem[] BuildHelpItems()
+    private IListItem[] BuildHelpItems()
     {
+        LanguageOption defaultTarget = _translatorService.Settings.TargetLanguage;
+
         return
         [
             new ListItem(new LocalNoOpCommand())
@@ -88,7 +93,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
             {
                 Title = "Specify a target language",
                 Subtitle = "Append `-> languageCode`, for example `hello world -> zht`.",
-                Icon = new IconInfo("\uE72A"),
+                Icon = new IconInfo("\uE946"),
                 Details = new Details
                 {
                     Title = "Target Language Syntax",
@@ -99,13 +104,18 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
             {
                 Title = "Browse supported languages",
                 Subtitle = "Open the language reference page and copy a language code.",
-                Icon = new IconInfo("\uE909"),
+                Icon = new IconInfo("\uE946"),
             },
-            new ListItem(new LocalNoOpCommand())
+            new ListItem(_settingsPage)
             {
-                Title = "Default target language",
-                Subtitle = $"{LanguageCatalog.DefaultTarget.DisplayName} ({LanguageCatalog.DefaultTarget.Id})",
-                Icon = new IconInfo("\uE909"),
+                Title = "Target language",
+                Subtitle = $"{defaultTarget.DisplayName} ({defaultTarget.Id})",
+                Icon = new IconInfo("\uE713"),
+                Details = new Details
+                {
+                    Title = "Target Language",
+                    Body = "Open the settings page to choose the target language used when the query does not include `-> languageCode`.",
+                },
             },
             // ------------------------------------------------------------
             // Test commands to show the Command Palette's capabilities

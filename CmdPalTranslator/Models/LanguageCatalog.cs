@@ -51,7 +51,7 @@ namespace CmdPalTranslator.Models
 
         public static LanguageOption AutoDetect => GetById("auto");
 
-        public static LanguageOption DefaultTarget => GetById("zht");
+        public static LanguageOption BuiltInDefaultTarget => GetById("zht");
 
         public static LanguageOption GetById(string id)
         {

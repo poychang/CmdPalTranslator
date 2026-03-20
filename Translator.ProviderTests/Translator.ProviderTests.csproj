@@ -13,6 +13,8 @@
         <Compile Include="..\CmdPalTranslator\Providers\ITranslatorProvider.cs" Link="Shared\Providers\ITranslatorProvider.cs" />
         <Compile Include="..\CmdPalTranslator\Providers\BingTranslatorProvider.cs" Link="Shared\Providers\BingTranslatorProvider.cs" />
         <Compile Include="..\CmdPalTranslator\Providers\GoogleTranslatorProvider.cs" Link="Shared\Providers\GoogleTranslatorProvider.cs" />
+        <Compile Include="..\CmdPalTranslator\Services\TranslatorSettingsService.cs" Link="Shared\Services\TranslatorSettingsService.cs" />
+        <Compile Include="..\CmdPalTranslator\Services\TranslatorService.cs" Link="Shared\Services\TranslatorService.cs" />
     </ItemGroup>
 
 </Project>
