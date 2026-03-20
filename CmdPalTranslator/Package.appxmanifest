@@ -9,14 +9,14 @@
   IgnorableNamespaces="uap uap3 rescap">
 
   <Identity
-    Name="CmdPalTranslator"
-    Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+    Name="25526PoyChang.TranslatorforCommandPalette"
+    Publisher="CN=DC46547E-28C9-45C1-91CC-5380ACD55B44"
     Version="0.0.1.0" />
   <!-- When you're ready to publish your extension, you'll need to change the
        Publisher= to match your own identity -->
 
   <Properties>
-    <DisplayName>Translator</DisplayName>
+    <DisplayName>Translator for Command Palette</DisplayName>
     <PublisherDisplayName>Poy Chang</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
