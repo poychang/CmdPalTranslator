@@ -19,12 +19,10 @@ namespace CmdPalTranslator;
 internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 {
     private readonly TranslatorService _translatorService;
-    private readonly TranslatorSettingsPage _settingsPage;
 
     public CmdPalTranslatorPage(TranslatorService translatorService)
     {
         _translatorService = translatorService;
-        _settingsPage = new TranslatorSettingsPage(_translatorService.Settings);
         _translatorService.Settings.SettingsChanged += (_, _) => RaiseItemsChanged();
 
         Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
@@ -70,7 +68,24 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                     Details = new Details
                     {
                         Title = $"{provider.DisplayName} translation failed",
-                        Body = $"Query: {query.SourceText}\nTarget: {query.TargetLanguage.DisplayName}\n\n{ex}",
+                        Body = $"Something goes wrong...",
+                        Metadata = [
+                            new DetailsElement()
+                            {
+                                Key = "Query",
+                                Data = new DetailsLink() { Text = query.SourceText },
+                            },
+                            new DetailsElement()
+                            {
+                                Key = "Target",
+                                Data = new DetailsLink() { Text = query.TargetLanguage.DisplayName },
+                            },
+                            new DetailsElement()
+                            {
+                                Key = "Failed Message",
+                                Data = new DetailsLink() { Text = ex.Message },
+                            },
+                        ],
                     },
                 },
             ];
@@ -83,7 +98,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 
         return
         [
-            new ListItem(new LocalNoOpCommand())
+            new ListItem(new NoOpCommand())
             {
                 Title = "Type text to translate",
                 Subtitle = "Use the provider filter above to switch between Bing and Google.",
@@ -97,7 +112,14 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                 Details = new Details
                 {
                     Title = "Target Language Syntax",
-                    Body = "Use `text -> languageCode` when you want to override the default target language.\nExample: `open source software -> ja`",
+                    Body = "Use `text -> languageCode` when you want to override the default target language.",
+                    Metadata = [
+                        new DetailsElement()
+                        {
+                            Key = "Example",
+                            Data = new DetailsLink() { Text = "hello world -> zht" },
+                        },
+                    ],
                 },
             },
             new ListItem(new LanguageReferencePage())
@@ -105,8 +127,20 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                 Title = "Browse supported languages",
                 Subtitle = "Open the language reference page and copy a language code.",
                 Icon = new IconInfo("\uE946"),
+                Details = new Details
+                {
+                    Title = "Supported Language",
+                    Body = "Open the language reference page to see all supported languages and their codes for both Bing and Google translators.",
+                    Metadata = [
+                        new DetailsElement()
+                        {
+                            Key = "Quick List",
+                            Data = new DetailsLink() { Text = string.Join(", ", LanguageCatalog.All.Select(l => l.DisplayName)) },
+                        },
+                    ],
+                },
             },
-            new ListItem(_settingsPage)
+            new ListItem(new TranslatorSettingsPage(_translatorService.Settings))
             {
                 Title = "Target language",
                 Subtitle = $"{defaultTarget.DisplayName} ({defaultTarget.Id})",

@@ -1,6 +1,5 @@
 ﻿using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
-using Windows.ApplicationModel.DataTransfer;
 
 namespace CmdPalTranslator.Commands
 {
@@ -10,10 +9,7 @@ namespace CmdPalTranslator.Commands
 
         public override ICommandResult Invoke()
         {
-            DataPackage package = new();
-            package.SetText(text);
-            Clipboard.SetContent(package);
-            Clipboard.Flush();
+            ClipboardHelper.SetText(text);
 
             return CommandResult.ShowToast(new ToastArgs()
             {

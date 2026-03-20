@@ -46,7 +46,7 @@ namespace CmdPalTranslator.Pages
 
             List<IListItem> items =
             [
-                new ListItem(new LocalNoOpCommand())
+                new ListItem(new NoOpCommand())
                 {
                     Title = "Current target language",
                     Subtitle = $"{currentLanguage.DisplayName} ({currentLanguage.Id})",
@@ -71,20 +71,11 @@ namespace CmdPalTranslator.Pages
                 ? $"{language.Id} · Used when no `-> languageCode` override is specified"
                 : $"{language.Id} · Set as the translation target";
 
-            List<CommandContextItem> moreCommands =
-            [
-                new CommandContextItem(new LocalCopyTextCommand(language.Id, $"Copied `{language.Id}`"))
-                {
-                    Title = "Copy language code",
-                },
-            ];
-
             return new ListItem(new SetTargetLanguageCommand(_settingsService, language))
             {
                 Title = title,
                 Subtitle = subtitle,
                 Icon = new IconInfo(isCurrent ? "\uE73A" : "\uE739"),
-                MoreCommands = [.. moreCommands],
                 Details = new Details
                 {
                     Title = $"{language.DisplayName} ({language.Id})",

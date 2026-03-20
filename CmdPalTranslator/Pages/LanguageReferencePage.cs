@@ -18,14 +18,21 @@ namespace CmdPalTranslator.Pages
         public override IListItem[] GetItems()
         {
             return [.. LanguageCatalog.All
-                .Select(language => new ListItem(new LocalCopyTextCommand(language.Id, $"Copied `{language.Id}`"))
+                .Select(language => new ListItem(new LocalCopyTextCommand($"hello -> {language.Id}", $"Copied `hello -> {language.Id}`"))
                 {
                     Title = language.DisplayName,
                     Subtitle = $"{language.Id} · Example: hello -> {language.Id}",
                     Details = new Details
                     {
                         Title = $"{language.DisplayName} ({language.Id})",
-                        Body = $"Use `{language.Id}` as the target language suffix.\nExample query: `hello world -> {language.Id}`",
+                        Body = $"Use `{language.Id}` as the target language suffix.",
+                        Metadata = [
+                            new DetailsElement()
+                            {
+                                Key = "Example",
+                                Data = new DetailsLink() { Text = $"hello -> {language.Id}" },
+                            },
+                        ],
                     },
                 })];
         }

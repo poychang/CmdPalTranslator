@@ -34,7 +34,7 @@ namespace CmdPalTranslator.Models
             new("zhs", "Chinese (Simplified)", "zh-CN", "zh-Hans", "zh-cn", "zh-hans", "simplified chinese"),
             new("zht", "Chinese (Traditional)", "zh-TW", "zh-Hant", "zh-tw", "zh-hant", "traditional chinese"),
             new("en", "English", "en", "en", "english"),
-            new("ja", "Japanese", "ja", "ja", "japanese"),
+            new("jp", "Japanese", "ja", "ja", "japanese"),
             new("ko", "Korean", "ko", "ko", "korean"),
             new("fr", "French", "fr", "fr", "french"),
             new("de", "German", "de", "de", "german"),
