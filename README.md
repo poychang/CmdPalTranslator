@@ -118,6 +118,10 @@ dotnet publish CmdPalTranslator/CmdPalTranslator.csproj -c Release -p:PublishPro
 
 完成部署後，Windows Command Palette 就能載入這個 `Translator` extension。
 
+### 5. 發佈到 Marketplace
+
+請至 [Microsoft Partner Center](https://partner.microsoft.com/dashboard/home) 發佈至 Microsoft Store，或直接提交到 WinGet。詳細流程請參考官方 [Command Palette 擴充功能發佈指南](https://learn.microsoft.com/en-us/windows/powertoys/command-palette/publish-extension)。
+
 ## 備註
 
 - 此專案目前透過公開 Web endpoint 存取 Bing / Google 翻譯能力。
