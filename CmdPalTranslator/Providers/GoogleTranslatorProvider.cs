@@ -143,6 +143,6 @@ namespace CmdPalTranslator.Providers
         [JsonSerializable(typeof(GoogleTranslatePayload[]))]
         [JsonSerializable(typeof(GoogleSentence))]
         [JsonSerializable(typeof(GoogleDictionaryEntry))]
-        private partial class GoogleJsonContext : JsonSerializerContext { }
+        private sealed partial class GoogleJsonContext : JsonSerializerContext { }
     }
 }

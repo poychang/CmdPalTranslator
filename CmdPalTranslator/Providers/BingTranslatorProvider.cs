@@ -222,6 +222,6 @@ namespace CmdPalTranslator.Providers
         [JsonSerializable(typeof(BingTranslatePayload[]))]
         [JsonSerializable(typeof(BingDetectedLanguage))]
         [JsonSerializable(typeof(BingTranslation))]
-        private partial class BingJsonContext : JsonSerializerContext { }
+        private sealed partial class BingJsonContext : JsonSerializerContext { }
     }
 }

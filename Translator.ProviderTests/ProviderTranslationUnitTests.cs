@@ -9,7 +9,7 @@ namespace Translator.ProviderTests
     public sealed class ProviderTranslationUnitTests
     {
         [TestMethod]
-        public void Bing_provider_translates_traditional_chinese_and_english()
+        public void BingProviderTranslatesTraditionalChineseAndEnglish()
         {
             int authRequests = 0;
             List<Dictionary<string, string>> formPayloads = [];
@@ -69,8 +69,8 @@ namespace Translator.ProviderTests
                 CreateQuery("apple", sourceLanguageId: "en", targetLanguageId: "zht"),
                 CancellationToken.None);
 
-            CollectionAssert.Contains(zhToEn.Entries.Select(entry => entry.Title).ToList(), "apple", StringComparer.OrdinalIgnoreCase);
-            CollectionAssert.Contains(enToZh.Entries.Select(entry => entry.Title).ToList(), "蘋果");
+            CollectionAssert.Contains([.. zhToEn.Entries.Select(entry => entry.Title)], "apple", StringComparer.OrdinalIgnoreCase);
+            CollectionAssert.Contains([.. enToZh.Entries.Select(entry => entry.Title)], "蘋果");
             Assert.AreEqual(1, authRequests);
             Assert.AreEqual("zh-Hant", formPayloads[0]["fromLang"]);
             Assert.AreEqual("en", formPayloads[0]["to"]);
@@ -84,7 +84,7 @@ namespace Translator.ProviderTests
         }
 
         [TestMethod]
-        public void Google_provider_translates_traditional_chinese_and_english()
+        public void GoogleProviderTranslatesTraditionalChineseAndEnglish()
         {
             List<string> requestUris = [];
             using HttpClient httpClient = new(new StubHttpMessageHandler(request =>
@@ -123,8 +123,8 @@ namespace Translator.ProviderTests
                 CreateQuery("apple", sourceLanguageId: "en", targetLanguageId: "zht"),
                 CancellationToken.None);
 
-            CollectionAssert.Contains(zhToEn.Entries.Select(entry => entry.Title).ToList(), "apple", StringComparer.OrdinalIgnoreCase);
-            CollectionAssert.Contains(enToZh.Entries.Select(entry => entry.Title).ToList(), "蘋果");
+            CollectionAssert.Contains([.. zhToEn.Entries.Select(entry => entry.Title)], "apple", StringComparer.OrdinalIgnoreCase);
+            CollectionAssert.Contains([.. enToZh.Entries.Select(entry => entry.Title)], "蘋果");
             Assert.IsTrue(requestUris.Any(uri => uri.Contains("sl=zh-TW", StringComparison.Ordinal) && uri.Contains("tl=en", StringComparison.Ordinal)));
             Assert.IsTrue(requestUris.Any(uri => uri.Contains("sl=en", StringComparison.Ordinal) && uri.Contains("tl=zh-TW", StringComparison.Ordinal)));
         }

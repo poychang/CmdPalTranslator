@@ -9,10 +9,10 @@ namespace Translator.ProviderTests
     [TestClass]
     public sealed class LiveTranslationProviderTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("Bing")]
         [DataRow("Google")]
-        public void Providers_translate_between_traditional_chinese_and_english(string providerId)
+        public void ProvidersTranslateBetweenTraditionalChineseAndEnglish(string providerId)
         {
             using ITranslatorProvider provider = CreateProvider(providerId);
 
@@ -32,10 +32,10 @@ namespace Translator.ProviderTests
             Trace.WriteLine($"ZH->EN: {zhToEnJoined}");
             Trace.WriteLine($"EN->ZH: {enToZhJoined}");
 
-            Assert.IsTrue(zhToEnResponse.Entries.Count > 0);
+            Assert.IsNotEmpty(zhToEnResponse.Entries);
             AssertContainsAny(zhToEnJoined, "apple");
 
-            Assert.IsTrue(enToZhResponse.Entries.Count > 0);
+            Assert.IsNotEmpty(enToZhResponse.Entries);
             AssertContainsAny(enToZhJoined, "蘋果", "苹果");
         }
 
@@ -69,7 +69,7 @@ namespace Translator.ProviderTests
             IEnumerable<char> filtered = value.Normalize(NormalizationForm.FormKC)
                 .Where(ch => !char.IsWhiteSpace(ch) && !char.IsPunctuation(ch) && !char.IsControl(ch));
 
-            return new string(filtered.ToArray()).ToLower(CultureInfo.InvariantCulture);
+            return new string([.. filtered]).ToLower(CultureInfo.InvariantCulture);
         }
     }
 }
