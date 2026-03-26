@@ -13,6 +13,7 @@ using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CmdPalTranslator;
@@ -20,6 +21,8 @@ namespace CmdPalTranslator;
 internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 {
     private readonly TranslatorService _translatorService;
+    private CancellationTokenSource? _debounceCts;
+    private const int DebounceDelayMs = 300;
 
     public CmdPalTranslatorPage(TranslatorService translatorService)
     {
@@ -36,9 +39,21 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         Filters = filters;
     }
 
-    public override void UpdateSearchText(string oldSearch, string newSearch)
+    public override async void UpdateSearchText(string oldSearch, string newSearch)
     {
-        RaiseItemsChanged();
+        _debounceCts?.Cancel();
+        _debounceCts = new CancellationTokenSource();
+        var token = _debounceCts.Token;
+
+        try
+        {
+            await Task.Delay(DebounceDelayMs, token);
+            RaiseItemsChanged();
+        }
+        catch (TaskCanceledException)
+        {
+            // Debounce cancelled by newer input; ignore.
+        }
     }
 
     public override IListItem[] GetItems()
