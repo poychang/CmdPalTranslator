@@ -3,11 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Extensions.Http;
+using Polly;
+using Polly.Extensions.Http;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CmdPalTranslator.Providers
 {
@@ -37,10 +41,10 @@ namespace CmdPalTranslator.Providers
                 $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={sourceLanguage}&tl={targetLanguage}&hl=en&dt=t&dt=bd&dj=1&q={Uri.EscapeDataString(query.SourceText)}";
 
             using HttpRequestMessage request = new(HttpMethod.Get, requestUri);
-            using HttpResponseMessage response = _httpClient.Send(request, cancellationToken);
+            using HttpResponseMessage response = _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
 
-            string content = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
+            string content = response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false).GetAwaiter().GetResult();
             Debug.WriteLine($"Translate response: {content}");
             GoogleTranslatePayload payload = JsonSerializer.Deserialize<GoogleTranslatePayload>(content, GoogleJsonContext.Default.GoogleTranslatePayload)
                 ?? throw new InvalidOperationException("Google translation returned an empty response.");
@@ -97,14 +101,23 @@ namespace CmdPalTranslator.Providers
 
         private static HttpClient CreateHttpClient()
         {
-            SocketsHttpHandler handler = new()
+            SocketsHttpHandler socketHandler = new()
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
             };
 
-            HttpClient client = new(handler)
+            IAsyncPolicy<HttpResponseMessage> retryPolicy = HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+            PolicyHttpMessageHandler policyHandler = new(retryPolicy)
             {
-                Timeout = TimeSpan.FromSeconds(15),
+                InnerHandler = socketHandler,
+            };
+
+            HttpClient client = new(policyHandler)
+            {
+                Timeout = TimeSpan.FromSeconds(30),
             };
             client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CmdPalTranslator/1.0");
             return client;

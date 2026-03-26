@@ -13,6 +13,7 @@ using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CmdPalTranslator;
 
@@ -59,15 +60,22 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         }
         catch (Exception ex)
         {
+            string failedTitle = ex is TaskCanceledException or OperationCanceledException
+                ? "Translation timed out"
+                : $"{provider.DisplayName} translation failed";
+            string failedMessage = ex is TaskCanceledException or OperationCanceledException
+                ? "The request timed out. Please try again later."
+                : ex.Message;
+
             return
             [
                 new ListItem(new LocalNoOpCommand())
                 {
-                    Title = $"{provider.DisplayName} translation failed",
-                    Subtitle = ex.Message,
+                    Title = failedTitle,
+                    Subtitle = failedMessage,
                     Details = new Details
                     {
-                        Title = $"{provider.DisplayName} translation failed",
+                        Title = failedTitle,
                         Body = $"Something goes wrong...",
                         Metadata = [
                             new DetailsElement()
@@ -83,7 +91,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                             new DetailsElement()
                             {
                                 Key = "Failed Message",
-                                Data = new DetailsLink() { Text = ex.Message },
+                                Data = new DetailsLink() { Text = failedMessage },
                             },
                         ],
                     },
