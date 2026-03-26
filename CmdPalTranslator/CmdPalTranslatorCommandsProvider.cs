@@ -24,7 +24,7 @@ public partial class CmdPalTranslatorCommandsProvider : CommandProvider
             new CommandItem(new CmdPalTranslatorPage(_translatorService))
             {
                 Title = "Translator",
-                Subtitle = "Instantly translate text and switch between Bing and Google translate.",
+                Subtitle = "Instantly translate text.",
             },
         ];
     }
