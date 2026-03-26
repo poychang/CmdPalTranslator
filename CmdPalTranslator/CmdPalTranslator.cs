@@ -19,7 +19,7 @@ public sealed partial class CmdPalTranslator : IExtension, IDisposable
 
     public CmdPalTranslator(ManualResetEvent extensionDisposedEvent)
     {
-        this._extensionDisposedEvent = extensionDisposedEvent;
+        _extensionDisposedEvent = extensionDisposedEvent;
         _provider = new CmdPalTranslatorCommandsProvider(new TranslatorService());
     }
 
@@ -32,5 +32,9 @@ public sealed partial class CmdPalTranslator : IExtension, IDisposable
         };
     }
 
-    public void Dispose() => this._extensionDisposedEvent.Set();
+    public void Dispose()
+    {
+        _provider.Dispose();
+        _extensionDisposedEvent.Set();
+    }
 }

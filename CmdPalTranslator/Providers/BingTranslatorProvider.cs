@@ -207,11 +207,11 @@ namespace CmdPalTranslator.Providers
         }
 
         // 使用正則表達式從 Bing 翻譯頁面 HTML 中提取認證相關的資訊，包括 token、key、IG 和 IID。
-        [GeneratedRegex(@"params_AbusePreventionHelper\s*=\s*\[(?<key>\d+),""(?<token>[^""]+)""(?:,\d+)?\]", RegexOptions.Compiled)]
+        [GeneratedRegex(@"params_AbusePreventionHelper\s*=\s*\[(?<key>\d+),""(?<token>[^""]+)""(?:,\d+)?\]")]
         private static partial Regex MyAbuseRegex();
-        [GeneratedRegex(@"IG:""(?<ig>[^""]+)""", RegexOptions.Compiled)]
+        [GeneratedRegex(@"IG:""(?<ig>[^""]+)""")]
         private static partial Regex MyIgRegex();
-        [GeneratedRegex(@"data-iid=""(?<iid>[^""]+)""", RegexOptions.Compiled)]
+        [GeneratedRegex(@"data-iid=""(?<iid>[^""]+)""")]
         private static partial Regex MyIidRegex();
 
         // 使用 NativeAOT 建置應用程式時，會需要標註序列化會涉及的型別，讓應用程式可以正確序列化和反序列化這些型別。

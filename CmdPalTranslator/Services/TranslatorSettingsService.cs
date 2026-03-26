@@ -1,5 +1,6 @@
 ﻿using CmdPalTranslator.Models;
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace CmdPalTranslator.Services
@@ -53,8 +54,9 @@ namespace CmdPalTranslator.Services
                 string languageId = File.ReadAllText(_settingsFilePath).Trim();
                 return ResolveTargetLanguage(languageId).Id;
             }
-            catch (Exception)
+            catch (IOException ex)
             {
+                Debug.WriteLine($"Failed to load target language setting: {ex.Message}");
             }
 
             return LanguageCatalog.BuiltInDefaultTarget.Id;

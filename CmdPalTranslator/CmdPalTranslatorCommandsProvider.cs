@@ -34,8 +34,9 @@ public partial class CmdPalTranslatorCommandsProvider : CommandProvider
         return _commands;
     }
 
-    public new void Dispose()
+    public override void Dispose()
     {
         _translatorService.Dispose();
+        base.Dispose();
     }
 }

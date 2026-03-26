@@ -16,7 +16,7 @@ namespace CmdPalTranslator.Commands
             return CommandResult.KeepOpen();
         }
 
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+        [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16)]
+        private static partial int MessageBox(IntPtr hWnd, string text, string caption, uint type);
     }
 }

@@ -21,7 +21,7 @@ namespace CmdPalTranslator.Filters
             get => _currentFilterId;
             set
             {
-                if (_currentFilterId == value)
+                if (string.Equals(_currentFilterId, value, System.StringComparison.Ordinal))
                 {
                     return;
                 }
