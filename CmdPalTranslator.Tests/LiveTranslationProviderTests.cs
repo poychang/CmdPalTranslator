@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 
-namespace Translator.ProviderTests
+namespace CmdPalTranslator.Tests
 {
     [TestClass]
     public sealed class LiveTranslationProviderTests

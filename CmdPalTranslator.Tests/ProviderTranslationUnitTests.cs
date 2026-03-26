@@ -3,7 +3,7 @@ using CmdPalTranslator.Providers;
 using System.Net;
 using System.Text;
 
-namespace Translator.ProviderTests
+namespace CmdPalTranslator.Tests
 {
     [TestClass]
     public sealed class ProviderTranslationUnitTests
