@@ -103,20 +103,15 @@ dotnet build CmdPalTranslator/CmdPalTranslator.csproj
 dotnet test --project Translator.ProviderTests/Translator.ProviderTests.csproj
 ```
 
-測試專案包含兩類驗證：
+### 4. 建置 MSIX
 
-- `ProviderTranslationUnitTests`：以 stub response 驗證 request / response 解析邏輯。
-- `LiveTranslationProviderTests`：直接呼叫線上 provider 驗證真實翻譯結果。
-
-### 4. 封裝與部署
-
-主專案已啟用 MSIX tooling，並提供 `win-x64` 與 `win-arm64` 的 publish profile。可透過 Visual Studio 的封裝流程，或使用 `dotnet publish` 輸出部署檔案，例如：
+移動到 `CmdPalTranslator\CmdPalTranslator` 目錄，用以下指令建立 x64 版本的 MSIX
 
 ```bash
-dotnet publish CmdPalTranslator/CmdPalTranslator.csproj -c Release -p:PublishProfile=win-x64
+dotnet build --configuration Release -p:GenerateAppxPackageOnBuild=true -p:Platform=x64 -p:AppxPackageDir="AppPackages\x64\"
 ```
 
-完成部署後，Windows Command Palette 就能載入這個 `Translator` extension。
+完成後，可以在 `CmdPalTranslator\CmdPalTranslator\AppPackages\x64\` 目錄中找到相關 MSIX 安裝檔。
 
 ### 5. 發佈到 Marketplace
 
