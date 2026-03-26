@@ -3,10 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.Extensions.Http;
-using Polly;
-using Polly.Extensions.Http;
-using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -26,7 +22,7 @@ namespace CmdPalTranslator.Providers
         private BingAuth? _cachedAuth;
         private DateTimeOffset _authExpiresAt = DateTimeOffset.MinValue;
 
-        public BingTranslatorProvider() : this(CreateHttpClient()) { }
+        public BingTranslatorProvider() : this(TranslatorHttpClient.Create()) { }
 
         internal BingTranslatorProvider(HttpClient httpClient)
         {
@@ -182,30 +178,6 @@ namespace CmdPalTranslator.Providers
                 _cachedAuth = null;
                 _authExpiresAt = DateTimeOffset.MinValue;
             }
-        }
-
-        private static HttpClient CreateHttpClient()
-        {
-            SocketsHttpHandler socketHandler = new()
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-            };
-
-            IAsyncPolicy<HttpResponseMessage> retryPolicy = HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-
-            PolicyHttpMessageHandler policyHandler = new(retryPolicy)
-            {
-                InnerHandler = socketHandler,
-            };
-
-            HttpClient client = new(policyHandler)
-            {
-                Timeout = TimeSpan.FromSeconds(30),
-            };
-            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CmdPalTranslator/1.0");
-            return client;
         }
 
         private sealed record BingAuth(string Key, string Token, string Ig, string Iid);

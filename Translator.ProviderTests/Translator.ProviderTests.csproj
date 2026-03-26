@@ -15,6 +15,7 @@
         <Compile Include="..\CmdPalTranslator\Models\LanguageCatalog.cs" Link="Shared\Models\LanguageCatalog.cs" />
         <Compile Include="..\CmdPalTranslator\Models\TranslationModels.cs" Link="Shared\Models\TranslationModels.cs" />
         <Compile Include="..\CmdPalTranslator\Providers\ITranslatorProvider.cs" Link="Shared\Providers\ITranslatorProvider.cs" />
+        <Compile Include="..\CmdPalTranslator\Providers\TranslatorHttpClient.cs" Link="Shared\Providers\TranslatorHttpClient.cs" />
         <Compile Include="..\CmdPalTranslator\Providers\BingTranslatorProvider.cs" Link="Shared\Providers\BingTranslatorProvider.cs" />
         <Compile Include="..\CmdPalTranslator\Providers\GoogleTranslatorProvider.cs" Link="Shared\Providers\GoogleTranslatorProvider.cs" />
         <Compile Include="..\CmdPalTranslator\Services\TranslatorSettingsService.cs" Link="Shared\Services\TranslatorSettingsService.cs" />
