@@ -9,11 +9,14 @@ namespace CmdPalTranslator.Filters
     internal sealed partial class TranslatorProviderFilters : IFilters
     {
         private readonly TranslatorService _translatorService;
-        private string _currentFilterId = TranslatorService.DefaultProviderId;
+        private readonly TranslatorSettingsService _settingsService;
+        private string _currentFilterId;
 
         public TranslatorProviderFilters(TranslatorService translatorService)
         {
             _translatorService = translatorService;
+            _settingsService = translatorService.Settings;
+            _currentFilterId = _settingsService.PreferredProviderId;
         }
 
         public string CurrentFilterId
@@ -27,6 +30,7 @@ namespace CmdPalTranslator.Filters
                 }
 
                 _currentFilterId = value;
+                _settingsService.SetPreferredProvider(value);
                 PropChanged?.Invoke(this, new PropChangedEventArgs(nameof(CurrentFilterId)));
             }
         }

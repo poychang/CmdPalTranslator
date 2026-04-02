@@ -11,16 +11,20 @@ namespace CmdPalTranslator.Services
     {
         private readonly string _settingsFilePath;
         private string _targetLanguageId;
+        private string _preferredProviderId;
 
         public TranslatorSettingsService(string? settingsFilePath = null)
         {
             _settingsFilePath = settingsFilePath ?? GetSettingsFilePath();
             _targetLanguageId = LoadTargetLanguageId();
+            _preferredProviderId = LoadPreferredProviderId();
         }
 
         public event EventHandler? SettingsChanged;
 
         public LanguageOption TargetLanguage => ResolveTargetLanguage(_targetLanguageId);
+
+        public string PreferredProviderId => _preferredProviderId;
 
         public bool SetTargetLanguage(LanguageOption language)
         {
@@ -38,6 +42,21 @@ namespace CmdPalTranslator.Services
             return true;
         }
 
+        public bool SetPreferredProvider(string providerId)
+        {
+            ArgumentNullException.ThrowIfNull(providerId);
+
+            if (string.Equals(_preferredProviderId, providerId, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            _preferredProviderId = providerId;
+            SaveSettings();
+            SettingsChanged?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
         private static string GetSettingsFilePath()
         {
             string basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -48,7 +67,7 @@ namespace CmdPalTranslator.Services
         {
             Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
 
-            TranslatorSettings settings = new() { TargetLanguageId = _targetLanguageId };
+            TranslatorSettings settings = new() { TargetLanguageId = _targetLanguageId, PreferredProviderId = _preferredProviderId };
             string json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.TranslatorSettings);
             File.WriteAllText(_settingsFilePath, json);
         }
@@ -63,6 +82,7 @@ namespace CmdPalTranslator.Services
             try
             {
                 string json = File.ReadAllText(_settingsFilePath);
+                Debug.WriteLine($"Loaded settings JSON: {json}");
                 return JsonSerializer.Deserialize(json, SettingsJsonContext.Default.TranslatorSettings);
             }
             catch (Exception ex) when (ex is IOException or JsonException)
@@ -83,6 +103,17 @@ namespace CmdPalTranslator.Services
             return LanguageCatalog.BuiltInDefaultTarget.Id;
         }
 
+        private string LoadPreferredProviderId()
+        {
+            TranslatorSettings? settings = LoadSettings();
+            if (settings is not null && !string.IsNullOrWhiteSpace(settings.PreferredProviderId))
+            {
+                return settings.PreferredProviderId;
+            }
+
+            return TranslatorService.DefaultProviderId;
+        }
+
         private static LanguageOption ResolveTargetLanguage(string? languageId)
         {
             if (!string.IsNullOrWhiteSpace(languageId)
@@ -99,6 +130,9 @@ namespace CmdPalTranslator.Services
         {
             [JsonPropertyName("targetLanguageId")]
             public string TargetLanguageId { get; set; } = string.Empty;
+
+            [JsonPropertyName("preferredProviderId")]
+            public string PreferredProviderId { get; set; } = string.Empty;
         }
 
         // 使用 NativeAOT 建置應用程式時，會需要標註序列化會涉及的型別，讓應用程式可以正確序列化和反序列化這些型別。
