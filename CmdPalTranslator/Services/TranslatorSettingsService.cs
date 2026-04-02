@@ -2,10 +2,12 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CmdPalTranslator.Services
 {
-    internal sealed class TranslatorSettingsService
+    internal sealed partial class TranslatorSettingsService
     {
         private readonly string _settingsFilePath;
         private string _targetLanguageId;
@@ -31,7 +33,7 @@ namespace CmdPalTranslator.Services
             }
 
             _targetLanguageId = normalizedLanguage.Id;
-            SaveTargetLanguageId();
+            SaveSettings();
             SettingsChanged?.Invoke(this, EventArgs.Empty);
             return true;
         }
@@ -39,7 +41,7 @@ namespace CmdPalTranslator.Services
         private static string GetSettingsFilePath()
         {
             string basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            return Path.Combine(basePath, "CmdPalTranslator", "default-target-language.txt");
+            return Path.Combine(basePath, "CmdPalTranslator", "settings.json");
         }
 
         private string LoadTargetLanguageId()
@@ -51,21 +53,28 @@ namespace CmdPalTranslator.Services
 
             try
             {
-                string languageId = File.ReadAllText(_settingsFilePath).Trim();
-                return ResolveTargetLanguage(languageId).Id;
+                string json = File.ReadAllText(_settingsFilePath);
+                TranslatorSettings? settings = JsonSerializer.Deserialize(json, SettingsJsonContext.Default.TranslatorSettings);
+                if (settings is not null && !string.IsNullOrWhiteSpace(settings.TargetLanguageId))
+                {
+                    return ResolveTargetLanguage(settings.TargetLanguageId).Id;
+                }
             }
-            catch (IOException ex)
+            catch (Exception ex) when (ex is IOException or JsonException)
             {
-                Debug.WriteLine($"Failed to load target language setting: {ex.Message}");
+                Debug.WriteLine($"Failed to load settings: {ex.Message}");
             }
 
             return LanguageCatalog.BuiltInDefaultTarget.Id;
         }
 
-        private void SaveTargetLanguageId()
+        private void SaveSettings()
         {
             Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
-            File.WriteAllText(_settingsFilePath, _targetLanguageId);
+
+            TranslatorSettings settings = new() { TargetLanguageId = _targetLanguageId };
+            string json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.TranslatorSettings);
+            File.WriteAllText(_settingsFilePath, json);
         }
 
         private static LanguageOption ResolveTargetLanguage(string? languageId)
@@ -79,5 +88,16 @@ namespace CmdPalTranslator.Services
 
             return LanguageCatalog.BuiltInDefaultTarget;
         }
+
+        private sealed class TranslatorSettings
+        {
+            [JsonPropertyName("targetLanguageId")]
+            public string TargetLanguageId { get; set; } = string.Empty;
+        }
+
+        // 使用 NativeAOT 建置應用程式時，會需要標註序列化會涉及的型別，讓應用程式可以正確序列化和反序列化這些型別。
+        [JsonSourceGenerationOptions(WriteIndented = true)]
+        [JsonSerializable(typeof(TranslatorSettings))]
+        private sealed partial class SettingsJsonContext : JsonSerializerContext { }
     }
 }

@@ -8,7 +8,7 @@ namespace CmdPalTranslator.Tests
         [TestMethod]
         public void ParseQueryUsesConfiguredDefaultTargetLanguageWhenQueryHasNoOverride()
         {
-            string settingsFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.txt");
+            string settingsFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.json");
 
             try
             {
@@ -33,7 +33,7 @@ namespace CmdPalTranslator.Tests
         [TestMethod]
         public void ParseQueryKeepsExplicitTargetLanguageEvenWhenDefaultIsDifferent()
         {
-            string settingsFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.txt");
+            string settingsFilePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.json");
 
             try
             {
