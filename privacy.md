@@ -23,9 +23,7 @@ This data is transmitted directly to the selected third-party translation servic
 
 The application stores a single preference on your device:
 
-- **Default target language** — saved as a plain text file (`default-target-language.txt`) in the application's sandboxed local data folder managed by Windows (under `%LocalAppData%\Packages\`).
-
-This file contains only a language code (e.g., `zht` for Traditional Chinese). It remains on your device within the app's private storage and is never transmitted to any server.
+- **Default target language** — saved locally in the application's private storage on your device. This file contains only a language code (e.g., `zht` for Traditional Chinese) and is never transmitted to any server.
 
 ---
 
@@ -96,7 +94,7 @@ CmdPalTranslator 是一個 Windows Command Palette 翻譯擴充功能。本應�
 ### 資料收集與使用
 
 - 您輸入的**文字內容**與**語言設定**會直接傳送至所選的第三方翻譯服務（Bing 或 Google），僅用於執行翻譯。開發者不保留任何翻譯紀錄。
-- **預設目標語言** 以純文字檔（`default-target-language.txt`）儲存於 Windows 為此應用程式管理的沙箱化本機資料夾中（位於 `%LocalAppData%\Packages\` 底下）。此設定不會傳送至任何伺服器。
+- **預設目標語言** 儲存於您裝置上應用程式的私有儲存空間中，僅包含語言代碼，不會傳送至任何伺服器。
 - 本應用程式**不收集**任何個人識別資訊、裝置識別碼、使用記錄、診斷遙測或位置資料。
 
 ### 第三方服務
