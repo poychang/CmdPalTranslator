@@ -1,6 +1,8 @@
-# CmdPalTranslator
+# Translator for Command Palette
 
-`CmdPalTranslator` 是一個提供給 Windows Command Palette 使用的翻譯擴充功能。它把文字翻譯流程直接帶進 Command Palette，讓你可以在同一個操作介面裡輸入文字、切換翻譯來源、複製結果，必要時再跳轉到原始翻譯網站。
+<a href="https://apps.microsoft.com/store/detail/9NSHZ9B3KJFW" target="_blank" rel="noopener noreferrer"><img src="https://get.microsoft.com/images/en-us%20light.svg" width="200"/></a>
+
+`Translator for Command Palette` 是一個提供給 Windows Command Palette 使用的翻譯擴充功能。它把文字翻譯流程直接帶進 Command Palette，讓你可以在同一個操作介面裡輸入文字、切換翻譯來源、複製結果，必要時再跳轉到原始翻譯網站。
 
 目前專案內建 `Bing` 與 `Google` 兩個翻譯 provider，預設目標語言可在設定頁中調整，初始值為繁體中文（`zht`），並支援用 `text -> lang` 的方式快速指定目標語言。
 
