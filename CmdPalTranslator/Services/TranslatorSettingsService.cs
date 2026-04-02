@@ -44,30 +44,6 @@ namespace CmdPalTranslator.Services
             return Path.Combine(basePath, "CmdPalTranslator", "settings.json");
         }
 
-        private string LoadTargetLanguageId()
-        {
-            if (!File.Exists(_settingsFilePath))
-            {
-                return LanguageCatalog.BuiltInDefaultTarget.Id;
-            }
-
-            try
-            {
-                string json = File.ReadAllText(_settingsFilePath);
-                TranslatorSettings? settings = JsonSerializer.Deserialize(json, SettingsJsonContext.Default.TranslatorSettings);
-                if (settings is not null && !string.IsNullOrWhiteSpace(settings.TargetLanguageId))
-                {
-                    return ResolveTargetLanguage(settings.TargetLanguageId).Id;
-                }
-            }
-            catch (Exception ex) when (ex is IOException or JsonException)
-            {
-                Debug.WriteLine($"Failed to load settings: {ex.Message}");
-            }
-
-            return LanguageCatalog.BuiltInDefaultTarget.Id;
-        }
-
         private void SaveSettings()
         {
             Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
@@ -75,6 +51,36 @@ namespace CmdPalTranslator.Services
             TranslatorSettings settings = new() { TargetLanguageId = _targetLanguageId };
             string json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.TranslatorSettings);
             File.WriteAllText(_settingsFilePath, json);
+        }
+
+        private TranslatorSettings? LoadSettings()
+        {
+            if (!File.Exists(_settingsFilePath))
+            {
+                return null;
+            }
+
+            try
+            {
+                string json = File.ReadAllText(_settingsFilePath);
+                return JsonSerializer.Deserialize(json, SettingsJsonContext.Default.TranslatorSettings);
+            }
+            catch (Exception ex) when (ex is IOException or JsonException)
+            {
+                Debug.WriteLine($"Failed to load settings: {ex.Message}");
+                return null;
+            }
+        }
+
+        private string LoadTargetLanguageId()
+        {
+            TranslatorSettings? settings = LoadSettings();
+            if (settings is not null && !string.IsNullOrWhiteSpace(settings.TargetLanguageId))
+            {
+                return ResolveTargetLanguage(settings.TargetLanguageId).Id;
+            }
+
+            return LanguageCatalog.BuiltInDefaultTarget.Id;
         }
 
         private static LanguageOption ResolveTargetLanguage(string? languageId)
