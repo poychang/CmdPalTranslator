@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <RootNamespace>CmdPalTranslator</RootNamespace>
@@ -16,7 +16,7 @@
 
     <AppxPackageIdentityName>25526PoyChang.TranslatorforCommandPalette</AppxPackageIdentityName>
     <AppxPackagePublisher>CN=DC46547E-28C9-45C1-91CC-5380ACD55B44</AppxPackagePublisher>
-    <AppxPackageVersion>0.0.1.0</AppxPackageVersion>
+    <AppxPackageVersion>0.0.2.0</AppxPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
