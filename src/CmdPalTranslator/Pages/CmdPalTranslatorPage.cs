@@ -29,7 +29,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         _translatorService = translatorService;
         _translatorService.Settings.SettingsChanged += (_, _) => RaiseItemsChanged();
 
-        Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
+        Icon = IconHelpers.FromRelativePath("Assets\\icons\\StoreLogo.png");
         Title = "Translator";
         Name = "Open";
         ShowDetails = true;

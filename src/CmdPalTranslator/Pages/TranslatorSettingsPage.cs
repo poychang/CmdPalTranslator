@@ -67,9 +67,7 @@ namespace CmdPalTranslator.Pages
         {
             bool isCurrent = string.Equals(language.Id, currentLanguage.Id, StringComparison.OrdinalIgnoreCase);
             string title = isCurrent ? $"{language.DisplayName} (Current)" : language.DisplayName;
-            string subtitle = isCurrent
-                ? $"{language.Id} · Used when no `-> languageCode` override is specified"
-                : $"{language.Id} · Set as the translation target";
+            string subtitle = isCurrent ? string.Empty : $"Set as the target";
 
             return new ListItem(new SetTargetLanguageCommand(_settingsService, language))
             {
@@ -80,8 +78,8 @@ namespace CmdPalTranslator.Pages
                 {
                     Title = $"{language.DisplayName} ({language.Id})",
                     Body = isCurrent
-                        ? $"This is the current target language.\nExample query without override: `hello world`"
-                        : $"Set this as the target language for new translations.\nExample query with explicit override: `hello world -> {language.Id}`",
+                        ? $"This is the current target language.\n Used when no `-> languageCode` override is specified.\n Example query without override: `hello world`"
+                        : $"Set this as the target language for new translations.\n Example query with explicit override: `hello world -> {language.Id}`",
                 },
                 Tags = [new Tag(language.Id)],
             };

@@ -18,7 +18,7 @@ public partial class CmdPalTranslatorCommandsProvider : CommandProvider
         _translatorService = translatorService;
 
         DisplayName = "Translator";
-        Icon = IconHelpers.FromRelativePath("Assets\\StoreLogo.png");
+        Icon = IconHelpers.FromRelativePath("Assets\\icons\\StoreLogo.png");
 
         _commands = [
             new CommandItem(new CmdPalTranslatorPage(_translatorService))
