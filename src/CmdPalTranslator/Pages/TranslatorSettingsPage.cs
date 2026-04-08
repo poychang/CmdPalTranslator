@@ -83,6 +83,7 @@ namespace CmdPalTranslator.Pages
                         ? $"This is the current target language.\nExample query without override: `hello world`"
                         : $"Set this as the target language for new translations.\nExample query with explicit override: `hello world -> {language.Id}`",
                 },
+                Tags = [new Tag(language.Id)],
             };
         }
 

@@ -21,7 +21,7 @@ namespace CmdPalTranslator.Pages
                 .Select(language => new ListItem(new LocalCopyTextCommand($"hello -> {language.Id}", $"Copied `hello -> {language.Id}`"))
                 {
                     Title = language.DisplayName,
-                    Subtitle = $"{language.Id} · Example: hello -> {language.Id}",
+                    //Subtitle = $"{language.Id} · Example: hello -> {language.Id}",
                     Details = new Details
                     {
                         Title = $"{language.DisplayName} ({language.Id})",
@@ -34,6 +34,7 @@ namespace CmdPalTranslator.Pages
                             },
                         ],
                     },
+                    Tags = [new Tag(language.Id), new Tag($"hello -> {language.Id}")],
                 })];
         }
     }
