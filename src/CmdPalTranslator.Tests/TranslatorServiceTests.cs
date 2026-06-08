@@ -3,6 +3,7 @@
 namespace CmdPalTranslator.Tests
 {
     [TestClass]
+    [TestCategory("Unit")]
     public sealed class TranslatorServiceTests
     {
         [TestMethod]

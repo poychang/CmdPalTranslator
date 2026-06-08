@@ -4,6 +4,7 @@ using CmdPalTranslator.Services;
 namespace CmdPalTranslator.Tests
 {
     [TestClass]
+    [TestCategory("Unit")]
     public sealed class TranslatorSettingsServiceTests
     {
         private string _settingsFilePath = null!;

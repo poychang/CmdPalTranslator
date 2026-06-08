@@ -7,6 +7,7 @@ using System.Text;
 namespace CmdPalTranslator.Tests
 {
     [TestClass]
+    [TestCategory("Integration")]
     public sealed class LiveTranslationProviderTests
     {
         [TestMethod]

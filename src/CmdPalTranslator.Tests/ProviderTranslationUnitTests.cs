@@ -6,6 +6,7 @@ using System.Text;
 namespace CmdPalTranslator.Tests
 {
     [TestClass]
+    [TestCategory("Unit")]
     public sealed class ProviderTranslationUnitTests
     {
         [TestMethod]
