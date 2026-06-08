@@ -58,8 +58,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CommandPalette.Extensions" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" />
     <PackageReference Include="Microsoft.Windows.CsWinRT" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CmdPalTranslator.Core\CmdPalTranslator.Core.csproj" />
   </ItemGroup>
 
   <!-- Provide the Implementation metadata for the CommandPalette .winmd so the MSIX manifest generates correct registration info -->
