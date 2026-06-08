@@ -9,11 +9,11 @@ using System.Linq;
 
 namespace CmdPalTranslator.Pages
 {
-    internal sealed partial class TranslatorSettingsPage : DynamicListPage
+    internal sealed partial class TargetLanguageSettingsPage : DynamicListPage
     {
         private readonly TranslatorSettingsService _settingsService;
 
-        public TranslatorSettingsPage(TranslatorSettingsService settingsService)
+        public TargetLanguageSettingsPage(TranslatorSettingsService settingsService)
         {
             _settingsService = settingsService;
             _settingsService.SettingsChanged += OnSettingsChanged;

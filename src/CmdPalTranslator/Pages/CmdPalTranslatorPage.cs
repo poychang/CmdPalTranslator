@@ -163,7 +163,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                     ],
                 },
             },
-            new ListItem(new TranslatorSettingsPage(_translatorService.Settings))
+            new ListItem(new TargetLanguageSettingsPage(_translatorService.Settings))
             {
                 Title = "Target language",
                 Subtitle = $"{defaultTarget.DisplayName} ({defaultTarget.Id})",
