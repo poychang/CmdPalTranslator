@@ -88,13 +88,13 @@ open source software -> fr
 請在 Windows 終端機或 Visual Studio 環境中，於專案根目錄執行：
 
 ```bash
-dotnet build CmdPalTranslator.sln
+dotnet build CmdPalTranslator.slnx
 ```
 
 若只想建置主專案：
 
 ```bash
-dotnet build CmdPalTranslator/CmdPalTranslator.csproj
+dotnet build CmdPalTranslator/CmdPalTranslator.csproj -r win-x64
 ```
 
 ### 3. 執行測試
@@ -102,7 +102,7 @@ dotnet build CmdPalTranslator/CmdPalTranslator.csproj
 執行 provider 測試：
 
 ```bash
-dotnet test --project Translator.ProviderTests/Translator.ProviderTests.csproj
+dotnet test --project CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj
 ```
 
 ### 4. 建置 MSIX
