@@ -1,21 +1,18 @@
 using CmdPalTranslator.Models;
-using System.Diagnostics;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace CmdPalTranslator.Services
 {
     internal sealed class CmdPalTranslatorSettingService
     {
-        private readonly string _settingsFilePath;
+        private readonly SettingService _settingService;
         private string _targetLanguageId;
         private string _preferredProviderId;
 
         public CmdPalTranslatorSettingService(string? settingsFilePath = null)
         {
-            _settingsFilePath = settingsFilePath ?? GetSettingsFilePath();
+            _settingService = new SettingService(settingsFilePath);
 
-            TranslatorSettings? settings = LoadSettings();
+            TranslatorSettings? settings = _settingService.LoadSettings();
             _targetLanguageId = LoadTargetLanguageId(settings);
             _preferredProviderId = LoadPreferredProviderId(settings);
         }
@@ -57,39 +54,9 @@ namespace CmdPalTranslator.Services
             return true;
         }
 
-        private static string GetSettingsFilePath()
-        {
-            string basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            return Path.Combine(basePath, "CmdPalTranslator", "settings.json");
-        }
-
         private void SaveSettings()
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
-
-            TranslatorSettings settings = new() { TargetLanguageId = _targetLanguageId, PreferredProviderId = _preferredProviderId };
-            string json = JsonSerializer.Serialize(settings);
-            File.WriteAllText(_settingsFilePath, json);
-        }
-
-        private TranslatorSettings? LoadSettings()
-        {
-            if (!File.Exists(_settingsFilePath))
-            {
-                return null;
-            }
-
-            try
-            {
-                string json = File.ReadAllText(_settingsFilePath);
-                Debug.WriteLine($"Loaded settings JSON: {json}");
-                return JsonSerializer.Deserialize<TranslatorSettings>(json);
-            }
-            catch (Exception ex) when (ex is IOException or JsonException)
-            {
-                Debug.WriteLine($"Failed to load settings: {ex.Message}");
-                return null;
-            }
+            _settingService.SaveSettings(_targetLanguageId, _preferredProviderId);
         }
 
         private static string LoadTargetLanguageId(TranslatorSettings? settings)
@@ -122,15 +89,6 @@ namespace CmdPalTranslator.Services
             }
 
             return LanguageCatalog.BuiltInDefaultTarget;
-        }
-
-        private sealed class TranslatorSettings
-        {
-            [JsonPropertyName("targetLanguageId")]
-            public string TargetLanguageId { get; set; } = string.Empty;
-
-            [JsonPropertyName("preferredProviderId")]
-            public string PreferredProviderId { get; set; } = string.Empty;
         }
     }
 }
