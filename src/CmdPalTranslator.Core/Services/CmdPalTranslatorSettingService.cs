@@ -1,17 +1,17 @@
-﻿using CmdPalTranslator.Models;
+using CmdPalTranslator.Models;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace CmdPalTranslator.Services
 {
-    internal sealed partial class TranslatorSettingsService
+    internal sealed class CmdPalTranslatorSettingService
     {
         private readonly string _settingsFilePath;
         private string _targetLanguageId;
         private string _preferredProviderId;
 
-        public TranslatorSettingsService(string? settingsFilePath = null)
+        public CmdPalTranslatorSettingService(string? settingsFilePath = null)
         {
             _settingsFilePath = settingsFilePath ?? GetSettingsFilePath();
 
@@ -68,7 +68,7 @@ namespace CmdPalTranslator.Services
             Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
 
             TranslatorSettings settings = new() { TargetLanguageId = _targetLanguageId, PreferredProviderId = _preferredProviderId };
-            string json = JsonSerializer.Serialize(settings, SettingsJsonContext.Default.TranslatorSettings);
+            string json = JsonSerializer.Serialize(settings);
             File.WriteAllText(_settingsFilePath, json);
         }
 
@@ -83,7 +83,7 @@ namespace CmdPalTranslator.Services
             {
                 string json = File.ReadAllText(_settingsFilePath);
                 Debug.WriteLine($"Loaded settings JSON: {json}");
-                return JsonSerializer.Deserialize(json, SettingsJsonContext.Default.TranslatorSettings);
+                return JsonSerializer.Deserialize<TranslatorSettings>(json);
             }
             catch (Exception ex) when (ex is IOException or JsonException)
             {
@@ -132,10 +132,5 @@ namespace CmdPalTranslator.Services
             [JsonPropertyName("preferredProviderId")]
             public string PreferredProviderId { get; set; } = string.Empty;
         }
-
-        // 使用 NativeAOT 建置應用程式時，會需要標註序列化會涉及的型別，讓應用程式可以正確序列化和反序列化這些型別。
-        [JsonSourceGenerationOptions(WriteIndented = true)]
-        [JsonSerializable(typeof(TranslatorSettings))]
-        private sealed partial class SettingsJsonContext : JsonSerializerContext { }
     }
 }

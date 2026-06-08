@@ -9,13 +9,13 @@ namespace CmdPalTranslator.Filters
     internal sealed partial class TranslatorProviderFilters : IFilters
     {
         private readonly TranslatorService _translatorService;
-        private readonly TranslatorSettingsService _settingsService;
+        private readonly CmdPalTranslatorSettingManager _settingsService;
         private string _currentFilterId;
 
-        public TranslatorProviderFilters(TranslatorService translatorService)
+        public TranslatorProviderFilters(TranslatorService translatorService, CmdPalTranslatorSettingManager settingsService)
         {
             _translatorService = translatorService;
-            _settingsService = translatorService.Settings;
+            _settingsService = settingsService;
             _currentFilterId = _settingsService.PreferredProviderId;
         }
 

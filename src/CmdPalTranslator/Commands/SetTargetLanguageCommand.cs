@@ -1,5 +1,4 @@
 ﻿using CmdPalTranslator.Models;
-using CmdPalTranslator.Services;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;
@@ -7,7 +6,7 @@ using System;
 namespace CmdPalTranslator.Commands
 {
     internal sealed partial class SetTargetLanguageCommand(
-        TranslatorSettingsService settingsService,
+        CmdPalTranslatorSettingManager settingsService,
         LanguageOption language) : InvokableCommand
     {
         public override string Name => "Set target language";

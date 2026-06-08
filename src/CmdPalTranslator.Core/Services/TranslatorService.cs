@@ -6,13 +6,11 @@ namespace CmdPalTranslator.Services
     internal sealed partial class TranslatorService : IDisposable
     {
         public const string DefaultProviderId = "bing";
-        private readonly TranslatorSettingsService _settings;
         private readonly IReadOnlyList<ITranslatorProvider> _providers;
         private readonly Dictionary<string, ITranslatorProvider> _providerMap;
 
-        public TranslatorService(TranslatorSettingsService? settings = null)
+        public TranslatorService()
         {
-            _settings = settings ?? new TranslatorSettingsService();
             _providers =
             [
                 new BingTranslatorProvider(),
@@ -24,14 +22,14 @@ namespace CmdPalTranslator.Services
 
         public IReadOnlyList<ITranslatorProvider> Providers => _providers;
 
-        public TranslatorSettingsService Settings => _settings;
-
-        public ParsedTranslationQuery ParseQuery(string searchText)
+        public ParsedTranslationQuery ParseQuery(string searchText, LanguageOption defaultTargetLanguage)
         {
+            ArgumentNullException.ThrowIfNull(defaultTargetLanguage);
+
             string trimmed = searchText.Trim();
             if (string.IsNullOrWhiteSpace(trimmed))
             {
-                return new ParsedTranslationQuery(string.Empty, LanguageCatalog.AutoDetect, _settings.TargetLanguage, false);
+                return new ParsedTranslationQuery(string.Empty, LanguageCatalog.AutoDetect, defaultTargetLanguage, false);
             }
 
             int splitIndex = trimmed.LastIndexOf("->", StringComparison.Ordinal);
@@ -45,7 +43,7 @@ namespace CmdPalTranslator.Services
                 }
             }
 
-            return new ParsedTranslationQuery(trimmed, LanguageCatalog.AutoDetect, _settings.TargetLanguage, false);
+            return new ParsedTranslationQuery(trimmed, LanguageCatalog.AutoDetect, defaultTargetLanguage, false);
         }
 
         public ITranslatorProvider GetProvider(string? providerId)

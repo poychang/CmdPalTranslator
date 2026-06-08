@@ -1,6 +1,5 @@
 ﻿using CmdPalTranslator.Commands;
 using CmdPalTranslator.Models;
-using CmdPalTranslator.Services;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;
@@ -11,9 +10,9 @@ namespace CmdPalTranslator.Pages
 {
     internal sealed partial class TargetLanguageSettingsPage : DynamicListPage
     {
-        private readonly TranslatorSettingsService _settingsService;
+        private readonly CmdPalTranslatorSettingManager _settingsService;
 
-        public TargetLanguageSettingsPage(TranslatorSettingsService settingsService)
+        public TargetLanguageSettingsPage(CmdPalTranslatorSettingManager settingsService)
         {
             _settingsService = settingsService;
             _settingsService.SettingsChanged += OnSettingsChanged;

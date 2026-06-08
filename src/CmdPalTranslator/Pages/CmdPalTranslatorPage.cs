@@ -20,21 +20,24 @@ namespace CmdPalTranslator;
 
 internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 {
+    private readonly CmdPalTranslatorSettingManager _settingsManager;
     private readonly TranslatorService _translatorService;
     private CancellationTokenSource? _debounceCts;
     private const int DebounceDelayMs = 300;
 
-    public CmdPalTranslatorPage(TranslatorService translatorService)
+    public CmdPalTranslatorPage(CmdPalTranslatorSettingManager settingsManager, TranslatorService translatorService)
     {
+        _settingsManager = settingsManager;
+        _settingsManager.SettingsChanged += (_, _) => RaiseItemsChanged();
+
         _translatorService = translatorService;
-        _translatorService.Settings.SettingsChanged += (_, _) => RaiseItemsChanged();
 
         Icon = IconHelpers.FromRelativePath("Assets\\icons\\StoreLogo.png");
         Title = "Translator";
         Name = "Open";
         ShowDetails = true;
 
-        TranslatorProviderFilters filters = new(_translatorService);
+        TranslatorProviderFilters filters = new(_translatorService, _settingsManager);
         filters.PropChanged += (_, _) => RaiseItemsChanged();
         Filters = filters;
     }
@@ -63,7 +66,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
             return BuildHelpItems();
         }
 
-        ParsedTranslationQuery query = _translatorService.ParseQuery(SearchText);
+        ParsedTranslationQuery query = _translatorService.ParseQuery(SearchText, _settingsManager.TargetLanguage);
         ITranslatorProvider provider = _translatorService.GetProvider(GetSelectedProviderId());
 
         try
@@ -117,7 +120,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 
     private IListItem[] BuildHelpItems()
     {
-        LanguageOption defaultTarget = _translatorService.Settings.TargetLanguage;
+        LanguageOption defaultTarget = _settingsManager.TargetLanguage;
 
         return
         [
@@ -163,7 +166,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                     ],
                 },
             },
-            new ListItem(new TargetLanguageSettingsPage(_translatorService.Settings))
+            new ListItem(new TargetLanguageSettingsPage(_settingsManager))
             {
                 Title = "Target language",
                 Subtitle = $"{defaultTarget.DisplayName} ({defaultTarget.Id})",
