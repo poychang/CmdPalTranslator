@@ -6,6 +6,7 @@ namespace CmdPalTranslator.Services
     internal sealed partial class TranslatorService : IDisposable
     {
         public const string DefaultProviderId = "bing";
+        public const string DefaultTranslateOperator = ">>";
         private readonly IReadOnlyList<ITranslatorProvider> _providers;
         private readonly Dictionary<string, ITranslatorProvider> _providerMap;
 
@@ -22,7 +23,7 @@ namespace CmdPalTranslator.Services
 
         public IReadOnlyList<ITranslatorProvider> Providers => _providers;
 
-        public ParsedTranslationQuery ParseQuery(string searchText, LanguageOption defaultTargetLanguage)
+        public ParsedTranslationQuery ParseQuery(string searchText, LanguageOption defaultTargetLanguage, string? translateOperator = null)
         {
             ArgumentNullException.ThrowIfNull(defaultTargetLanguage);
 
@@ -32,11 +33,15 @@ namespace CmdPalTranslator.Services
                 return new ParsedTranslationQuery(string.Empty, LanguageCatalog.AutoDetect, defaultTargetLanguage, false);
             }
 
-            int splitIndex = trimmed.LastIndexOf("->", StringComparison.Ordinal);
+            string normalizedTranslateOperator = string.IsNullOrWhiteSpace(translateOperator)
+                ? DefaultTranslateOperator
+                : translateOperator.Trim();
+
+            int splitIndex = trimmed.LastIndexOf(normalizedTranslateOperator, StringComparison.Ordinal);
             if (splitIndex > 0)
             {
                 string candidateText = trimmed[..splitIndex].Trim();
-                string candidateLanguage = trimmed[(splitIndex + 2)..].Trim();
+                string candidateLanguage = trimmed[(splitIndex + normalizedTranslateOperator.Length)..].Trim();
                 if (!string.IsNullOrWhiteSpace(candidateText) && LanguageCatalog.TryResolve(candidateLanguage, out var language))
                 {
                     return new ParsedTranslationQuery(candidateText, LanguageCatalog.AutoDetect, language!, true);

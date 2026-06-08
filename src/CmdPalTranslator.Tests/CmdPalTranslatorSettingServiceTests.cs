@@ -33,6 +33,14 @@ namespace CmdPalTranslator.Tests
         }
 
         [TestMethod]
+        public void UsesDefaultTranslateOperatorWhenSettingsFileDoesNotExist()
+        {
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+
+            Assert.AreEqual(TranslatorService.DefaultTranslateOperator, service.TranslateOperator);
+        }
+
+        [TestMethod]
         public void LoadsSavedLanguageFromValidJsonSettingsFile()
         {
             File.WriteAllText(_settingsFilePath, """{"targetLanguageId":"ja"}""");
@@ -40,6 +48,16 @@ namespace CmdPalTranslator.Tests
             CmdPalTranslatorSettingService service = new(_settingsFilePath);
 
             Assert.AreEqual("ja", service.TargetLanguage.Id);
+        }
+
+        [TestMethod]
+        public void LoadsSavedTranslateOperatorFromValidJsonSettingsFile()
+        {
+            File.WriteAllText(_settingsFilePath, """{"translateOperator":"=>"}""");
+
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+
+            Assert.AreEqual("=>", service.TranslateOperator);
         }
 
         [TestMethod]
@@ -159,6 +177,22 @@ namespace CmdPalTranslator.Tests
             CmdPalTranslatorSettingService service2 = new(_settingsFilePath);
 
             Assert.AreEqual("es", service2.TargetLanguage.Id);
+        }
+
+        [TestMethod]
+        public void SetTranslateOperatorPersistsSettingAsJson()
+        {
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+
+            service.SetTranslateOperator("=>");
+
+            Assert.AreEqual("=>", service.TranslateOperator);
+            Assert.IsTrue(File.Exists(_settingsFilePath));
+            string json = File.ReadAllText(_settingsFilePath);
+            Assert.IsTrue(json.Contains("\"translateOperator\""));
+
+            CmdPalTranslatorSettingService reloadedService = new(_settingsFilePath);
+            Assert.AreEqual("=>", reloadedService.TranslateOperator);
         }
 
         [TestMethod]

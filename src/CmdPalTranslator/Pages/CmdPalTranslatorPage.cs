@@ -61,7 +61,10 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
             return BuildHelpItems();
         }
 
-        ParsedTranslationQuery query = _translatorService.ParseQuery(SearchText, _translatorSettingManager.TargetLanguage);
+        ParsedTranslationQuery query = _translatorService.ParseQuery(
+            SearchText,
+            _translatorSettingManager.TargetLanguage,
+            _translatorSettingManager.TranslateOperator);
         ITranslatorProvider provider = _translatorService.GetProvider(GetSelectedProviderId());
 
         try
@@ -116,6 +119,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
     private IListItem[] BuildHelpItems()
     {
         LanguageOption defaultTarget = _translatorSettingManager.TargetLanguage;
+        string translateOperator = _translatorSettingManager.TranslateOperator;
 
         return
         [
@@ -125,25 +129,25 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                 Subtitle = "Use the provider filter above to switch between Bing and Google.",
                 Icon = new IconInfo("\uE721"),
             },
-            new ListItem(new LocalCopyTextCommand("hello world -> zht", "Copied sample query"))
+            new ListItem(new LocalCopyTextCommand($"hello world {translateOperator} zht", "Copied sample query"))
             {
                 Title = "Specify a target language",
-                Subtitle = "Append `-> languageCode`, for example `hello world -> zht`.",
+                Subtitle = $"Append `{translateOperator} languageCode`, for example `hello world {translateOperator} zht`.",
                 Icon = new IconInfo("\uE946"),
                 Details = new Details
                 {
                     Title = "Target Language Syntax",
-                    Body = "Use `text -> languageCode` when you want to override the default target language.",
+                    Body = $"Use `text {translateOperator} languageCode` when you want to override the default target language.",
                     Metadata = [
                         new DetailsElement()
                         {
                             Key = "Example",
-                            Data = new DetailsLink() { Text = "hello world -> zht" },
+                            Data = new DetailsLink() { Text = $"hello world {translateOperator} zht" },
                         },
                     ],
                 },
             },
-            new ListItem(new LanguageReferencePage())
+            new ListItem(new LanguageReferencePage(translateOperator))
             {
                 Title = "Browse supported languages",
                 Subtitle = "Open the language reference page and copy a language code.",
@@ -169,7 +173,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                 Details = new Details
                 {
                     Title = "Target Language",
-                    Body = "Open the settings page to choose the target language used when the query does not include `-> languageCode`.",
+                    Body = $"Open the settings page to choose the target language used when the query does not include `{translateOperator} languageCode`.",
                 },
             },
             // ------------------------------------------------------------

@@ -31,6 +31,7 @@ namespace CmdPalTranslator.Pages
         public override IListItem[] GetItems()
         {
             LanguageOption currentLanguage = _translatorSettingManager.TargetLanguage;
+            string translateOperator = _translatorSettingManager.TranslateOperator;
             IEnumerable<LanguageOption> languages = LanguageCatalog.All
                 .Where(language => !string.Equals(language.Id, LanguageCatalog.AutoDetect.Id, StringComparison.OrdinalIgnoreCase));
 
@@ -53,16 +54,16 @@ namespace CmdPalTranslator.Pages
                     Details = new Details
                     {
                         Title = "How target language works",
-                        Body = "New translations use this language unless you append `-> languageCode` in the query.\nExample: `hello world -> ja`",
+                        Body = $"New translations use this language unless you append `{translateOperator} languageCode` in the query.\nExample: `hello world {translateOperator} ja`",
                     },
                 },
             ];
 
-            items.AddRange(languages.Select(language => BuildLanguageItem(language, currentLanguage)));
+            items.AddRange(languages.Select(language => BuildLanguageItem(language, currentLanguage, translateOperator)));
             return [.. items];
         }
 
-        private ListItem BuildLanguageItem(LanguageOption language, LanguageOption currentLanguage)
+        private ListItem BuildLanguageItem(LanguageOption language, LanguageOption currentLanguage, string translateOperator)
         {
             bool isCurrent = string.Equals(language.Id, currentLanguage.Id, StringComparison.OrdinalIgnoreCase);
             string title = isCurrent ? $"{language.DisplayName} (Current)" : language.DisplayName;
@@ -77,8 +78,8 @@ namespace CmdPalTranslator.Pages
                 {
                     Title = $"{language.DisplayName} ({language.Id})",
                     Body = isCurrent
-                        ? $"This is the current target language.\n Used when no `-> languageCode` override is specified.\n Example query without override: `hello world`"
-                        : $"Set this as the target language for new translations.\n Example query with explicit override: `hello world -> {language.Id}`",
+                        ? $"This is the current target language.\n Used when no `{translateOperator} languageCode` override is specified.\n Example query without override: `hello world`"
+                        : $"Set this as the target language for new translations.\n Example query with explicit override: `hello world {translateOperator} {language.Id}`",
                 },
                 Tags = [new Tag(language.Id)],
             };

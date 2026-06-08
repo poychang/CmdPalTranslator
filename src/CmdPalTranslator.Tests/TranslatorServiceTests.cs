@@ -23,7 +23,18 @@ namespace CmdPalTranslator.Tests
         {
             using TranslatorService service = new();
 
-            var parsed = service.ParseQuery("hello world -> fr", LanguageCatalog.GetById("ja"));
+            var parsed = service.ParseQuery("hello world >> fr", LanguageCatalog.GetById("ja"));
+
+            Assert.AreEqual("fr", parsed.TargetLanguage.Id);
+            Assert.IsTrue(parsed.HasExplicitTargetLanguage);
+        }
+
+        [TestMethod]
+        public void ParseQuerySupportsCustomTranslateOperator()
+        {
+            using TranslatorService service = new();
+
+            var parsed = service.ParseQuery("hello world => fr", LanguageCatalog.GetById("ja"), "=>");
 
             Assert.AreEqual("fr", parsed.TargetLanguage.Id);
             Assert.IsTrue(parsed.HasExplicitTargetLanguage);
