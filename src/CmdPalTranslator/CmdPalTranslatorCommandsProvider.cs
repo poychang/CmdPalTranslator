@@ -10,21 +10,21 @@ namespace CmdPalTranslator;
 
 public partial class CmdPalTranslatorCommandsProvider : CommandProvider
 {
-    private readonly CmdPalTranslatorSettingManager _settingsManager;
+    private readonly CmdPalTranslatorSettingManager _translatorSettingManager;
     private readonly TranslatorService _translatorService;
     private readonly ICommandItem[] _commands;
 
-    internal CmdPalTranslatorCommandsProvider(TranslatorService translatorService, CmdPalTranslatorSettingManager settingsManager)
+    internal CmdPalTranslatorCommandsProvider(TranslatorService translatorService, CmdPalTranslatorSettingManager translatorSettingManager)
     {
         _translatorService = translatorService;
-        _settingsManager = settingsManager;
+        _translatorSettingManager = translatorSettingManager;
 
         DisplayName = "Translator";
         Icon = IconHelpers.FromRelativePath("Assets\\icons\\StoreLogo.png");
-        Settings = _settingsManager.CommandSettings;
+        Settings = _translatorSettingManager.CommandSettings;
 
         _commands = [
-            new CommandItem(new CmdPalTranslatorPage(_settingsManager, _translatorService))
+            new CommandItem(new CmdPalTranslatorPage(_translatorSettingManager, _translatorService))
             {
                 Title = "Translator",
                 Subtitle = "Instantly translate text.",

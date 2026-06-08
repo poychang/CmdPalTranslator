@@ -10,12 +10,12 @@ namespace CmdPalTranslator.Pages
 {
     internal sealed partial class TargetLanguageSettingsPage : DynamicListPage
     {
-        private readonly CmdPalTranslatorSettingManager _settingsService;
+        private readonly CmdPalTranslatorSettingManager _translatorSettingManager;
 
-        public TargetLanguageSettingsPage(CmdPalTranslatorSettingManager settingsService)
+        public TargetLanguageSettingsPage(CmdPalTranslatorSettingManager translatorSettingManager)
         {
-            _settingsService = settingsService;
-            _settingsService.SettingsChanged += OnSettingsChanged;
+            _translatorSettingManager = translatorSettingManager;
+            _translatorSettingManager.SettingsChanged += OnSettingsChanged;
 
             Name = "Translation Settings";
             Title = "Target Language";
@@ -30,7 +30,7 @@ namespace CmdPalTranslator.Pages
 
         public override IListItem[] GetItems()
         {
-            LanguageOption currentLanguage = _settingsService.TargetLanguage;
+            LanguageOption currentLanguage = _translatorSettingManager.TargetLanguage;
             IEnumerable<LanguageOption> languages = LanguageCatalog.All
                 .Where(language => !string.Equals(language.Id, LanguageCatalog.AutoDetect.Id, StringComparison.OrdinalIgnoreCase));
 
@@ -68,7 +68,7 @@ namespace CmdPalTranslator.Pages
             string title = isCurrent ? $"{language.DisplayName} (Current)" : language.DisplayName;
             string subtitle = isCurrent ? string.Empty : $"Set as the target";
 
-            return new ListItem(new SetTargetLanguageCommand(_settingsService, language))
+            return new ListItem(new SetTargetLanguageCommand(_translatorSettingManager, language))
             {
                 Title = title,
                 Subtitle = subtitle,

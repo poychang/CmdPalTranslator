@@ -9,24 +9,24 @@ namespace CmdPalTranslator
     internal sealed partial class CmdPalTranslatorSettingManager
     {
         private readonly Settings _settings = new();
-        private readonly CmdPalTranslatorSettingService _settingService;
+        private readonly CmdPalTranslatorSettingService _translatorSettingService;
 
-        public CmdPalTranslatorSettingManager(CmdPalTranslatorSettingService? settingService = null)
+        public CmdPalTranslatorSettingManager(CmdPalTranslatorSettingService? translatorSettingService = null)
         {
-            _settingService = settingService ?? new CmdPalTranslatorSettingService();
-            _settingService.SettingsChanged += (_, _) => SettingsChanged?.Invoke(this, EventArgs.Empty);
+            _translatorSettingService = translatorSettingService ?? new CmdPalTranslatorSettingService();
+            _translatorSettingService.SettingsChanged += (_, _) => SettingsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public ICommandSettings CommandSettings => _settings;
 
         public event EventHandler? SettingsChanged;
 
-        public LanguageOption TargetLanguage => _settingService.TargetLanguage;
+        public LanguageOption TargetLanguage => _translatorSettingService.TargetLanguage;
 
-        public string PreferredProviderId => _settingService.PreferredProviderId;
+        public string PreferredProviderId => _translatorSettingService.PreferredProviderId;
 
-        public bool SetTargetLanguage(LanguageOption language) => _settingService.SetTargetLanguage(language);
+        public bool SetTargetLanguage(LanguageOption language) => _translatorSettingService.SetTargetLanguage(language);
 
-        public bool SetPreferredProvider(string providerId) => _settingService.SetPreferredProvider(providerId);
+        public bool SetPreferredProvider(string providerId) => _translatorSettingService.SetPreferredProvider(providerId);
     }
 }

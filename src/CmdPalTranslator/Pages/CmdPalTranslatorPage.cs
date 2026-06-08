@@ -20,15 +20,15 @@ namespace CmdPalTranslator;
 
 internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 {
-    private readonly CmdPalTranslatorSettingManager _settingsManager;
+    private readonly CmdPalTranslatorSettingManager _translatorSettingManager;
     private readonly TranslatorService _translatorService;
     private CancellationTokenSource? _debounceCts;
     private const int DebounceDelayMs = 300;
 
-    public CmdPalTranslatorPage(CmdPalTranslatorSettingManager settingsManager, TranslatorService translatorService)
+    public CmdPalTranslatorPage(CmdPalTranslatorSettingManager translatorSettingManager, TranslatorService translatorService)
     {
-        _settingsManager = settingsManager;
-        _settingsManager.SettingsChanged += (_, _) => RaiseItemsChanged();
+        _translatorSettingManager = translatorSettingManager;
+        _translatorSettingManager.SettingsChanged += (_, _) => RaiseItemsChanged();
 
         _translatorService = translatorService;
 
@@ -37,7 +37,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         Name = "Open";
         ShowDetails = true;
 
-        TranslatorProviderFilters filters = new(_translatorService, _settingsManager);
+        TranslatorProviderFilters filters = new(_translatorService, _translatorSettingManager);
         filters.PropChanged += (_, _) => RaiseItemsChanged();
         Filters = filters;
     }
@@ -66,7 +66,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
             return BuildHelpItems();
         }
 
-        ParsedTranslationQuery query = _translatorService.ParseQuery(SearchText, _settingsManager.TargetLanguage);
+        ParsedTranslationQuery query = _translatorService.ParseQuery(SearchText, _translatorSettingManager.TargetLanguage);
         ITranslatorProvider provider = _translatorService.GetProvider(GetSelectedProviderId());
 
         try
@@ -120,7 +120,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 
     private IListItem[] BuildHelpItems()
     {
-        LanguageOption defaultTarget = _settingsManager.TargetLanguage;
+        LanguageOption defaultTarget = _translatorSettingManager.TargetLanguage;
 
         return
         [
@@ -166,7 +166,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
                     ],
                 },
             },
-            new ListItem(new TargetLanguageSettingsPage(_settingsManager))
+            new ListItem(new TargetLanguageSettingsPage(_translatorSettingManager))
             {
                 Title = "Target language",
                 Subtitle = $"{defaultTarget.DisplayName} ({defaultTarget.Id})",

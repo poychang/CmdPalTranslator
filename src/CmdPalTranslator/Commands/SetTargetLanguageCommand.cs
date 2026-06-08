@@ -6,7 +6,7 @@ using System;
 namespace CmdPalTranslator.Commands
 {
     internal sealed partial class SetTargetLanguageCommand(
-        CmdPalTranslatorSettingManager settingsService,
+        CmdPalTranslatorSettingManager translatorSettingManager,
         LanguageOption language) : InvokableCommand
     {
         public override string Name => "Set target language";
@@ -15,7 +15,7 @@ namespace CmdPalTranslator.Commands
         {
             try
             {
-                bool changed = settingsService.SetTargetLanguage(language);
+                bool changed = translatorSettingManager.SetTargetLanguage(language);
                 string message = changed
                     ? $"Target language set to {language.DisplayName}"
                     : $"{language.DisplayName} is already the target language";

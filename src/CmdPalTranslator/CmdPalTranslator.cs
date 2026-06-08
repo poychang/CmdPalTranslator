@@ -21,9 +21,9 @@ public sealed partial class CmdPalTranslator : IExtension, IDisposable
     {
         _extensionDisposedEvent = extensionDisposedEvent;
 
-        CmdPalTranslatorSettingManager settingsManager = new();
+        CmdPalTranslatorSettingManager translatorSettingManager = new();
         TranslatorService translatorService = new();
-        _provider = new CmdPalTranslatorCommandsProvider(translatorService, settingsManager);
+        _provider = new CmdPalTranslatorCommandsProvider(translatorService, translatorSettingManager);
     }
 
     public object? GetProvider(ProviderType providerType)
