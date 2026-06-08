@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CmdPalTranslator.Models
+﻿namespace CmdPalTranslator.Models
 {
     internal sealed record ParsedTranslationQuery(
         string SourceText,

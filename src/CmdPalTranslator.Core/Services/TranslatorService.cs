@@ -1,8 +1,5 @@
 ﻿using CmdPalTranslator.Models;
 using CmdPalTranslator.Providers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CmdPalTranslator.Services
 {

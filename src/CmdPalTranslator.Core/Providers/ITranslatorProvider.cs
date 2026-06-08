@@ -1,6 +1,4 @@
 ﻿using CmdPalTranslator.Models;
-using System;
-using System.Threading;
 
 namespace CmdPalTranslator.Providers
 {

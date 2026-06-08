@@ -1,9 +1,7 @@
 using Microsoft.Extensions.Http;
 using Polly;
 using Polly.Extensions.Http;
-using System;
 using System.Net;
-using System.Net.Http;
 
 namespace CmdPalTranslator.Providers
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace CmdPalTranslator.Models
+﻿namespace CmdPalTranslator.Models
 {
     internal sealed record LanguageOption(
     string Id,
