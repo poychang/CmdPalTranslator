@@ -18,7 +18,7 @@ namespace CmdPalTranslator.Providers
 
             IAsyncPolicy<HttpResponseMessage> retryPolicy = HttpPolicyExtensions
                 .HandleTransientHttpError()
-                .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+                .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2d, retryAttempt)));
 
             PolicyHttpMessageHandler policyHandler = new(retryPolicy)
             {
@@ -27,7 +27,7 @@ namespace CmdPalTranslator.Providers
 
             HttpClient client = new(policyHandler)
             {
-                Timeout = TimeSpan.FromSeconds(30),
+                Timeout = TimeSpan.FromSeconds(30d),
             };
             client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) CmdPalTranslator/1.0");
             return client;
