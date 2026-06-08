@@ -1,131 +1,131 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>CmdPalTranslator</RootNamespace>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <RootNamespace>CmdPalTranslator</RootNamespace>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
 
-    <WindowsSdkPackageVersion>10.0.26100.68-preview</WindowsSdkPackageVersion>
-    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
-    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
-    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
-    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+        <WindowsSdkPackageVersion>10.0.26100.68-preview</WindowsSdkPackageVersion>
+        <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+        <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+        <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+        <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
 
-    <PublishProfile>win-$(Platform).pubxml</PublishProfile>
-    <EnableMsixTooling>true</EnableMsixTooling>
-    <Nullable>enable</Nullable>
+        <PublishProfile>win-$(Platform).pubxml</PublishProfile>
+        <EnableMsixTooling>true</EnableMsixTooling>
+        <Nullable>enable</Nullable>
 
-    <AppxPackageIdentityName>25526PoyChang.TranslatorforCommandPalette</AppxPackageIdentityName>
-    <AppxPackagePublisher>CN=DC46547E-28C9-45C1-91CC-5380ACD55B44</AppxPackagePublisher>
-    <AppxPackageVersion>0.0.3.0</AppxPackageVersion>
-  </PropertyGroup>
+        <AppxPackageIdentityName>25526PoyChang.TranslatorforCommandPalette</AppxPackageIdentityName>
+        <AppxPackagePublisher>CN=DC46547E-28C9-45C1-91CC-5380ACD55B44</AppxPackagePublisher>
+        <AppxPackageVersion>0.0.3.0</AppxPackageVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="Assets\**\*.png" />
-  </ItemGroup>
-  <Target Name="PrepareAssets" BeforeTargets="BeforeBuild">
-    <!-- Copy scale-specific assets to base filenames expected by store validations -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\Square150x150Logo.scale-200.png"
-        DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\Square150x150Logo.png"
-        SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\Square44x44Logo.scale-200.png"
-        DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\SmallTile.png"
-        SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\Wide310x150Logo.scale-200.png"
-        DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\Wide310x150Logo.png"
-        SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\SplashScreen.scale-200.png"
-        DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\SplashScreen.png"
-        SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\Square150x150Logo.scale-200.png"
-        DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\LargeTile.png"
-        SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\StoreLogo.scale-100.png"
-        DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\StoreLogo.png"
-        SkipUnchangedFiles="true" />
-  </Target>
+    <ItemGroup>
+        <Content Include="Assets\**\*.png" />
+    </ItemGroup>
+    <Target Name="PrepareAssets" BeforeTargets="BeforeBuild">
+        <!-- Copy scale-specific assets to base filenames expected by store validations -->
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\Square150x150Logo.scale-200.png"
+            DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\Square150x150Logo.png"
+            SkipUnchangedFiles="true" />
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\Square44x44Logo.scale-200.png"
+            DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\SmallTile.png"
+            SkipUnchangedFiles="true" />
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\Wide310x150Logo.scale-200.png"
+            DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\Wide310x150Logo.png"
+            SkipUnchangedFiles="true" />
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\SplashScreen.scale-200.png"
+            DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\SplashScreen.png"
+            SkipUnchangedFiles="true" />
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\Square150x150Logo.scale-200.png"
+            DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\LargeTile.png"
+            SkipUnchangedFiles="true" />
+        <Copy SourceFiles="$(MSBuildProjectDirectory)\Assets\icons\StoreLogo.scale-100.png"
+            DestinationFiles="$(MSBuildProjectDirectory)\Assets\icons\StoreLogo.png"
+            SkipUnchangedFiles="true" />
+    </Target>
 
-  <ItemGroup>
-    <Manifest Include="$(ApplicationManifest)" />
-  </ItemGroup>
+    <ItemGroup>
+        <Manifest Include="$(ApplicationManifest)" />
+    </ItemGroup>
 
-  <!--
+    <!--
     Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
     Tools extension to be activated for this project even if the Windows App SDK Nuget
     package has not yet been restored.
   -->
-  <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
-    <ProjectCapability Include="Msix" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CommandPalette.Extensions" />
-    <PackageReference Include="Microsoft.Windows.CsWinRT" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\CmdPalTranslator.Core\CmdPalTranslator.Core.csproj" />
-  </ItemGroup>
-
-  <!-- Provide the Implementation metadata for the CommandPalette .winmd so the MSIX manifest generates correct registration info -->
-  <Target Name="SetCommandPaletteWinMDImplementation" BeforeTargets="_GenerateAppxPackageFile">
-    <ItemGroup>
-      <ResolvedWinMDReferences Update="@(ResolvedWinMDReferences)" Condition="'%(ResolvedWinMDReferences.Filename)' == 'Microsoft.CommandPalette.Extensions'">
-        <Implementation>$(AssemblyName).dll</Implementation>
-      </ResolvedWinMDReferences>
+    <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+        <ProjectCapability Include="Msix" />
     </ItemGroup>
-  </Target>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CommandPalette.Extensions" />
+        <PackageReference Include="Microsoft.Windows.CsWinRT" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Shmuelie.WinRTServer" />
+    <ItemGroup>
+        <ProjectReference Include="..\CmdPalTranslator.Core\CmdPalTranslator.Core.csproj" />
+    </ItemGroup>
 
-    <!-- Needed to enable building an MSIX package -->
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools.MSIX">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+    <!-- Provide the Implementation metadata for the CommandPalette .winmd so the MSIX manifest generates correct registration info -->
+    <Target Name="SetCommandPaletteWinMDImplementation" BeforeTargets="_GenerateAppxPackageFile">
+        <ItemGroup>
+            <ResolvedWinMDReferences Update="@(ResolvedWinMDReferences)" Condition="'%(ResolvedWinMDReferences.Filename)' == 'Microsoft.CommandPalette.Extensions'">
+                <Implementation>$(AssemblyName).dll</Implementation>
+            </ResolvedWinMDReferences>
+        </ItemGroup>
+    </Target>
 
-  <!--
+    <ItemGroup>
+        <PackageReference Include="Shmuelie.WinRTServer" />
+
+        <!-- Needed to enable building an MSIX package -->
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools.MSIX">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <!--
     Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution
     Explorer "Package and Publish" context menu entry to be enabled for this project even if
     the Windows App SDK Nuget package has not yet been restored.
   -->
-  <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
-    <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+        <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <PublishSingleFile>true</PublishSingleFile>
-    <IsAotCompatible>true</IsAotCompatible>
+    <PropertyGroup>
+        <PublishSingleFile>true</PublishSingleFile>
+        <IsAotCompatible>true</IsAotCompatible>
 
-    <CsWinRTAotOptimizerEnabled>true</CsWinRTAotOptimizerEnabled>
-    <CsWinRTAotWarningLevel>2</CsWinRTAotWarningLevel>
-    <!-- Suppress DynamicallyAccessedMemberTypes.PublicParameterlessConstructor in fallback code path of Windows SDK projection -->
-    <WarningsNotAsErrors>IL2081;$(WarningsNotAsErrors)</WarningsNotAsErrors>
+        <CsWinRTAotOptimizerEnabled>true</CsWinRTAotOptimizerEnabled>
+        <CsWinRTAotWarningLevel>2</CsWinRTAotWarningLevel>
+        <!-- Suppress DynamicallyAccessedMemberTypes.PublicParameterlessConstructor in fallback code path of Windows SDK projection -->
+        <WarningsNotAsErrors>IL2081;$(WarningsNotAsErrors)</WarningsNotAsErrors>
 
-    <!-- When publishing trimmed, make sure to treat trimming warnings as build errors -->
-    <ILLinkTreatWarningsAsErrors>true</ILLinkTreatWarningsAsErrors>
-    <DefaultLanguage>en-US</DefaultLanguage>
+        <!-- When publishing trimmed, make sure to treat trimming warnings as build errors -->
+        <ILLinkTreatWarningsAsErrors>true</ILLinkTreatWarningsAsErrors>
+        <DefaultLanguage>en-US</DefaultLanguage>
 
-  </PropertyGroup>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <!-- In Debug builds, trimming is disabled by default, but all the trim & 
+    <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+        <!-- In Debug builds, trimming is disabled by default, but all the trim & 
          AOT warnings are enabled. This gives debug builds a tighter inner loop,
          while at least warning about future trim violations -->
-    <PublishTrimmed>false</PublishTrimmed>
-    
-    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
-    <EnableAotAnalyzer>true</EnableAotAnalyzer>
-  </PropertyGroup>
+        <PublishTrimmed>false</PublishTrimmed>
 
-  <PropertyGroup Condition="'$(Configuration)'!='Debug'">
-    <!-- In Release builds, trimming is enabled by default. 
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+        <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'!='Debug'">
+        <!-- In Release builds, trimming is enabled by default. 
          feel free to disable this if needed -->
-    <PublishTrimmed>true</PublishTrimmed>
+        <PublishTrimmed>true</PublishTrimmed>
 
-    <!-- In release, also ignore the aforementioned ILLink warning -->
-    <ILLinkTreatWarningsAsErrors>false</ILLinkTreatWarningsAsErrors>
-  </PropertyGroup>
+        <!-- In release, also ignore the aforementioned ILLink warning -->
+        <ILLinkTreatWarningsAsErrors>false</ILLinkTreatWarningsAsErrors>
+    </PropertyGroup>
 
 </Project>
