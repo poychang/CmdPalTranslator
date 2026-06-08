@@ -14,7 +14,9 @@ namespace CmdPalTranslator
         public CmdPalTranslatorSettingManager(CmdPalTranslatorSettingService? translatorSettingService = null)
         {
             _translatorSettingService = translatorSettingService ?? new CmdPalTranslatorSettingService();
-            _translatorSettingService.SettingsChanged += (_, _) => SettingsChanged?.Invoke(this, EventArgs.Empty);
+
+            InitializePreferredProviderSettings();
+            _translatorSettingService.SettingsChanged += OnServiceSettingsChanged;
         }
 
         public ICommandSettings CommandSettings => _settings;
@@ -23,10 +25,12 @@ namespace CmdPalTranslator
 
         public LanguageOption TargetLanguage => _translatorSettingService.TargetLanguage;
 
-        public string PreferredProviderId => _translatorSettingService.PreferredProviderId;
-
         public bool SetTargetLanguage(LanguageOption language) => _translatorSettingService.SetTargetLanguage(language);
 
-        public bool SetPreferredProvider(string providerId) => _translatorSettingService.SetPreferredProvider(providerId);
+        private void OnServiceSettingsChanged(object? sender, EventArgs e)
+        {
+            ApplyPreferredProviderSettingValue(_translatorSettingService.PreferredProviderId);
+            SettingsChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

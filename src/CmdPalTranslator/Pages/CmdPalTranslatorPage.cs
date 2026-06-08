@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using CmdPalTranslator.Commands;
-using CmdPalTranslator.Filters;
 using CmdPalTranslator.Models;
 using CmdPalTranslator.Pages;
 using CmdPalTranslator.Providers;
@@ -36,10 +35,6 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         Title = "Translator";
         Name = "Open";
         ShowDetails = true;
-
-        TranslatorProviderFilters filters = new(_translatorService, _translatorSettingManager);
-        filters.PropChanged += (_, _) => RaiseItemsChanged();
-        Filters = filters;
     }
 
     public override async void UpdateSearchText(string oldSearch, string newSearch)
@@ -247,9 +242,9 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 
     private string GetSelectedProviderId()
     {
-        if (Filters is TranslatorProviderFilters providerFilters && !string.IsNullOrWhiteSpace(providerFilters.CurrentFilterId))
+        if (!string.IsNullOrWhiteSpace(_translatorSettingManager.PreferredProviderId))
         {
-            return providerFilters.CurrentFilterId;
+            return _translatorSettingManager.PreferredProviderId;
         }
 
         return TranslatorService.DefaultProviderId;
