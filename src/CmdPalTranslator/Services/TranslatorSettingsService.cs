@@ -16,8 +16,10 @@ namespace CmdPalTranslator.Services
         public TranslatorSettingsService(string? settingsFilePath = null)
         {
             _settingsFilePath = settingsFilePath ?? GetSettingsFilePath();
-            _targetLanguageId = LoadTargetLanguageId();
-            _preferredProviderId = LoadPreferredProviderId();
+
+            TranslatorSettings? settings = LoadSettings();
+            _targetLanguageId = LoadTargetLanguageId(settings);
+            _preferredProviderId = LoadPreferredProviderId(settings);
         }
 
         public event EventHandler? SettingsChanged;
@@ -92,9 +94,8 @@ namespace CmdPalTranslator.Services
             }
         }
 
-        private string LoadTargetLanguageId()
+        private static string LoadTargetLanguageId(TranslatorSettings? settings)
         {
-            TranslatorSettings? settings = LoadSettings();
             if (settings is not null && !string.IsNullOrWhiteSpace(settings.TargetLanguageId))
             {
                 return ResolveTargetLanguage(settings.TargetLanguageId).Id;
@@ -103,9 +104,8 @@ namespace CmdPalTranslator.Services
             return LanguageCatalog.BuiltInDefaultTarget.Id;
         }
 
-        private string LoadPreferredProviderId()
+        private static string LoadPreferredProviderId(TranslatorSettings? settings)
         {
-            TranslatorSettings? settings = LoadSettings();
             if (settings is not null && !string.IsNullOrWhiteSpace(settings.PreferredProviderId))
             {
                 return settings.PreferredProviderId;
