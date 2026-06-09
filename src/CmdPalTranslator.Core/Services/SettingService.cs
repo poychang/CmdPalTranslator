@@ -4,6 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace CmdPalTranslator.Services
 {
+    [JsonSourceGenerationOptions(JsonSerializerDefaults.General)]
+    [JsonSerializable(typeof(TranslatorSettings))]
+    internal sealed partial class SettingJsonContext : JsonSerializerContext { }
+
     internal sealed class SettingService
     {
         private readonly string _settingsFilePath;
@@ -24,7 +28,7 @@ namespace CmdPalTranslator.Services
             {
                 string json = File.ReadAllText(_settingsFilePath);
                 Debug.WriteLine($"Loaded settings JSON: {json}");
-                return JsonSerializer.Deserialize<TranslatorSettings>(json);
+                return JsonSerializer.Deserialize(json, SettingJsonContext.Default.TranslatorSettings);
             }
             catch (Exception ex) when (ex is IOException or JsonException)
             {
@@ -44,7 +48,7 @@ namespace CmdPalTranslator.Services
                 TranslateOperator = translateOperator,
             };
 
-            string json = JsonSerializer.Serialize(settings);
+            string json = JsonSerializer.Serialize(settings, SettingJsonContext.Default.TranslatorSettings);
             File.WriteAllText(_settingsFilePath, json);
         }
 
