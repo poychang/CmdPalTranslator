@@ -1,126 +1,209 @@
 # Translator for Command Palette
 
+Languages: English | [繁體中文](README.zh-tw.md)
+
 <a href="https://apps.microsoft.com/store/detail/9NSHZ9B3KJFW" target="_blank" rel="noopener noreferrer"><img src="https://get.microsoft.com/images/en-us%20light.svg" width="200"/></a>
 
-`Translator for Command Palette` 是一個提供給 Windows Command Palette 使用的翻譯擴充功能。它把文字翻譯流程直接帶進 Command Palette，讓你可以在同一個操作介面裡輸入文字、切換翻譯來源、複製結果，必要時再跳轉到原始翻譯網站。
+`Translator for Command Palette` is a translation extension for Windows Command Palette. It brings translation, language selection, copying results, and opening the original translation website into a single Command Palette workflow.
 
-目前專案內建 `Bing` 與 `Google` 兩個翻譯 provider，預設目標語言可在設定頁中調整，初始值為繁體中文（`zht`），並支援用 `text -> lang` 的方式快速指定目標語言。
+The current version is `0.1.1.0`. The project has been upgraded to `.NET 10`. The main app is packaged as an MSIX Command Palette extension and supports `win-x64` and `win-arm64` releases.
 
-## 主要功能特性
+## Screenshots
 
-- 整合 Windows Command Palette，以 extension 形式提供翻譯命令。
-- 內建 `Bing`、`Google` 兩種翻譯來源，可透過篩選器即時切換。
-- 支援自動偵測來源語言。
-- 支援 `text -> languageCode` 查詢語法，直接在輸入框指定目標語言。
-- 提供設定頁，可自訂預設翻譯目標語言。
-- 翻譯結果可直接複製到剪貼簿。
-- 提供複製原文與開啟 Bing / Google 翻譯網頁等額外操作。
-- 內建 Supported Languages 頁面，可查詢語言代碼並一鍵複製。
-- 針對 provider 端點實作單元測試與 live 測試，驗證中英雙向翻譯流程。
+![Extension settings](src/CmdPalTranslator/Assets/screenshots/00-extension-setting.png)
 
-## 使用簡介
+![Main translator view](src/CmdPalTranslator/Assets/screenshots/01-main-view.png)
 
-1. 先將此專案建置並部署到本機，讓它能被 Windows Command Palette 載入為 extension。
-2. 開啟 Windows Command Palette，搜尋 `Translator`。
-3. 直接輸入要翻譯的文字，例如：
+![Translation results](src/CmdPalTranslator/Assets/screenshots/02-results.png)
+
+![Choose target language](src/CmdPalTranslator/Assets/screenshots/03-choose-target-language.png)
+
+## Features
+
+- Integrates with Windows Command Palette and provides a top-level `Translator` command.
+- Includes two translation providers, `Bing` and `Google`, with `Bing` as the default.
+- Lets you choose the default translation source from `Preferred provider` in the extension settings.
+- Supports automatic source-language detection, with Traditional Chinese `zht` as the default target language.
+- Lets you search, select, and save the default target language from the `Target language` page.
+- Supports the `text >> languageCode` query syntax to override the target language for a single translation.
+- Lets you customize the query operator from `Translate operator` in the extension settings, for example by changing it to `=>`.
+- Translation results can be copied directly. More actions can also copy the original text or open the Bing / Google Translate webpage.
+- The Google provider also shows Dictionary items when dictionary data is included in the response.
+- Includes a built-in `Supported Languages` page for browsing language codes and copying example queries.
+- Translation input uses a short delayed update to avoid sending a request on every keystroke.
+
+## Usage
+
+After installation, open Windows Command Palette, then search for and run `Translator`.
+
+Enter text directly to translate it:
 
 ```text
 hello world
 ```
 
-若未指定語言，系統會自動偵測來源語言，並翻譯成你在設定頁選定的預設目標語言。
+When no target language is specified, the configured `Target language` is used. The initial default is Traditional Chinese `zht`.
 
-4. 若要指定目標語言，使用 `->` 語法，例如：
+To specify the target language for a single translation, use the default operator `>>`:
 
 ```text
-hello world -> ja
-open source software -> fr
-今天天氣很好 -> en
+hello world >> ja
+open source software >> fr
+今天天氣很好 >> en
 ```
 
-5. 使用頁面上方的 filter 在 `Bing` 與 `Google` 之間切換翻譯來源。
-6. 若要調整預設目標語言，進入 `Target language` 設定頁後選取語言即可儲存。
-7. 選取翻譯結果後即可複製內容；更多操作中還可以複製原文或開啟對應的翻譯網站。
+If you change `Translate operator` to `=>` in settings, queries will use that operator instead:
 
-## 支援語言
+```text
+hello world => ja
+```
 
-目前專案內建以下語言代碼：
+Blank or invalid custom operators fall back to the default value, `>>`.
 
-- `auto` 自動偵測
-- `zhs` 簡體中文
-- `zht` 繁體中文
-- `en` 英文
-- `ja` 日文
-- `ko` 韓文
-- `fr` 法文
-- `de` 德文
-- `es` 西班牙文
-- `it` 義大利文
-- `ru` 俄文
-- `ar` 阿拉伯文
-- `he` 希伯來文
-- `pt` 葡萄牙文
-- `th` 泰文
+## Settings
 
-在 Command Palette 中也可以開啟 `Supported Languages` 頁面，直接瀏覽與複製語言代碼。
+Command Palette extension settings currently provide two options:
 
-## 專案結構
+- `Preferred provider`: Choose the default translation provider. Available options are `Bing` and `Google`.
+- `Translate operator`: Set the operator used in queries to override the target language. The default is `>>`.
 
-- `CmdPalTranslator/`：Command Palette extension 主程式。
-- `CmdPalTranslator/Providers/`：Bing、Google 翻譯 provider 實作。
-- `CmdPalTranslator/Pages/`：翻譯頁面與支援語言頁面。
-- `CmdPalTranslator/Services/`：查詢解析與 provider 管理。
-- `Translator.ProviderTests/`：provider 單元測試與 live 測試。
+The `Target language` item on the translation page opens the language settings page. The selected language is saved immediately. Settings are written locally to:
 
-## 開發基本起手式
+```text
+%LOCALAPPDATA%\CmdPalTranslator\settings.json
+```
 
-### 1. 開發環境
+The settings file stores:
 
-建議準備以下環境：
+- `targetLanguageId`
+- `preferredProviderId`
+- `translateOperator`
+
+If the settings file does not exist, has invalid contents, uses an unknown target language, or sets the target language to `auto`, the project falls back to its built-in defaults.
+
+## Supported Languages
+
+The currently built-in language codes are:
+
+| Code | Language |
+| --- | --- |
+| `auto` | Auto Detect |
+| `zhs` | Chinese (Simplified) |
+| `zht` | Chinese (Traditional) |
+| `en` | English |
+| `ja` | Japanese |
+| `ko` | Korean |
+| `fr` | French |
+| `de` | German |
+| `es` | Spanish |
+| `it` | Italian |
+| `ru` | Russian |
+| `ar` | Arabic |
+| `he` | Hebrew |
+| `pt` | Portuguese |
+| `th` | Thai |
+
+`LanguageCatalog` maps the internal language codes to the provider codes required by Bing and Google. For example, Traditional Chinese uses `zh-TW` in Google and `zh-Hant` in Bing.
+
+## Project Structure
+
+```text
+.
+├─ README.md
+├─ privacy.md
+└─ src
+   ├─ CmdPalTranslator.slnx
+   ├─ CmdPalTranslator
+   │  ├─ Pages
+   │  ├─ Commands
+   │  ├─ Assets
+   │  └─ Package.appxmanifest
+   ├─ CmdPalTranslator.Core
+   │  ├─ Models
+   │  ├─ Providers
+   │  └─ Services
+   └─ CmdPalTranslator.Tests
+```
+
+- `src/CmdPalTranslator/`: Main Command Palette extension app, commands, pages, MSIX manifest, and assets.
+- `src/CmdPalTranslator.Core/`: Core logic for translation providers, query parsing, language catalog, settings read/write, and related functionality.
+- `src/CmdPalTranslator.Tests/`: MSTest project containing unit and live integration tests.
+
+## Development
+
+### Requirements
 
 - Windows 11
-- Visual Studio 2022（含 .NET / Windows 開發工作負載）
-- 可建置 Windows App / MSIX 專案的 SDK 與工具鏈
-- 可連網環境（翻譯 provider 會呼叫線上服務）
+- Visual Studio 2022 with .NET / Windows app development workloads
+- .NET 10 SDK
+- Windows SDK / MSIX build tools
+- Network access, because providers call public web endpoints
 
-### 2. 還原與建置
+Package versions are centrally managed in `src/Directory.Packages.props`. The test runner uses Microsoft Testing Platform.
 
-請在 Windows 終端機或 Visual Studio 環境中，於專案根目錄執行：
+### Restore and Build
 
-```bash
-dotnet build CmdPalTranslator.slnx
-```
-
-若只想建置主專案：
+Run from the repository root:
 
 ```bash
-dotnet build CmdPalTranslator/CmdPalTranslator.csproj -r win-x64
+dotnet restore src/CmdPalTranslator.slnx
+dotnet build src/CmdPalTranslator.slnx -p:Platform=x64
 ```
 
-### 3. 執行測試
-
-執行 provider 測試：
+To build only the main app:
 
 ```bash
-dotnet test --project CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj
+dotnet build src/CmdPalTranslator/CmdPalTranslator.csproj -p:Platform=x64
 ```
 
-### 4. 建置 MSIX
-
-移動到 `CmdPalTranslator\CmdPalTranslator` 目錄，用以下指令建立 x64 版本的 MSIX
+`ARM64` is also supported:
 
 ```bash
-dotnet build --configuration Release -p:GenerateAppxPackageOnBuild=true -p:Platform=x64 -p:AppxPackageDir="AppPackages\x64\"
+dotnet build src/CmdPalTranslator.slnx -p:Platform=ARM64
 ```
 
-完成後，可以在 `CmdPalTranslator\CmdPalTranslator\AppPackages\x64\` 目錄中找到相關 MSIX 安裝檔。
+### Run Tests
 
-### 5. 發佈到 Marketplace
+Run unit tests:
 
-請至 [Microsoft Partner Center](https://partner.microsoft.com/dashboard/home) 發佈至 Microsoft Store，或直接提交到 WinGet。詳細流程請參考官方 [Command Palette 擴充功能發佈指南](https://learn.microsoft.com/en-us/windows/powertoys/command-palette/publish-extension)。
+```bash
+dotnet test src/CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj --filter TestCategory=Unit
+```
 
-## 備註
+Run live integration tests:
 
-- 此專案目前透過公開 Web endpoint 存取 Bing / Google 翻譯能力。
-- Bing 與 Google 的語言代碼不完全相同，專案已在 `LanguageCatalog` 中做 provider 對應。
-- 若未來要增加新的翻譯來源，可沿用 `ITranslatorProvider` 介面擴充。
+```bash
+dotnet test src/CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj --filter TestCategory=Integration
+```
+
+Integration tests call the live Bing and Google online translation endpoints. They are useful when verifying network access and provider behavior.
+
+### Build MSIX
+
+Create an x64 Release MSIX:
+
+```bash
+dotnet build src/CmdPalTranslator/CmdPalTranslator.csproj -c Release -p:Platform=x64 -p:GenerateAppxPackageOnBuild=true -p:AppxPackageDir=AppPackages\x64\
+```
+
+Create an ARM64 Release MSIX:
+
+```bash
+dotnet build src/CmdPalTranslator/CmdPalTranslator.csproj -c Release -p:Platform=ARM64 -p:GenerateAppxPackageOnBuild=true -p:AppxPackageDir=AppPackages\ARM64\
+```
+
+Before building, scale-specific icons are automatically copied to the base filenames required by Store / MSIX validation.
+
+### Publishing
+
+You can publish to Microsoft Store through [Microsoft Partner Center](https://partner.microsoft.com/dashboard/home), or submit to WinGet. See the official documentation for the Command Palette extension packaging and publishing workflow:
+
+[Publish a Command Palette extension](https://learn.microsoft.com/en-us/windows/powertoys/command-palette/publish-extension)
+
+## Notes
+
+- The Bing and Google providers currently obtain translation results through public web endpoints. Endpoint behavior may change in the future.
+- The Bing provider first obtains and caches validation information from the translation page. If validation expires, it retries once.
+- The HTTP client has built-in gzip/deflate decompression, a 30-second timeout, and retries for transient errors.
+- Release builds enable trimming and use source generation for JSON serialization to support NativeAOT/trim-friendly builds.
+- To add a new translation source, implement `ITranslatorProvider`, then register the provider in `TranslatorService`.
