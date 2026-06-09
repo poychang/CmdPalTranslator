@@ -1,3 +1,4 @@
+using CmdPalTranslator.Core.Services;
 using CmdPalTranslator.Models;
 
 namespace CmdPalTranslator.Services

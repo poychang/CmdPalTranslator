@@ -1,7 +1,7 @@
 ﻿using CmdPalTranslator.Models;
 using CmdPalTranslator.Providers;
 
-namespace CmdPalTranslator.Services
+namespace CmdPalTranslator.Core.Services
 {
     internal sealed partial class TranslatorService : IDisposable
     {

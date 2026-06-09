@@ -1,6 +1,6 @@
 ﻿using CmdPalTranslator.Commands;
+using CmdPalTranslator.Core.Services;
 using CmdPalTranslator.Models;
-using CmdPalTranslator.Services;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;

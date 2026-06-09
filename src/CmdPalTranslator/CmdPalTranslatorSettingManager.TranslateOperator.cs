@@ -1,4 +1,4 @@
-using CmdPalTranslator.Services;
+using CmdPalTranslator.Core.Services;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;
 
