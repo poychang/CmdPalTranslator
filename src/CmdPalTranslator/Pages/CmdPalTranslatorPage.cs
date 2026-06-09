@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace CmdPalTranslator;
 
-internal sealed partial class CmdPalTranslatorPage : DynamicListPage
+internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposable
 {
     private readonly CmdPalTranslatorSettingManager _translatorSettingManager;
     private readonly TranslatorService _translatorService;
@@ -39,9 +39,12 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
 
     public override async void UpdateSearchText(string oldSearch, string newSearch)
     {
-        _debounceCts?.Cancel();
-        _debounceCts = new CancellationTokenSource();
-        var token = _debounceCts.Token;
+        CancellationTokenSource newDebounceCts = new();
+        CancellationTokenSource? previousCts = Interlocked.Exchange(ref _debounceCts, newDebounceCts);
+        previousCts?.Cancel();
+        previousCts?.Dispose();
+
+        var token = newDebounceCts.Token;
 
         try
         {
@@ -252,5 +255,12 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage
         }
 
         return TranslatorService.DefaultProviderId;
+    }
+
+    public void Dispose()
+    {
+        CancellationTokenSource? cts = Interlocked.Exchange(ref _debounceCts, null);
+        cts?.Cancel();
+        cts?.Dispose();
     }
 }
