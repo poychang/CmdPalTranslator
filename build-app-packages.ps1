@@ -500,6 +500,7 @@ foreach ($platform in $platformsToBuild) {
     if (-not $SkipBuild) {
         Write-Host ''
         Write-Host "Building $platform MSIX..." -BackgroundColor DarkGreen
+        Write-Host "`e[0m" -NoNewline
         & dotnet build $projectFullPath `
             --configuration $Configuration `
             "-p:GenerateAppxPackageOnBuild=true" `
@@ -526,6 +527,7 @@ foreach ($platform in $platformsToBuild) {
 
 Write-Host ''
 Write-Host 'MSIX packages:' -BackgroundColor DarkGreen
+Write-Host "`e[0m" -NoNewline
 
 foreach ($package in $packageFiles) {
     Write-Host "  $($package.File.FullName)"
@@ -534,7 +536,6 @@ foreach ($package in $packageFiles) {
 if ($SkipBundle) {
     Write-Host ''
     Write-Host 'Skipping MSIX bundle creation.'
-    return
 }
 
 $makeAppxPath = Resolve-MakeAppx
@@ -555,6 +556,7 @@ Set-Content -LiteralPath $mappingPath -Value $mappingLines -Encoding ASCII
 
 Write-Host ''
 Write-Host "Bundle mapping: $mappingPath" -BackgroundColor DarkGreen
+Write-Host "`e[0m" -NoNewline
 Write-Host "Creating MSIX bundle..."
 
 Push-Location $bundleDirectoryFullPath
@@ -570,11 +572,11 @@ try {
 }
 
 Write-Host ''
-Write-Host 'Package outputs:' -BackgroundColor DarkGreen
+Write-Host "Package outputs: $bundleDirectoryFullPath" -BackgroundColor DarkGreen
+Write-Host "`e[0m" -NoNewline
 
 foreach ($package in $packageFiles) {
     Write-Host "MSIX ($($package.Platform)): $($package.File.FullName)"
 }
-
 Write-Host "MSIX bundle: $bundlePath"
-Get-Item -LiteralPath $bundlePath
+
