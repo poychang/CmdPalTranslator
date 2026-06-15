@@ -130,6 +130,82 @@ namespace CmdPalTranslator.Tests
             Assert.IsTrue(requestUris.Any(uri => uri.Contains("sl=en", StringComparison.Ordinal) && uri.Contains("tl=zh-TW", StringComparison.Ordinal)));
         }
 
+        [TestMethod]
+        public void AliyunProviderTranslatesTraditionalChineseAndEnglish()
+        {
+            int csrfRequests = 0;
+            List<Dictionary<string, string>> formPayloads = [];
+            List<string?> csrfHeaders = [];
+
+            using HttpClient httpClient = new(new StubHttpMessageHandler(request =>
+            {
+                if (request.Method == HttpMethod.Get)
+                {
+                    csrfRequests++;
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new StringContent("""
+                    {
+                      "token": "aliyun-csrf-token",
+                      "headerName": "x-csrf-token"
+                    }
+                    """, Encoding.UTF8, "application/json"),
+                    };
+                }
+
+                formPayloads.Add(ReadFormValues(request));
+                request.Headers.TryGetValues("x-csrf-token", out IEnumerable<string>? headerValues);
+                csrfHeaders.Add(headerValues?.FirstOrDefault());
+
+                bool isZhToEn = formPayloads[^1]["query"] == "蘋果";
+                string translatedText = isZhToEn ? "apple" : "蘋果";
+                string detectedLanguage = isZhToEn ? "zh-TW" : "en";
+
+                string json = $$"""
+            {
+              "code": "200",
+              "success": true,
+              "data": {
+                "detectLanguage": "{{detectedLanguage}}",
+                "translateText": "{{translatedText}}"
+              }
+            }
+            """;
+
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json"),
+                };
+            }));
+
+            using AliyunTranslatorProvider provider = new(httpClient);
+
+            TranslationResponse zhToEn = provider.Translate(
+                CreateQuery("蘋果", sourceLanguageId: "zht", targetLanguageId: "en"),
+                CancellationToken.None);
+
+            TranslationResponse enToZh = provider.Translate(
+                CreateQuery("apple", sourceLanguageId: "en", targetLanguageId: "zht"),
+                CancellationToken.None);
+
+            CollectionAssert.Contains([.. zhToEn.Entries.Select(entry => entry.Title)], "apple", StringComparer.OrdinalIgnoreCase);
+            CollectionAssert.Contains([.. enToZh.Entries.Select(entry => entry.Title)], "蘋果");
+            Assert.AreEqual(1, csrfRequests);
+
+            Assert.AreEqual("zh-TW", formPayloads[0]["srcLang"]);
+            Assert.AreEqual("en", formPayloads[0]["tgtLang"]);
+            Assert.AreEqual("en", formPayloads[1]["srcLang"]);
+            Assert.AreEqual("zh-TW", formPayloads[1]["tgtLang"]);
+
+            foreach (Dictionary<string, string> payload in formPayloads)
+            {
+                Assert.AreEqual("general", payload["domain"]);
+                Assert.AreEqual("aliyun-csrf-token", payload["_csrf"]);
+            }
+
+            Assert.IsTrue(csrfHeaders.All(value => string.Equals(value, "aliyun-csrf-token", StringComparison.Ordinal)));
+        }
+
         private static ParsedTranslationQuery CreateQuery(string text, string sourceLanguageId, string targetLanguageId)
         {
             return new ParsedTranslationQuery(
