@@ -5,12 +5,14 @@
     string DisplayName,
     string GoogleCode,
     string BingCode,
+    string AliyunCode,
     params string[] Aliases)
     {
         public string GetProviderCode(string providerId) => providerId switch
         {
             "google" => GoogleCode,
             "bing" => BingCode,
+            "aliyun" => AliyunCode,
             _ => BingCode,
         };
 
@@ -26,21 +28,21 @@
     {
         private static readonly IReadOnlyList<LanguageOption> Languages =
         [
-            new("auto", "Auto Detect", "auto", "auto-detect", "detect", "default"),
-            new("zhs", "Chinese (Simplified)", "zh-CN", "zh-Hans", "zh-cn", "zh-hans", "simplified chinese"),
-            new("zht", "Chinese (Traditional)", "zh-TW", "zh-Hant", "zh-tw", "zh-hant", "traditional chinese"),
-            new("en", "English", "en", "en", "english"),
-            new("ja", "Japanese", "ja", "ja", "japanese"),
-            new("ko", "Korean", "ko", "ko", "korean"),
-            new("fr", "French", "fr", "fr", "french"),
-            new("de", "German", "de", "de", "german"),
-            new("es", "Spanish", "es", "es", "spanish"),
-            new("it", "Italian", "it", "it", "italian"),
-            new("ru", "Russian", "ru", "ru", "russian"),
-            new("ar", "Arabic", "ar", "ar", "arabic"),
-            new("he", "Hebrew", "iw", "he", "hebrew"),
-            new("pt", "Portuguese", "pt", "pt", "portuguese"),
-            new("th", "Thai", "th", "th", "thai"),
+            new("auto", "Auto Detect", "auto", "auto-detect", "auto", "detect", "default"),
+            new("zhs", "Chinese (Simplified)", "zh-CN", "zh-Hans", "zh", "zh-cn", "zh-hans", "simplified chinese"),
+            new("zht", "Chinese (Traditional)", "zh-TW", "zh-Hant", "zh-TW", "zh-tw", "zh-hant", "traditional chinese"),
+            new("en", "English", "en", "en", "en", "english"),
+            new("ja", "Japanese", "ja", "ja", "ja", "japanese"),
+            new("ko", "Korean", "ko", "ko", "ko", "korean"),
+            new("fr", "French", "fr", "fr", "fr", "french"),
+            new("de", "German", "de", "de", "de", "german"),
+            new("es", "Spanish", "es", "es", "es", "spanish"),
+            new("it", "Italian", "it", "it", "it", "italian"),
+            new("ru", "Russian", "ru", "ru", "ru", "russian"),
+            new("ar", "Arabic", "ar", "ar", "ar", "arabic"),
+            new("he", "Hebrew", "iw", "he", "he", "hebrew"),
+            new("pt", "Portuguese", "pt", "pt", "pt", "portuguese"),
+            new("th", "Thai", "th", "th", "th", "thai"),
         ];
 
         public static IReadOnlyList<LanguageOption> All => Languages;
@@ -69,7 +71,8 @@
 
             if (Languages.FirstOrDefault(item =>
                 string.Equals(item.GoogleCode, idOrCode, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(item.BingCode, idOrCode, StringComparison.OrdinalIgnoreCase)) is { } fromProviderCode)
+                || string.Equals(item.BingCode, idOrCode, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(item.AliyunCode, idOrCode, StringComparison.OrdinalIgnoreCase)) is { } fromProviderCode)
             {
                 return fromProviderCode.DisplayName;
             }

@@ -13,6 +13,7 @@ namespace CmdPalTranslator.Tests
         [TestMethod]
         [DataRow("Bing")]
         [DataRow("Google")]
+        [DataRow("Aliyun")]
         public void ProvidersTranslateBetweenTraditionalChineseAndEnglish(string providerId)
         {
             using ITranslatorProvider provider = CreateProvider(providerId);
@@ -53,6 +54,7 @@ namespace CmdPalTranslator.Tests
         {
             "Bing" => new BingTranslatorProvider(),
             "Google" => new GoogleTranslatorProvider(),
+            "Aliyun" => new AliyunTranslatorProvider(),
             _ => throw new ArgumentOutOfRangeException(nameof(providerId), providerId, "Unknown provider."),
         };
 
