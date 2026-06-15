@@ -16,6 +16,7 @@ namespace CmdPalTranslator.Core.Services
             [
                 new BingTranslatorProvider(),
                 new GoogleTranslatorProvider(),
+                new AliyunTranslatorProvider(),
             ];
 
             _providerMap = _providers.ToDictionary(provider => provider.Id, StringComparer.OrdinalIgnoreCase);

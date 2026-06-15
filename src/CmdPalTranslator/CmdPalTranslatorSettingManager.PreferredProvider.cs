@@ -12,6 +12,7 @@ namespace CmdPalTranslator
         [
             new("Bing", "bing"),
             new("Google", "google"),
+            new("Aliyun", "aliyun"),
         ];
 
         private ChoiceSetSetting _preferredProviderSetting = null!;

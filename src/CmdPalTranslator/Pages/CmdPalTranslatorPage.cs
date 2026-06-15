@@ -129,7 +129,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
             new ListItem(new NoOpCommand())
             {
                 Title = "Type text to translate",
-                Subtitle = "Use the provider filter above to switch between Bing and Google.",
+                Subtitle = "Use the translation provider configured in extension settings.",
                 Icon = new IconInfo("\uE721"),
             },
             new ListItem(new LocalCopyTextCommand($"hello world {translateOperator} zht", "Copied sample query"))
@@ -158,7 +158,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
                 Details = new Details
                 {
                     Title = "Supported Language",
-                    Body = "Open the language reference page to see all supported languages and their codes for both Bing and Google translators.",
+                    Body = "Open the language reference page to see all supported languages and their codes.",
                     Metadata = [
                         new DetailsElement()
                         {
