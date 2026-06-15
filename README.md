@@ -10,13 +10,13 @@ The current version is `0.1.1.0`. The project has been upgraded to `.NET 10`. Th
 
 ## Screenshots
 
-![Extension settings](src/CmdPalTranslator/Assets/screenshots/00-extension-setting.png)
-
 ![Main translator view](src/CmdPalTranslator/Assets/screenshots/01-main-view.png)
 
 ![Translation results](src/CmdPalTranslator/Assets/screenshots/02-results.png)
 
 ![Choose target language](src/CmdPalTranslator/Assets/screenshots/03-choose-target-language.png)
+
+![Extension settings](src/CmdPalTranslator/Assets/screenshots/04-extension-setting.png)
 
 ## Features
 
