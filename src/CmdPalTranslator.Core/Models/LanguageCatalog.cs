@@ -30,7 +30,7 @@
         [
             new("auto", "Auto Detect", "auto", "auto-detect", "auto", "detect", "default"),
             new("zhs", "Chinese (Simplified)", "zh-CN", "zh-Hans", "zh", "zh-cn", "zh-hans", "simplified chinese"),
-            new("zht", "Chinese (Traditional)", "zh-TW", "zh-Hant", "zh-TW", "zh-tw", "zh-hant", "traditional chinese"),
+            new("zht", "Chinese (Traditional)", "zh-TW", "zh-Hant", "zh-tw", "zh-tw", "zh-hant", "traditional chinese"),
             new("en", "English", "en", "en", "en", "english"),
             new("ja", "Japanese", "ja", "ja", "ja", "japanese"),
             new("ko", "Korean", "ko", "ko", "ko", "korean"),

@@ -3,7 +3,6 @@ using CmdPalTranslator.Core.Services;
 using CmdPalTranslator.Models;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
-using System;
 using System.Linq;
 
 namespace CmdPalTranslator.Pages

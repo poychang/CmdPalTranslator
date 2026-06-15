@@ -157,9 +157,11 @@ namespace CmdPalTranslator.Tests
                 request.Headers.TryGetValues("x-csrf-token", out IEnumerable<string>? headerValues);
                 csrfHeaders.Add(headerValues?.FirstOrDefault());
 
-                bool isZhToEn = formPayloads[^1]["query"] == "蘋果";
+                Dictionary<string, string> latestPayload = formPayloads[^1];
+                bool isZhToEn = latestPayload.TryGetValue("srcLang", out string? srcLang)
+                    && string.Equals(srcLang, "zh-tw", StringComparison.Ordinal);
                 string translatedText = isZhToEn ? "apple" : "蘋果";
-                string detectedLanguage = isZhToEn ? "zh-TW" : "en";
+                string detectedLanguage = isZhToEn ? "zh-tw" : "en";
 
                 string json = $$"""
             {
@@ -192,10 +194,10 @@ namespace CmdPalTranslator.Tests
             CollectionAssert.Contains([.. enToZh.Entries.Select(entry => entry.Title)], "蘋果");
             Assert.AreEqual(1, csrfRequests);
 
-            Assert.AreEqual("zh-TW", formPayloads[0]["srcLang"]);
+            Assert.AreEqual("zh-tw", formPayloads[0]["srcLang"]);
             Assert.AreEqual("en", formPayloads[0]["tgtLang"]);
             Assert.AreEqual("en", formPayloads[1]["srcLang"]);
-            Assert.AreEqual("zh-TW", formPayloads[1]["tgtLang"]);
+            Assert.AreEqual("zh-tw", formPayloads[1]["tgtLang"]);
 
             foreach (Dictionary<string, string> payload in formPayloads)
             {
@@ -217,6 +219,23 @@ namespace CmdPalTranslator.Tests
 
         private static Dictionary<string, string> ReadFormValues(HttpRequestMessage request)
         {
+            if (request.Content is MultipartContent multipartContent)
+            {
+                Dictionary<string, string> values = new(StringComparer.Ordinal);
+                foreach (HttpContent part in multipartContent)
+                {
+                    string? name = part.Headers.ContentDisposition?.Name?.Trim('"');
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        continue;
+                    }
+
+                    values[name] = part.ReadAsStringAsync().GetAwaiter().GetResult();
+                }
+
+                return values;
+            }
+
             string formBody = request.Content!.ReadAsStringAsync().GetAwaiter().GetResult();
             return formBody.Split('&', StringSplitOptions.RemoveEmptyEntries)
                 .Select(part => part.Split('=', 2))
