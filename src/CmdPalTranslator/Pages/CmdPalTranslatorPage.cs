@@ -3,10 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using CmdPalTranslator.Commands;
+using CmdPalTranslator.Core.Models;
+using CmdPalTranslator.Core.Providers;
 using CmdPalTranslator.Core.Services;
-using CmdPalTranslator.Models;
 using CmdPalTranslator.Pages;
-using CmdPalTranslator.Providers;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;

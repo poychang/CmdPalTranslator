@@ -1,4 +1,4 @@
-﻿using CmdPalTranslator.Models;
+﻿using CmdPalTranslator.Core.Models;
 using Microsoft.CommandPalette.Extensions;
 using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;

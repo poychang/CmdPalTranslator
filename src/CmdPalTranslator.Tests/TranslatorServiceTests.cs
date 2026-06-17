@@ -1,5 +1,5 @@
-﻿using CmdPalTranslator.Core.Services;
-using CmdPalTranslator.Models;
+﻿using CmdPalTranslator.Core.Models;
+using CmdPalTranslator.Core.Services;
 
 namespace CmdPalTranslator.Tests
 {

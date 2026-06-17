@@ -1,6 +1,6 @@
-﻿using CmdPalTranslator.Models;
+﻿using CmdPalTranslator.Core.Models;
 
-namespace CmdPalTranslator.Providers
+namespace CmdPalTranslator.Core.Providers
 {
     internal interface ITranslatorProvider : IDisposable
     {

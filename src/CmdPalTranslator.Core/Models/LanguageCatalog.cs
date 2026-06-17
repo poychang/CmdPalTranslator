@@ -1,4 +1,4 @@
-﻿namespace CmdPalTranslator.Models
+﻿namespace CmdPalTranslator.Core.Models
 {
     internal sealed record LanguageOption(
     string Id,

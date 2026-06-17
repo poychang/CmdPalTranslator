@@ -1,5 +1,5 @@
-﻿using CmdPalTranslator.Models;
-using CmdPalTranslator.Providers;
+﻿using CmdPalTranslator.Core.Models;
+using CmdPalTranslator.Core.Providers;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;

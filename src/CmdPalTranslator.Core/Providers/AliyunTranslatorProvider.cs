@@ -1,11 +1,11 @@
-using CmdPalTranslator.Models;
+using CmdPalTranslator.Core.Models;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CmdPalTranslator.Providers
+namespace CmdPalTranslator.Core.Providers
 {
     internal sealed partial class AliyunTranslatorProvider : ITranslatorProvider
     {

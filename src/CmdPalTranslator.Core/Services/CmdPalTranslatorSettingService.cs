@@ -1,7 +1,6 @@
-using CmdPalTranslator.Core.Services;
-using CmdPalTranslator.Models;
+using CmdPalTranslator.Core.Models;
 
-namespace CmdPalTranslator.Services
+namespace CmdPalTranslator.Core.Services
 {
     internal sealed class CmdPalTranslatorSettingService
     {

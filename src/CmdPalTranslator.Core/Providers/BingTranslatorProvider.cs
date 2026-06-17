@@ -1,10 +1,10 @@
-﻿using CmdPalTranslator.Models;
+﻿using CmdPalTranslator.Core.Models;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-namespace CmdPalTranslator.Providers
+namespace CmdPalTranslator.Core.Providers
 {
     internal sealed partial class BingTranslatorProvider : ITranslatorProvider
     {

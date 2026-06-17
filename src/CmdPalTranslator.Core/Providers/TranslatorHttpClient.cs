@@ -3,7 +3,7 @@ using Polly;
 using Polly.Extensions.Http;
 using System.Net;
 
-namespace CmdPalTranslator.Providers
+namespace CmdPalTranslator.Core.Providers
 {
     internal static class TranslatorHttpClient
     {

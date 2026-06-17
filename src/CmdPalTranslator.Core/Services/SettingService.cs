@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CmdPalTranslator.Services
+namespace CmdPalTranslator.Core.Services
 {
     [JsonSourceGenerationOptions(JsonSerializerDefaults.General)]
     [JsonSerializable(typeof(TranslatorSettings))]
