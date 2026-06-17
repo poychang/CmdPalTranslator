@@ -62,8 +62,8 @@ namespace CmdPalTranslator.Tests
         {
             string normalizedActual = Normalize(actual);
 
-            Assert.IsTrue(
-                expectedValues.Any(expected => normalizedActual.Contains(Normalize(expected), StringComparison.Ordinal)),
+            Assert.Contains(
+                expected => normalizedActual.Contains(Normalize(expected), StringComparison.Ordinal), expectedValues,
                 $"Expected one of [{string.Join(", ", expectedValues)}] in '{actual}'.");
         }
 

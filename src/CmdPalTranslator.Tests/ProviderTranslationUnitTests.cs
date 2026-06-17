@@ -126,8 +126,8 @@ namespace CmdPalTranslator.Tests
 
             CollectionAssert.Contains([.. zhToEn.Entries.Select(entry => entry.Title)], "apple", StringComparer.OrdinalIgnoreCase);
             CollectionAssert.Contains([.. enToZh.Entries.Select(entry => entry.Title)], "蘋果");
-            Assert.IsTrue(requestUris.Any(uri => uri.Contains("sl=zh-TW", StringComparison.Ordinal) && uri.Contains("tl=en", StringComparison.Ordinal)));
-            Assert.IsTrue(requestUris.Any(uri => uri.Contains("sl=en", StringComparison.Ordinal) && uri.Contains("tl=zh-TW", StringComparison.Ordinal)));
+            Assert.Contains(uri => uri.Contains("sl=zh-TW", StringComparison.Ordinal) && uri.Contains("tl=en", StringComparison.Ordinal), requestUris);
+            Assert.Contains(uri => uri.Contains("sl=en", StringComparison.Ordinal) && uri.Contains("tl=zh-TW", StringComparison.Ordinal), requestUris);
         }
 
         [TestMethod]
