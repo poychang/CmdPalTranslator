@@ -28,7 +28,6 @@
     {
         private static readonly IReadOnlyList<LanguageOption> Languages =
         [
-            new("auto", "Auto Detect", "auto", "auto-detect", "auto", "detect", "default"),
             new("zhs", "Chinese (Simplified)", "zh-CN", "zh-Hans", "zh", "zh-cn", "zh-hans", "simplified chinese"),
             new("zht", "Chinese (Traditional)", "zh-TW", "zh-Hant", "zh-tw", "zh-tw", "zh-hant", "traditional chinese"),
             new("en", "English", "en", "en", "en", "english"),
@@ -47,7 +46,7 @@
 
         public static IReadOnlyList<LanguageOption> All => Languages;
 
-        public static LanguageOption AutoDetect => GetById("auto");
+        public static LanguageOption AutoDetect => new("auto", "Auto Detect", "auto", "auto-detect", "auto", "detect", "default");
 
         public static LanguageOption BuiltInDefaultTarget => GetById("zht");
 
