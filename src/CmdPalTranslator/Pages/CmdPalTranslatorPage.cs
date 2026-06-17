@@ -64,7 +64,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
             return BuildHelpItems();
         }
 
-        ParsedTranslationQuery query = _translatorService.ParseQuery(
+        ParsedTranslationQuery query = TranslatorService.ParseQuery(
             SearchText,
             _translatorSettingManager.TargetLanguage,
             _translatorSettingManager.TranslateOperator);

@@ -24,7 +24,7 @@ namespace CmdPalTranslator.Core.Services
 
         public IReadOnlyList<ITranslatorProvider> Providers => _providers;
 
-        public ParsedTranslationQuery ParseQuery(string searchText, LanguageOption defaultTargetLanguage, string? translateOperator = null)
+        public static ParsedTranslationQuery ParseQuery(string searchText, LanguageOption defaultTargetLanguage, string? translateOperator = null)
         {
             ArgumentNullException.ThrowIfNull(defaultTargetLanguage);
 

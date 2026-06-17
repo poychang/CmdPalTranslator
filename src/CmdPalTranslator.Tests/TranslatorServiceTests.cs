@@ -10,9 +10,7 @@ namespace CmdPalTranslator.Tests
         [TestMethod]
         public void ParseQueryUsesConfiguredDefaultTargetLanguageWhenQueryHasNoOverride()
         {
-            using TranslatorService service = new();
-
-            var parsed = service.ParseQuery("hello world", LanguageCatalog.GetById("ja"));
+            var parsed = TranslatorService.ParseQuery("hello world", LanguageCatalog.GetById("ja"));
 
             Assert.AreEqual("ja", parsed.TargetLanguage.Id);
             Assert.IsFalse(parsed.HasExplicitTargetLanguage);
@@ -21,9 +19,7 @@ namespace CmdPalTranslator.Tests
         [TestMethod]
         public void ParseQueryKeepsExplicitTargetLanguageEvenWhenDefaultIsDifferent()
         {
-            using TranslatorService service = new();
-
-            var parsed = service.ParseQuery("hello world >> fr", LanguageCatalog.GetById("ja"));
+            var parsed = TranslatorService.ParseQuery("hello world >> fr", LanguageCatalog.GetById("ja"));
 
             Assert.AreEqual("fr", parsed.TargetLanguage.Id);
             Assert.IsTrue(parsed.HasExplicitTargetLanguage);
@@ -32,9 +28,7 @@ namespace CmdPalTranslator.Tests
         [TestMethod]
         public void ParseQuerySupportsCustomTranslateOperator()
         {
-            using TranslatorService service = new();
-
-            var parsed = service.ParseQuery("hello world => fr", LanguageCatalog.GetById("ja"), "=>");
+            var parsed = TranslatorService.ParseQuery("hello world => fr", LanguageCatalog.GetById("ja"), "=>");
 
             Assert.AreEqual("fr", parsed.TargetLanguage.Id);
             Assert.IsTrue(parsed.HasExplicitTargetLanguage);
