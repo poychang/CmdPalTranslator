@@ -66,14 +66,11 @@ namespace CmdPalTranslator.Pages
         private ListItem BuildLanguageItem(LanguageOption language, LanguageOption currentLanguage, string translateOperator)
         {
             bool isCurrent = string.Equals(language.Id, currentLanguage.Id, StringComparison.OrdinalIgnoreCase);
-            string title = isCurrent ? $"{language.DisplayName} (Current)" : language.DisplayName;
-            string subtitle = isCurrent ? string.Empty : $"Set as the target";
 
             return new ListItem(new SetTargetLanguageCommand(_translatorSettingManager, language))
             {
-                Title = title,
-                Subtitle = subtitle,
-                Icon = new IconInfo(isCurrent ? "\uE73A" : "\uE739"),
+                Title = language.DisplayName,
+                Icon = new IconInfo(isCurrent ? "\uE73D" : "\uE739"),
                 Details = new Details
                 {
                     Title = $"{language.DisplayName} ({language.Id})",
