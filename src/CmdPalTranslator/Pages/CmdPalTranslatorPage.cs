@@ -132,42 +132,6 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
                 Subtitle = "Use the translation provider configured in extension settings.",
                 Icon = new IconInfo("\uE721"),
             },
-            new ListItem(new LocalCopyTextCommand($"hello world {translateOperator} zht", "Copied sample query"))
-            {
-                Title = "Specify a target language",
-                Subtitle = $"Append `{translateOperator} languageCode`, for example `hello world {translateOperator} zht`.",
-                Icon = new IconInfo("\uE946"),
-                Details = new Details
-                {
-                    Title = "Target Language Syntax",
-                    Body = $"Use `text {translateOperator} languageCode` when you want to override the default target language.",
-                    Metadata = [
-                        new DetailsElement()
-                        {
-                            Key = "Example",
-                            Data = new DetailsLink() { Text = $"hello world {translateOperator} zht" },
-                        },
-                    ],
-                },
-            },
-            new ListItem(new LanguageReferencePage(translateOperator))
-            {
-                Title = "Browse supported languages",
-                Subtitle = "Open the language reference page and copy a language code.",
-                Icon = new IconInfo("\uE946"),
-                Details = new Details
-                {
-                    Title = "Supported Language",
-                    Body = "Open the language reference page to see all supported languages and their codes.",
-                    Metadata = [
-                        new DetailsElement()
-                        {
-                            Key = "Quick List",
-                            Data = new DetailsLink() { Text = string.Join(", ", LanguageCatalog.All.Select(l => l.DisplayName)) },
-                        },
-                    ],
-                },
-            },
             new ListItem(new TargetLanguageSettingsPage(_translatorSettingManager))
             {
                 Title = "Target language",
@@ -177,6 +141,34 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
                 {
                     Title = "Target Language",
                     Body = $"Open the settings page to choose the target language used when the query does not include `{translateOperator} languageCode`.",
+                },
+            },
+            new ListItem(new LanguageReferencePage(translateOperator))
+            {
+                Title = "Supported Languages",
+                Subtitle = "Open the language reference page.",
+                Icon = new IconInfo("\uE946"),
+                Details = new Details
+                {
+                    Title = "Supported Languages",
+                    Body = "Open the language reference page to see all supported languages and their codes.",
+                    Metadata = [
+                        new DetailsElement()
+                        {
+                            Key = "Target Languages",
+                            Data = new DetailsTags
+                            {
+                                Tags = [.. LanguageCatalog.All
+                                    .Select(l => l.DisplayName)
+                                    .Select(t => new Tag(t))],
+                            },
+                        },
+                        new DetailsElement()
+                        {
+                            Key = "Specify Target",
+                            Data = new DetailsLink() { Text = $"Append {translateOperator} and the languageCode to override the default target language.\r\n\r\nExample: hello world {translateOperator} zht" },
+                        },
+                    ],
                 },
             },
             // ------------------------------------------------------------
