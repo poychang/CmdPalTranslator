@@ -1,4 +1,5 @@
-﻿using Microsoft.CommandPalette.Extensions.Toolkit;
+﻿using Microsoft.CommandPalette.Extensions;
+using Microsoft.CommandPalette.Extensions.Toolkit;
 using System;
 using System.Runtime.InteropServices;
 
@@ -18,5 +19,20 @@ namespace CmdPalTranslator.Commands
 
         [LibraryImport("user32.dll", StringMarshalling = StringMarshalling.Utf16)]
         private static partial int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+    }
+
+    internal sealed partial class ToastCommand(string message, MessageState state = MessageState.Info) : InvokableCommand
+    {
+        public override ICommandResult Invoke()
+        {
+            var t = new ToastStatusMessage(new StatusMessage()
+            {
+                Message = message,
+                State = state,
+            });
+            t.Show();
+
+            return CommandResult.KeepOpen();
+        }
     }
 }
