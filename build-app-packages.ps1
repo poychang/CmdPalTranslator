@@ -6,7 +6,7 @@ Builds CmdPalTranslator MSIX packages and an MSIX Bundle.
 .DESCRIPTION
 This script automates the package build flow for release:
 1. Reads the package version from the project file and Package.appxmanifest.
-2. Increments the last version part by default, then updates AppxPackageVersion and Identity Version.
+2. Increments the third version part by default and keeps the fourth part at 0, then updates AppxPackageVersion and Identity Version.
 3. Runs dotnet build for each selected platform to create MSIX packages.
 4. Collects the generated MSIX files and creates bundle_mapping.txt.
 5. Uses makeappx.exe to create a Microsoft Store-ready .msixbundle.
@@ -119,11 +119,12 @@ function Get-IncrementedPackageVersion {
 
     $parts = ConvertTo-PackageVersionParts -Version $Version
 
-    if ($parts[3] -ge 65535) {
-        throw "Package version '$Version' cannot be incremented because the last part is already 65535."
+    if ($parts[2] -ge 65535) {
+        throw "Package version '$Version' cannot be incremented because the third part is already 65535."
     }
 
-    $parts[3]++
+    $parts[2]++
+    $parts[3] = 0
     return $parts -join '.'
 }
 
