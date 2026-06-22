@@ -164,15 +164,15 @@ namespace CmdPalTranslator.Tests
                 string detectedLanguage = isZhToEn ? "zh-tw" : "en";
 
                 string json = $$"""
-            {
-              "code": "200",
-              "success": true,
-              "data": {
-                "detectLanguage": "{{detectedLanguage}}",
-                "translateText": "{{translatedText}}"
-              }
-            }
-            """;
+                {
+                  "code": "200",
+                  "success": true,
+                  "data": {
+                    "detectLanguage": "{{detectedLanguage}}",
+                    "translateText": "{{translatedText}}"
+                  }
+                }
+                """;
 
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {

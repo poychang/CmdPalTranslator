@@ -31,14 +31,14 @@ namespace CmdPalTranslator.Tests
             string enToZhJoined = string.Join(" | ", enToZhResponse.Entries.Select(entry => entry.Title));
 
             Trace.WriteLine($"Provider: {provider.DisplayName}");
-            Trace.WriteLine($"ZH->EN: {zhToEnJoined}");
-            Trace.WriteLine($"EN->ZH: {enToZhJoined}");
+            Trace.WriteLine($"ZH >> EN: {zhToEnJoined}");
+            Trace.WriteLine($"EN >> ZH: {enToZhJoined}");
 
             Assert.IsNotEmpty(zhToEnResponse.Entries);
             AssertContainsAny(zhToEnJoined, "apple");
 
             Assert.IsNotEmpty(enToZhResponse.Entries);
-            AssertContainsAny(enToZhJoined, "蘋果", "苹果");
+            AssertContainsAny(enToZhJoined, "蘋果");
         }
 
         private static ParsedTranslationQuery CreateQuery(string text, string sourceLanguageId, string targetLanguageId)

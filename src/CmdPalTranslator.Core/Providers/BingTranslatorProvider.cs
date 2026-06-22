@@ -103,7 +103,7 @@ namespace CmdPalTranslator.Core.Providers
             List<TranslationEntry> entries = first.Translations?
                 .Select(translation => new TranslationEntry(
                     Title: translation.Text ?? string.Empty,
-                    Subtitle: $"{LanguageCatalog.ToDisplayName(first.DetectedLanguage?.Language ?? query.SourceLanguage.Id)} -> {LanguageCatalog.ToDisplayName(translation.To ?? query.TargetLanguage.Id)}",
+                    Subtitle: $"{LanguageCatalog.ToDisplayName(first.DetectedLanguage?.Language ?? query.SourceLanguage.Id)} to {LanguageCatalog.ToDisplayName(translation.To ?? query.TargetLanguage.Id)}",
                     CopyText: translation.Text ?? string.Empty,
                     Description: $"{translation.Text}\n{query.SourceText}",
                     Category: "Translation"))

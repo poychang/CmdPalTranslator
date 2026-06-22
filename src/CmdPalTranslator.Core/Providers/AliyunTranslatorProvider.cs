@@ -121,7 +121,7 @@ namespace CmdPalTranslator.Core.Providers
                 [
                     new TranslationEntry(
                         Title: translatedText,
-                        Subtitle: $"{LanguageCatalog.ToDisplayName(detectedLanguage)} -> {targetDisplayName}",
+                        Subtitle: $"{LanguageCatalog.ToDisplayName(detectedLanguage)} to {targetDisplayName}",
                         CopyText: translatedText,
                         Description: $"{translatedText}\n{query.SourceText}",
                         Category: "Translation"),

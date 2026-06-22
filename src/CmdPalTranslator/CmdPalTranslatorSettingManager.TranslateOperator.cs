@@ -15,7 +15,7 @@ namespace CmdPalTranslator
             _translateOperatorSetting = new TextSetting(TranslateOperatorSettingId, _translatorSettingService.TranslateOperator)
             {
                 Label = "Translate operator",
-                Description = "Use this operator in queries to override target language (for example: hello world -> ja).",
+                Description = "Use this operator in queries to override target language (for example: hello world >> ja).",
                 Placeholder = TranslatorService.DefaultTranslateOperator,
             };
 

@@ -227,7 +227,7 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
                     new DetailsElement()
                     {
                         Key = "Language Pair",
-                        Data = new DetailsLink() { Text = $"{LanguageCatalog.ToDisplayName(response.SourceLanguage)} -> {LanguageCatalog.ToDisplayName(response.TargetLanguage)}" },
+                        Data = new DetailsLink() { Text = $"{LanguageCatalog.ToDisplayName(response.SourceLanguage)} to {LanguageCatalog.ToDisplayName(response.TargetLanguage)}" },
                     },
                     new DetailsElement()
                     {
