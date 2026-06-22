@@ -1,6 +1,6 @@
 # Translator for Command Palette
 
-Languages: English | [繁體中文](README.zh-tw.md)
+Languages: English | [繁體中文](README.zh-TW.md)
 
 <a href="https://apps.microsoft.com/store/detail/9NSHZ9B3KJFW" target="_blank" rel="noopener noreferrer"><img src="https://get.microsoft.com/images/en-us%20light.svg" width="200"/></a>
 
