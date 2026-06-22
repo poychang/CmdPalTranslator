@@ -37,7 +37,7 @@ namespace CmdPalTranslator.Core.Services
             }
         }
 
-        public void SaveSettings(string targetLanguageId, string preferredProviderId, string translateOperator)
+        public void SaveSettings(string targetLanguageId, string preferredProviderId, string translateOperator, string displayLanguageId)
         {
             Directory.CreateDirectory(Path.GetDirectoryName(_settingsFilePath)!);
 
@@ -46,6 +46,7 @@ namespace CmdPalTranslator.Core.Services
                 TargetLanguageId = targetLanguageId,
                 PreferredProviderId = preferredProviderId,
                 TranslateOperator = translateOperator,
+                DisplayLanguageId = displayLanguageId,
             };
 
             string json = JsonSerializer.Serialize(settings, SettingJsonContext.Default.TranslatorSettings);
@@ -69,5 +70,8 @@ namespace CmdPalTranslator.Core.Services
 
         [JsonPropertyName("translateOperator")]
         public string TranslateOperator { get; set; } = string.Empty;
+
+        [JsonPropertyName("displayLanguageId")]
+        public string DisplayLanguageId { get; set; } = string.Empty;
     }
 }

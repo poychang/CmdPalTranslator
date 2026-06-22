@@ -8,6 +8,7 @@ namespace CmdPalTranslator.Core.Services
         private string _targetLanguageId;
         private string _preferredProviderId;
         private string _translateOperator;
+        private string _displayLanguageId;
 
         public CmdPalTranslatorSettingService(string? settingsFilePath = null)
         {
@@ -17,6 +18,7 @@ namespace CmdPalTranslator.Core.Services
             _targetLanguageId = LoadTargetLanguageId(settings);
             _preferredProviderId = LoadPreferredProviderId(settings);
             _translateOperator = LoadTranslateOperator(settings);
+            _displayLanguageId = LoadDisplayLanguageId(settings);
         }
 
         public event EventHandler? SettingsChanged;
@@ -26,6 +28,8 @@ namespace CmdPalTranslator.Core.Services
         public string PreferredProviderId => _preferredProviderId;
 
         public string TranslateOperator => _translateOperator;
+
+        public string DisplayLanguageId => _displayLanguageId;
 
         public bool SetTargetLanguage(LanguageOption language)
         {
@@ -74,9 +78,25 @@ namespace CmdPalTranslator.Core.Services
             return true;
         }
 
+        public bool SetDisplayLanguage(string languageId)
+        {
+            ArgumentNullException.ThrowIfNull(languageId);
+
+            string normalizedId = languageId.Trim();
+            if (string.Equals(_displayLanguageId, normalizedId, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            _displayLanguageId = normalizedId;
+            SaveSettings();
+            SettingsChanged?.Invoke(this, EventArgs.Empty);
+            return true;
+        }
+
         private void SaveSettings()
         {
-            _settingService.SaveSettings(_targetLanguageId, _preferredProviderId, _translateOperator);
+            _settingService.SaveSettings(_targetLanguageId, _preferredProviderId, _translateOperator, _displayLanguageId);
         }
 
         private static string LoadTargetLanguageId(TranslatorSettings? settings)
@@ -107,6 +127,16 @@ namespace CmdPalTranslator.Core.Services
             }
 
             return TranslatorService.DefaultTranslateOperator;
+        }
+
+        private static string LoadDisplayLanguageId(TranslatorSettings? settings)
+        {
+            if (settings is not null && !string.IsNullOrWhiteSpace(settings.DisplayLanguageId))
+            {
+                return settings.DisplayLanguageId.Trim();
+            }
+
+            return "en-US";
         }
 
         private static string NormalizeTranslateOperator(string value)

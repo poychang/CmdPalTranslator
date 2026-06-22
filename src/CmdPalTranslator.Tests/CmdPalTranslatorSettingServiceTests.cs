@@ -217,5 +217,89 @@ namespace CmdPalTranslator.Tests
             Assert.AreEqual("ja", target.Id);
             Assert.AreEqual("日本語", target.DisplayName);
         }
+
+        [TestMethod]
+        public void UsesDefaultDisplayLanguageWhenSettingsFileDoesNotExist()
+        {
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+
+            Assert.AreEqual("en-US", service.DisplayLanguageId);
+        }
+
+        [TestMethod]
+        public void LoadsSavedDisplayLanguageFromValidJsonSettingsFile()
+        {
+            File.WriteAllText(_settingsFilePath, """{"displayLanguageId":"zh-TW"}""");
+
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+
+            Assert.AreEqual("zh-TW", service.DisplayLanguageId);
+        }
+
+        [TestMethod]
+        public void SetDisplayLanguageReturnsTrueAndUpdatesPropertyForNewLanguage()
+        {
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+
+            bool result = service.SetDisplayLanguage("zh-TW");
+
+            Assert.IsTrue(result);
+            Assert.AreEqual("zh-TW", service.DisplayLanguageId);
+        }
+
+        [TestMethod]
+        public void SetDisplayLanguageReturnsFalseForSameLanguage()
+        {
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+            service.SetDisplayLanguage("zh-TW");
+
+            bool result = service.SetDisplayLanguage("zh-TW");
+
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void SetDisplayLanguageThrowsArgumentNullExceptionForNull()
+        {
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+
+            Assert.ThrowsExactly<ArgumentNullException>(() => service.SetDisplayLanguage(null!));
+        }
+
+        [TestMethod]
+        public void SetDisplayLanguageRaisesSettingsChangedEvent()
+        {
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+            bool eventRaised = false;
+            service.SettingsChanged += (_, _) => eventRaised = true;
+
+            service.SetDisplayLanguage("zh-TW");
+
+            Assert.IsTrue(eventRaised);
+        }
+
+        [TestMethod]
+        public void SetDisplayLanguagePersistsSettingAsJson()
+        {
+            CmdPalTranslatorSettingService service = new(_settingsFilePath);
+
+            service.SetDisplayLanguage("zh-TW");
+
+            Assert.IsTrue(File.Exists(_settingsFilePath));
+            string json = File.ReadAllText(_settingsFilePath);
+            Assert.IsTrue(json.Contains("\"displayLanguageId\""));
+            Assert.IsTrue(json.Contains("\"zh-TW\""));
+        }
+
+        [TestMethod]
+        public void PersistedDisplayLanguageCanBeReloadedByNewInstance()
+        {
+            CmdPalTranslatorSettingService service1 = new(_settingsFilePath);
+            service1.SetDisplayLanguage("zh-TW");
+
+            CmdPalTranslatorSettingService service2 = new(_settingsFilePath);
+
+            Assert.AreEqual("zh-TW", service2.DisplayLanguageId);
+        }
     }
 }
