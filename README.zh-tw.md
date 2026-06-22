@@ -62,10 +62,11 @@ hello world => ja
 
 ## 設定
 
-Command Palette extension settings 目前提供兩個設定：
+Command Palette extension settings 目前提供三個設定：
 
 - `Preferred provider`：選擇預設翻譯 provider，可選 `Bing`、`Google` 或 `Aliyun`。
 - `Translate operator`：設定查詢中用來覆寫目標語言的運算子，預設為 `>>`。
+- `Display language`：選擇擴充套件介面所使用的語言。
 
 翻譯頁面中的 `Target language` 會開啟語言設定頁，選取後立即儲存。設定會寫入本機：
 
@@ -78,6 +79,7 @@ Command Palette extension settings 目前提供兩個設定：
 - `targetLanguageId`
 - `preferredProviderId`
 - `translateOperator`
+- `displayLanguageId`
 
 如果設定檔不存在、內容無效、目標語言未知，或把目標語言設為 `auto`，專案會回到內建預設值。
 
@@ -192,6 +194,28 @@ dotnet build src/CmdPalTranslator/CmdPalTranslator.csproj -c Release -p:Platform
 ```
 
 建置前會自動把 scale-specific 圖示複製成 Store / MSIX 驗證需要的基礎檔名。
+
+### 增加顯示語言
+
+擴充套件的所有 UI 字串存放在 JSON 檔案裡，路徑為 `src/CmdPalTranslator/Localization/`。啟動時，`LocalizationService` 會自動掃描該目錄並發現所有 `*.json` 檔案。因此，增加一個新的顯示語言只需一個步驟。
+
+**新建 JSON 字串檔**
+
+在 `src/CmdPalTranslator/Localization/` 下新建 `<語言標籤>.json`（例如 `ja-JP.json`）。檔案內需包含 `_meta.displayName` 鍵（存該語言的原生名稱），以及將 `en-US.json` 中所有 UI 鍵翻譯後的內容。
+
+```json
+// src/CmdPalTranslator/Localization/ja-JP.json
+{
+  "_meta.displayName": "日本語",
+
+  "Settings.PreferredProvider.Label": "優先翻訳プロバイダー",
+  ...
+}
+```
+
+內容中的 `{0}`、`{1}` 佔位符必須與 `en-US.json` 完全一致，因為它們會在執行期被上下文資訊取代。
+
+下次啟動時，`LocalizationService` 會自目錄中每個 JSON 檔讀取 `_meta.displayName`，自動建立 `SupportedLanguages`。設定面板中的「顯示語言」下拉選單也會自動從該清單建立，不需修改任何程式碼。
 
 ### 發佈
 

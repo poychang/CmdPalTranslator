@@ -62,10 +62,11 @@ Blank or invalid custom operators fall back to the default value, `>>`.
 
 ## Settings
 
-Command Palette extension settings currently provide two options:
+Command Palette extension settings currently provide three options:
 
 - `Preferred provider`: Choose the default translation provider. Available options are `Bing`, `Google`, and `Aliyun`.
 - `Translate operator`: Set the operator used in queries to override the target language. The default is `>>`.
+- `Display language`: Choose the language used for the extension's interface.
 
 The `Target language` item on the translation page opens the language settings page. The selected language is saved immediately. Settings are written locally to:
 
@@ -78,6 +79,7 @@ The settings file stores:
 - `targetLanguageId`
 - `preferredProviderId`
 - `translateOperator`
+- `displayLanguageId`
 
 If the settings file does not exist, has invalid contents, uses an unknown target language, or sets the target language to `auto`, the project falls back to its built-in defaults.
 
@@ -192,6 +194,28 @@ dotnet build src/CmdPalTranslator/CmdPalTranslator.csproj -c Release -p:Platform
 ```
 
 Before building, scale-specific icons are automatically copied to the base filenames required by Store / MSIX validation.
+
+### Adding a Display Language
+
+The extension stores all UI strings in JSON files under `src/CmdPalTranslator/Localization/`. At startup, `LocalizationService` scans that directory and discovers every `*.json` file automatically. Adding a new display language therefore requires only one step.
+
+**Create a new JSON string file**
+
+Add a file named `<language-tag>.json` in `src/CmdPalTranslator/Localization/` (for example, `ja-JP.json`). The file must contain a `_meta.displayName` key with the native name of the language, plus every UI key translated from `en-US.json`.
+
+```json
+// src/CmdPalTranslator/Localization/ja-JP.json
+{
+  "_meta.displayName": "日本語",
+
+  "Settings.PreferredProvider.Label": "優先翻訳プロバイダー",
+  ...
+}
+```
+
+Keep all `{0}`, `{1}` format placeholders exactly as they appear in `en-US.json`; they are replaced at runtime with context-specific values.
+
+On the next startup, `LocalizationService` reads `_meta.displayName` from every JSON file in the directory and builds `SupportedLanguages` from those entries. The `Display language` dropdown in the settings panel is then populated from that list automatically — no code changes are needed.
 
 ### Publishing
 
