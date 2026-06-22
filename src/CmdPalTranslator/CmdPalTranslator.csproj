@@ -21,6 +21,9 @@
 
     <ItemGroup>
         <Content Include="Assets\**\*.png" />
+        <Content Include="Localization\*.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     <Target Name="PrepareAssets" BeforeTargets="BeforeBuild">
         <!-- Copy scale-specific assets to base filenames expected by store validations -->
