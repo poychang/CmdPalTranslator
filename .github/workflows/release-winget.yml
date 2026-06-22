@@ -67,7 +67,7 @@ jobs:
         shell: pwsh
 
       - name: Run unit tests
-        run: dotnet test src/CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj --configuration Release --filter TestCategory=Unit -p:Platform=x64
+        run: dotnet test --project src/CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj --configuration Release --filter TestCategory=Unit -p:Platform=x64
         shell: pwsh
 
       - name: Build EXE installers
