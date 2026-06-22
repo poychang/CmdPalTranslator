@@ -6,7 +6,7 @@
 
 `Translator for Command Palette` 是 Windows Command Palette 的翻譯擴充功能。它把翻譯、語言選擇、結果複製與開啟原始翻譯網站整合在同一個 Command Palette 工作流程裡。
 
-目前版本為 `0.1.1.0`。專案已升級至 `.NET 10`，主程式以 MSIX 封裝為 Command Palette extension，支援 `win-x64` 與 `win-arm64` 發佈。
+專案已升級至 `.NET 10`，主程式以 MSIX 封裝為 Command Palette extension，支援 `win-x64` 與 `win-arm64` 發佈。
 
 ## 畫面預覽
 
@@ -21,13 +21,13 @@
 ## 主要功能
 
 - 整合 Windows Command Palette，提供 `Translator` 頂層命令。
-- 內建 `Bing` 與 `Google` 兩個翻譯 provider，預設使用 `Bing`。
+- 內建 `Bing`、`Google` 與 `Aliyun` 三個翻譯 provider，預設使用 `Bing`。
 - 可在 extension settings 的 `Preferred provider` 選擇預設翻譯來源。
 - 支援自動偵測來源語言，預設目標語言為繁體中文 `zht`。
 - 可在 `Target language` 頁面搜尋、選取並儲存預設目標語言。
 - 支援 `text >> languageCode` 查詢語法，直接覆寫單次翻譯的目標語言。
 - 可在 extension settings 的 `Translate operator` 自訂查詢運算子，例如改成 `=>`。
-- 翻譯結果可直接複製，也可從更多操作複製原文或開啟 Bing / Google 翻譯網頁。
+- 翻譯結果可直接複製，也可從更多操作複製原文或開啟 Bing / Google / Aliyun 翻譯網頁。
 - Google provider 會在回應包含字典資料時一併顯示 Dictionary 項目。
 - 內建 `Supported Languages` 頁面，可瀏覽語言代碼並複製範例查詢。
 - 翻譯輸入採用短延遲更新，避免每次按鍵都立即送出請求。
@@ -64,7 +64,7 @@ hello world => ja
 
 Command Palette extension settings 目前提供兩個設定：
 
-- `Preferred provider`：選擇預設翻譯 provider，可選 `Bing` 或 `Google`。
+- `Preferred provider`：選擇預設翻譯 provider，可選 `Bing`、`Google` 或 `Aliyun`。
 - `Translate operator`：設定查詢中用來覆寫目標語言的運算子，預設為 `>>`。
 
 翻譯頁面中的 `Target language` 會開啟語言設定頁，選取後立即儲存。設定會寫入本機：
@@ -87,10 +87,9 @@ Command Palette extension settings 目前提供兩個設定：
 
 | Code | Language |
 | --- | --- |
-| `auto` | Auto Detect |
-| `zhs` | Chinese (Simplified) |
-| `zht` | Chinese (Traditional) |
 | `en` | English |
+| `zht` | Chinese (Traditional) |
+| `zhs` | Chinese (Simplified) |
 | `ja` | Japanese |
 | `ko` | Korean |
 | `fr` | French |
@@ -103,7 +102,7 @@ Command Palette extension settings 目前提供兩個設定：
 | `pt` | Portuguese |
 | `th` | Thai |
 
-`LanguageCatalog` 會把內部語言代碼對應到 Bing 與 Google 各自需要的 provider code。例如繁體中文在 Google 使用 `zh-TW`，在 Bing 使用 `zh-Hant`。
+`LanguageCatalog` 會把內部語言代碼對應到 Bing、Google 與 Aliyun 各自需要的 provider code。例如繁體中文在 Google 使用 `zh-TW`，在 Bing 使用 `zh-Hant`，在 Aliyun 使用 `zh-tw`。
 
 ## 專案結構
 
@@ -176,7 +175,7 @@ dotnet test src/CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj --filter Te
 dotnet test src/CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj --filter TestCategory=Integration
 ```
 
-Integration tests 會實際呼叫 Bing 與 Google 的線上翻譯 endpoint，適合在確認網路與 provider 行為時執行。
+Integration tests 會實際呼叫 Bing、Google 與 Aliyun 的線上翻譯 endpoint，適合在確認網路與 provider 行為時執行。
 
 ### 建置 MSIX
 
@@ -202,8 +201,9 @@ dotnet build src/CmdPalTranslator/CmdPalTranslator.csproj -c Release -p:Platform
 
 ## 備註
 
-- Bing 與 Google provider 目前透過公開 Web endpoint 取得翻譯結果，endpoint 行為未來可能變動。
+- Bing、Google 與 Aliyun provider 目前透過公開 Web endpoint 取得翻譯結果，endpoint 行為未來可能變動。
 - Bing provider 會先取得並快取翻譯頁面的驗證資訊，驗證失效時會重試一次。
+- Aliyun provider 送出翻譯請求前會先取得並快取 CSRF 驗證資訊。
 - HTTP client 內建 gzip/deflate 解壓縮、30 秒 timeout 與暫時性錯誤重試。
 - Release build 啟用 trimming，並針對 JSON serialization 使用 source generation 以支援 NativeAOT/trim 友善建置。
 - 若要增加新的翻譯來源，可實作 `ITranslatorProvider`，再在 `TranslatorService` 註冊 provider。

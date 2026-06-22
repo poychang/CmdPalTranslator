@@ -6,7 +6,7 @@ Languages: English | [繁體中文](README.zh-tw.md)
 
 `Translator for Command Palette` is a translation extension for Windows Command Palette. It brings translation, language selection, copying results, and opening the original translation website into a single Command Palette workflow.
 
-The current version is `0.1.1.0`. The project has been upgraded to `.NET 10`. The main app is packaged as an MSIX Command Palette extension and supports `win-x64` and `win-arm64` releases.
+The project has been upgraded to `.NET 10`. The main app is packaged as an MSIX Command Palette extension and supports `win-x64` and `win-arm64` releases.
 
 ## Screenshots
 
@@ -21,13 +21,13 @@ The current version is `0.1.1.0`. The project has been upgraded to `.NET 10`. Th
 ## Features
 
 - Integrates with Windows Command Palette and provides a top-level `Translator` command.
-- Includes two translation providers, `Bing` and `Google`, with `Bing` as the default.
+- Includes three translation providers, `Bing`, `Google`, and `Aliyun`, with `Bing` as the default.
 - Lets you choose the default translation source from `Preferred provider` in the extension settings.
 - Supports automatic source-language detection, with Traditional Chinese `zht` as the default target language.
 - Lets you search, select, and save the default target language from the `Target language` page.
 - Supports the `text >> languageCode` query syntax to override the target language for a single translation.
 - Lets you customize the query operator from `Translate operator` in the extension settings, for example by changing it to `=>`.
-- Translation results can be copied directly. More actions can also copy the original text or open the Bing / Google Translate webpage.
+- Translation results can be copied directly. More actions can also copy the original text or open the Bing / Google / Aliyun Translate webpage.
 - The Google provider also shows Dictionary items when dictionary data is included in the response.
 - Includes a built-in `Supported Languages` page for browsing language codes and copying example queries.
 - Translation input uses a short delayed update to avoid sending a request on every keystroke.
@@ -64,7 +64,7 @@ Blank or invalid custom operators fall back to the default value, `>>`.
 
 Command Palette extension settings currently provide two options:
 
-- `Preferred provider`: Choose the default translation provider. Available options are `Bing` and `Google`.
+- `Preferred provider`: Choose the default translation provider. Available options are `Bing`, `Google`, and `Aliyun`.
 - `Translate operator`: Set the operator used in queries to override the target language. The default is `>>`.
 
 The `Target language` item on the translation page opens the language settings page. The selected language is saved immediately. Settings are written locally to:
@@ -87,10 +87,9 @@ The currently built-in language codes are:
 
 | Code | Language |
 | --- | --- |
-| `auto` | Auto Detect |
-| `zhs` | Chinese (Simplified) |
-| `zht` | Chinese (Traditional) |
 | `en` | English |
+| `zht` | Chinese (Traditional) |
+| `zhs` | Chinese (Simplified) |
 | `ja` | Japanese |
 | `ko` | Korean |
 | `fr` | French |
@@ -103,7 +102,7 @@ The currently built-in language codes are:
 | `pt` | Portuguese |
 | `th` | Thai |
 
-`LanguageCatalog` maps the internal language codes to the provider codes required by Bing and Google. For example, Traditional Chinese uses `zh-TW` in Google and `zh-Hant` in Bing.
+`LanguageCatalog` maps the internal language codes to the provider codes required by Bing, Google, and Aliyun. For example, Traditional Chinese uses `zh-TW` in Google, `zh-Hant` in Bing, and `zh-tw` in Aliyun.
 
 ## Project Structure
 
@@ -176,7 +175,7 @@ Run live integration tests:
 dotnet test src/CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj --filter TestCategory=Integration
 ```
 
-Integration tests call the live Bing and Google online translation endpoints. They are useful when verifying network access and provider behavior.
+Integration tests call the live Bing, Google, and Aliyun online translation endpoints. They are useful when verifying network access and provider behavior.
 
 ### Build MSIX
 
@@ -202,8 +201,9 @@ You can publish to Microsoft Store through [Microsoft Partner Center](https://pa
 
 ## Notes
 
-- The Bing and Google providers currently obtain translation results through public web endpoints. Endpoint behavior may change in the future.
+- The Bing, Google, and Aliyun providers currently obtain translation results through public web endpoints. Endpoint behavior may change in the future.
 - The Bing provider first obtains and caches validation information from the translation page. If validation expires, it retries once.
+- The Aliyun provider fetches and caches CSRF metadata before submitting translation requests.
 - The HTTP client has built-in gzip/deflate decompression, a 30-second timeout, and retries for transient errors.
 - Release builds enable trimming and use source generation for JSON serialization to support NativeAOT/trim-friendly builds.
 - To add a new translation source, implement `ITranslatorProvider`, then register the provider in `TranslatorService`.
