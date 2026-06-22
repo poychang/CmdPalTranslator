@@ -1,0 +1,81 @@
+name: Update WinGet Manifest
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number, for example 0.2.3.0.'
+        required: false
+        type: string
+      release_tag:
+        description: 'Release tag, for example CmdPalTranslator-v0.2.3.0.'
+        required: false
+        type: string
+
+env:
+  EXTENSION_NAME: CmdPalTranslator
+  GITHUB_USER_NAME: poychang
+  GITHUB_REPO: CmdPalTranslator
+  WINGET_PACKAGE_IDENTIFIER: ${{ vars.WINGET_PACKAGE_IDENTIFIER || '25526PoyChang.TranslatorforCommandPalette' }}
+
+jobs:
+  update-winget:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'CmdPalTranslator-v')
+    runs-on: windows-2022
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get release info
+        id: release
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            if ("${{ inputs.version }}" -eq "" -or "${{ inputs.release_tag }}" -eq "") {
+              throw "Manual runs must provide both version and release_tag."
+            }
+
+            $version = "${{ inputs.version }}"
+            $tag = "${{ inputs.release_tag }}"
+          } else {
+            $tag = "${{ github.event.release.tag_name }}"
+            $version = $tag -replace "^${{ env.EXTENSION_NAME }}-v", ""
+          }
+
+          "VERSION=$version" >> $env:GITHUB_OUTPUT
+          "TAG=$tag" >> $env:GITHUB_OUTPUT
+          Write-Host "Using version: $version"
+          Write-Host "Using tag: $tag"
+        shell: pwsh
+
+      - name: Install wingetcreate
+        run: Invoke-WebRequest https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+        shell: pwsh
+
+      - name: Submit WinGet update
+        env:
+          WINGET_TOKEN: ${{ secrets.WINGET_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:WINGET_TOKEN)) {
+            throw "Set a WINGET_TOKEN secret with permission to submit to microsoft/winget-pkgs."
+          }
+
+          $version = "${{ steps.release.outputs.VERSION }}"
+          $tag = "${{ steps.release.outputs.TAG }}"
+          $x64Url = "https://github.com/${{ env.GITHUB_USER_NAME }}/${{ env.GITHUB_REPO }}/releases/download/$tag/${{ env.EXTENSION_NAME }}-Setup-$version-x64.exe"
+          $arm64Url = "https://github.com/${{ env.GITHUB_USER_NAME }}/${{ env.GITHUB_REPO }}/releases/download/$tag/${{ env.EXTENSION_NAME }}-Setup-$version-arm64.exe"
+
+          Write-Host "Updating WinGet manifest for ${{ env.WINGET_PACKAGE_IDENTIFIER }} version $version"
+          Write-Host "x64 URL: $x64Url"
+          Write-Host "arm64 URL: $arm64Url"
+
+          .\wingetcreate.exe update "${{ env.WINGET_PACKAGE_IDENTIFIER }}" `
+            --version "$version" `
+            --urls "$x64Url|x64" "$arm64Url|arm64" `
+            --token "$env:WINGET_TOKEN" `
+            --submit
+        shell: pwsh

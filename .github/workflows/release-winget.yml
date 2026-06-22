@@ -1,0 +1,116 @@
+name: Build WinGet Installers
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number. Leave empty to read AppxPackageVersion from the project.'
+        required: false
+        type: string
+      create_release:
+        description: 'Create or update the GitHub Release with installer assets.'
+        required: false
+        default: true
+        type: boolean
+      release_notes:
+        description: 'Release notes for the GitHub Release.'
+        required: false
+        default: 'New release with latest updates and improvements.'
+        type: string
+
+env:
+  EXTENSION_NAME: CmdPalTranslator
+  DISPLAY_NAME: Translator for Command Palette
+  GITHUB_REPO_URL: https://github.com/poychang/CmdPalTranslator
+
+jobs:
+  build:
+    runs-on: windows-2022
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+        shell: pwsh
+
+      - name: Get version
+        id: version
+        run: |
+          if ("${{ inputs.version }}" -ne "") {
+            $version = "${{ inputs.version }}"
+          } else {
+            $projectFile = "src/CmdPalTranslator/CmdPalTranslator.csproj"
+            $xml = [xml](Get-Content $projectFile)
+            $version = $xml.Project.PropertyGroup.AppxPackageVersion | Select-Object -First 1
+            if (-not $version) {
+              throw "AppxPackageVersion was not found in $projectFile."
+            }
+          }
+
+          "VERSION=$version" >> $env:GITHUB_OUTPUT
+          "TAG=${{ env.EXTENSION_NAME }}-v$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Using version: $version"
+        shell: pwsh
+
+      - name: Restore
+        run: dotnet restore src/CmdPalTranslator.slnx
+        shell: pwsh
+
+      - name: Run unit tests
+        run: dotnet test src/CmdPalTranslator.Tests/CmdPalTranslator.Tests.csproj --configuration Release --filter TestCategory=Unit -p:Platform=x64
+        shell: pwsh
+
+      - name: Build EXE installers
+        run: |
+          .\build-winget-release.ps1 `
+            -Version "${{ steps.version.outputs.VERSION }}" `
+            -Platforms x64,arm64 `
+            -SkipPrerequisiteCheck
+        shell: pwsh
+
+      - name: Upload x64 installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXTENSION_NAME }}-x64-installer
+          path: src/CmdPalTranslator/bin/Release/installer/*-x64.exe
+          if-no-files-found: error
+
+      - name: Upload arm64 installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.EXTENSION_NAME }}-arm64-installer
+          path: src/CmdPalTranslator/bin/Release/installer/*-arm64.exe
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        if: ${{ inputs.create_release }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.TAG }}
+          name: "${{ env.DISPLAY_NAME }} v${{ steps.version.outputs.VERSION }}"
+          body: |
+            ## ${{ env.DISPLAY_NAME }} ${{ steps.version.outputs.VERSION }}
+
+            ## What's New
+            ${{ inputs.release_notes }}
+
+            ## Installation
+            Download the installer for your system architecture from the release assets.
+
+            - x64: `${{ env.EXTENSION_NAME }}-Setup-${{ steps.version.outputs.VERSION }}-x64.exe`
+            - arm64: `${{ env.EXTENSION_NAME }}-Setup-${{ steps.version.outputs.VERSION }}-arm64.exe`
+
+            Repository: ${{ env.GITHUB_REPO_URL }}
+          files: src/CmdPalTranslator/bin/Release/installer/*.exe
+          draft: false
+          prerelease: false
