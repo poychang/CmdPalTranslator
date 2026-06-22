@@ -215,7 +215,7 @@ namespace CmdPalTranslator.Tests
             LanguageOption target = service.TargetLanguage;
 
             Assert.AreEqual("ja", target.Id);
-            Assert.AreEqual("Japanese", target.DisplayName);
+            Assert.AreEqual("日本語", target.DisplayName);
         }
     }
 }
