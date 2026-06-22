@@ -32,8 +32,8 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
         _translatorService = translatorService;
 
         Icon = IconHelpers.FromRelativePath("Assets\\icons\\StoreLogo.png");
-        Title = "Translator";
-        Name = "Open";
+        Title = LocalizationService.Instance.Get("Page.Main.Title");
+        Name = LocalizationService.Instance.Get("Page.Main.Name");
         ShowDetails = true;
     }
 
@@ -80,10 +80,10 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
         catch (Exception ex)
         {
             string failedTitle = ex is TaskCanceledException or OperationCanceledException
-                ? "Translation timed out"
-                : $"{provider.DisplayName} translation failed";
+                ? LocalizationService.Instance.Get("Page.Main.Error.TranslationTimedOut")
+                : LocalizationService.Instance.Get("Page.Main.Error.TranslationFailed", provider.DisplayName);
             string failedMessage = ex is TaskCanceledException or OperationCanceledException
-                ? "The request timed out. Please try again later."
+                ? LocalizationService.Instance.Get("Page.Main.Error.RequestTimedOut")
                 : ex.Message;
 
             return
@@ -95,21 +95,21 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
                     Details = new Details
                     {
                         Title = failedTitle,
-                        Body = $"Something goes wrong...",
+                        Body = LocalizationService.Instance.Get("Page.Main.Error.SomethingWrong"),
                         Metadata = [
                             new DetailsElement()
                             {
-                                Key = "Query",
+                                Key = LocalizationService.Instance.Get("Page.Main.Error.Details.Query.Key"),
                                 Data = new DetailsLink() { Text = query.SourceText },
                             },
                             new DetailsElement()
                             {
-                                Key = "Target",
+                                Key = LocalizationService.Instance.Get("Page.Main.Error.Details.Target.Key"),
                                 Data = new DetailsLink() { Text = query.TargetLanguage.DisplayName },
                             },
                             new DetailsElement()
                             {
-                                Key = "Failed Message",
+                                Key = LocalizationService.Instance.Get("Page.Main.Error.Details.FailedMessage.Key"),
                                 Data = new DetailsLink() { Text = failedMessage },
                             },
                         ],
@@ -128,34 +128,34 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
         [
             new ListItem(new NoOpCommand())
             {
-                Title = "Type text to translate",
-                Subtitle = "Use the translation provider configured in extension settings.",
+                Title = LocalizationService.Instance.Get("Page.Main.Help.Title"),
+                Subtitle = LocalizationService.Instance.Get("Page.Main.Help.Subtitle"),
                 Icon = new IconInfo("\uE721"),
             },
             new ListItem(new TargetLanguageSettingsPage(_translatorSettingManager))
             {
-                Title = "Target language",
-                Subtitle = $"{defaultTarget.DisplayName} ({defaultTarget.Id})",
+                Title = LocalizationService.Instance.Get("Page.Main.Help.TargetLanguage.Title"),
+                Subtitle = LocalizationService.Instance.Get("Page.Main.Help.TargetLanguage.Subtitle", defaultTarget.DisplayName, defaultTarget.Id),
                 Icon = new IconInfo("\uE713"),
                 Details = new Details
                 {
-                    Title = "Target Language",
-                    Body = $"Open the settings page to choose the target language used when the query does not include `{translateOperator} languageCode`.",
+                    Title = LocalizationService.Instance.Get("Page.Main.Help.TargetLanguage.Details.Title"),
+                    Body = LocalizationService.Instance.Get("Page.Main.Help.TargetLanguage.Details.Body", translateOperator),
                 },
             },
             new ListItem(new LanguageReferencePage(translateOperator))
             {
-                Title = "Supported Languages",
-                Subtitle = "Open the language reference page.",
+                Title = LocalizationService.Instance.Get("Page.Main.Help.SupportedLanguages.Title"),
+                Subtitle = LocalizationService.Instance.Get("Page.Main.Help.SupportedLanguages.Subtitle"),
                 Icon = new IconInfo("\uE946"),
                 Details = new Details
                 {
-                    Title = "Supported Languages",
-                    Body = "Open the language reference page to see all supported languages and their codes.",
+                    Title = LocalizationService.Instance.Get("Page.Main.Help.SupportedLanguages.Details.Title"),
+                    Body = LocalizationService.Instance.Get("Page.Main.Help.SupportedLanguages.Details.Body"),
                     Metadata = [
                         new DetailsElement()
                         {
-                            Key = "Target Languages",
+                            Key = LocalizationService.Instance.Get("Page.Main.Help.SupportedLanguages.Details.TargetLanguages.Key"),
                             Data = new DetailsTags
                             {
                                 Tags = [.. LanguageCatalog.All
@@ -165,8 +165,8 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
                         },
                         new DetailsElement()
                         {
-                            Key = "Specify Target",
-                            Data = new DetailsLink() { Text = $"Append {translateOperator} and the languageCode to override the default target language.\r\n\r\nExample: hello world {translateOperator} zht" },
+                            Key = LocalizationService.Instance.Get("Page.Main.Help.SupportedLanguages.Details.SpecifyTarget.Key"),
+                            Data = new DetailsLink() { Text = LocalizationService.Instance.Get("Page.Main.Help.SupportedLanguages.Details.SpecifyTarget.Text", translateOperator) },
                         },
                     ],
                 },
@@ -194,9 +194,9 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
 
         List<CommandContextItem> moreCommands =
         [
-            new CommandContextItem(new LocalCopyTextCommand(query.SourceText, "Copied source text"))
+            new CommandContextItem(new LocalCopyTextCommand(query.SourceText, LocalizationService.Instance.Get("Page.Main.Item.CopiedSourceText")))
             {
-                Title = "Copy source text",
+                Title = LocalizationService.Instance.Get("Page.Main.Item.CopySourceText.Title"),
             },
         ];
 
@@ -204,11 +204,11 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
         {
             moreCommands.Add(new CommandContextItem(new OpenUrlCommand(response.WebUri.ToString()))
             {
-                Title = $"Open in {response.ProviderDisplayName}",
+                Title = LocalizationService.Instance.Get("Page.Main.Item.OpenIn.Title", response.ProviderDisplayName),
             });
         }
 
-        return new ListItem(new LocalCopyTextCommand(entry.CopyText, "Copied translation"))
+        return new ListItem(new LocalCopyTextCommand(entry.CopyText, LocalizationService.Instance.Get("Page.Main.Item.CopiedTranslation")))
         {
             Title = entry.Title,
             Subtitle = subtitle,
@@ -221,18 +221,18 @@ internal sealed partial class CmdPalTranslatorPage : DynamicListPage, IDisposabl
                 [
                     new DetailsElement()
                     {
-                        Key = "Provider",
+                        Key = LocalizationService.Instance.Get("Page.Main.Item.Details.Provider.Key"),
                         Data = new DetailsLink() { Text = response.ProviderDisplayName },
                     },
                     new DetailsElement()
                     {
-                        Key = "Language Pair",
-                        Data = new DetailsLink() { Text = $"{LanguageCatalog.ToDisplayName(response.SourceLanguage)} to {LanguageCatalog.ToDisplayName(response.TargetLanguage)}" },
+                        Key = LocalizationService.Instance.Get("Page.Main.Item.Details.LanguagePair.Key"),
+                        Data = new DetailsLink() { Text = LocalizationService.Instance.Get("Page.Main.Item.Details.LanguagePair.Text", LanguageCatalog.ToDisplayName(response.SourceLanguage), LanguageCatalog.ToDisplayName(response.TargetLanguage)) },
                     },
                     new DetailsElement()
                     {
-                        Key = "Category",
-                        Data = new DetailsLink() { Text = entry.Category ?? "Translation" },
+                        Key = LocalizationService.Instance.Get("Page.Main.Item.Details.Category.Key"),
+                        Data = new DetailsLink() { Text = entry.Category ?? LocalizationService.Instance.Get("Page.Main.Item.Details.DefaultCategory") },
                     },
                 ],
             },

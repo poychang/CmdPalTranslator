@@ -17,7 +17,7 @@ namespace CmdPalTranslator.Pages
                 ? TranslatorService.DefaultTranslateOperator
                 : translateOperator.Trim();
 
-            Name = "Supported Languages";
+            Name = LocalizationService.Instance.Get("Page.LanguageReference.Name");
             Icon = new IconInfo("\uE909");
             ShowDetails = true;
         }
@@ -32,11 +32,11 @@ namespace CmdPalTranslator.Pages
                     Details = new Details
                     {
                         Title = $"{language.DisplayName} ({language.Id})",
-                        Body = $"Use `{_translateOperator} {language.Id}` as the target language suffix.",
+                        Body = LocalizationService.Instance.Get("Page.LanguageReference.Item.Details.Body", _translateOperator, language.Id),
                         Metadata = [
                             new DetailsElement()
                             {
-                                Key = "Example",
+                                Key = LocalizationService.Instance.Get("Page.LanguageReference.Item.Details.Example.Key"),
                                 Data = new DetailsLink() { Text = $"hello {_translateOperator} {language.Id}" },
                             },
                         ],

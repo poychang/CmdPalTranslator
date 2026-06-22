@@ -15,8 +15,12 @@ namespace CmdPalTranslator
         {
             _translatorSettingService = translatorSettingService ?? new CmdPalTranslatorSettingService();
 
+            // Load the display language before initializing any settings UI strings.
+            LocalizationService.Instance.Load(_translatorSettingService.DisplayLanguageId);
+
             InitializePreferredProviderSettings();
             InitializeTranslateOperatorSettings();
+            InitializeDisplayLanguageSettings();
             _translatorSettingService.SettingsChanged += OnServiceSettingsChanged;
         }
 
@@ -34,9 +38,22 @@ namespace CmdPalTranslator
 
         private void OnServiceSettingsChanged(object? sender, EventArgs e)
         {
+            LocalizationService.Instance.Load(_translatorSettingService.DisplayLanguageId);
+            ApplyLocalization();
             ApplyPreferredProviderSettingValue(_translatorSettingService.PreferredProviderId);
             ApplyTranslateOperatorSettingValue(_translatorSettingService.TranslateOperator);
+            ApplyDisplayLanguageSettingValue(_translatorSettingService.DisplayLanguageId);
             SettingsChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ApplyLocalization()
+        {
+            _preferredProviderSetting.Label = LocalizationService.Instance.Get("Settings.PreferredProvider.Label");
+            _preferredProviderSetting.Description = LocalizationService.Instance.Get("Settings.PreferredProvider.Description");
+            _translateOperatorSetting.Label = LocalizationService.Instance.Get("Settings.TranslateOperator.Label");
+            _translateOperatorSetting.Description = LocalizationService.Instance.Get("Settings.TranslateOperator.Description");
+            _displayLanguageSetting.Label = LocalizationService.Instance.Get("Settings.DisplayLanguage.Label");
+            _displayLanguageSetting.Description = LocalizationService.Instance.Get("Settings.DisplayLanguage.Description");
         }
     }
 }

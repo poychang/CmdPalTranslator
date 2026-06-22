@@ -34,8 +34,8 @@ namespace CmdPalTranslator
         {
             _preferredProviderSetting = new ChoiceSetSetting(PreferredProviderSettingId, PreferredProviderChoices)
             {
-                Label = "Preferred provider",
-                Description = "Choose the default translation provider.",
+                Label = LocalizationService.Instance.Get("Settings.PreferredProvider.Label"),
+                Description = LocalizationService.Instance.Get("Settings.PreferredProvider.Description"),
             };
 
             _settings.Add(_preferredProviderSetting);

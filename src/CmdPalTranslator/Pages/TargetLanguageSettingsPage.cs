@@ -17,8 +17,8 @@ namespace CmdPalTranslator.Pages
             _translatorSettingManager = translatorSettingManager;
             _translatorSettingManager.SettingsChanged += OnSettingsChanged;
 
-            Name = "Translation Settings";
-            Title = "Target Language";
+            Name = LocalizationService.Instance.Get("Page.TargetLanguage.Name");
+            Title = LocalizationService.Instance.Get("Page.TargetLanguage.Title");
             Icon = new IconInfo("\uE713");
             ShowDetails = true;
         }
@@ -48,13 +48,13 @@ namespace CmdPalTranslator.Pages
             [
                 new ListItem(new NoOpCommand())
                 {
-                    Title = "Current target language",
-                    Subtitle = $"{currentLanguage.DisplayName} ({currentLanguage.Id})",
+                    Title = LocalizationService.Instance.Get("Page.TargetLanguage.Current.Title"),
+                    Subtitle = LocalizationService.Instance.Get("Page.TargetLanguage.Current.Subtitle", currentLanguage.DisplayName, currentLanguage.Id),
                     Icon = new IconInfo("\uE909"),
                     Details = new Details
                     {
-                        Title = "How target language works",
-                        Body = $"New translations use this language unless you append `{translateOperator} languageCode` in the query.\nExample: `hello world {translateOperator} ja`",
+                        Title = LocalizationService.Instance.Get("Page.TargetLanguage.Current.Details.Title"),
+                        Body = LocalizationService.Instance.Get("Page.TargetLanguage.Current.Details.Body", translateOperator),
                     },
                 },
             ];
@@ -75,8 +75,8 @@ namespace CmdPalTranslator.Pages
                 {
                     Title = $"{language.DisplayName} ({language.Id})",
                     Body = isCurrent
-                        ? $"This is the current target language.\n Used when no `{translateOperator} languageCode` override is specified.\n Example query without override: `hello world`"
-                        : $"Set this as the target language for new translations.\n Example query with explicit override: `hello world {translateOperator} {language.Id}`",
+                        ? LocalizationService.Instance.Get("Page.TargetLanguage.Item.IsCurrent.Body", translateOperator)
+                        : LocalizationService.Instance.Get("Page.TargetLanguage.Item.IsNotCurrent.Body", translateOperator, language.Id),
                 },
                 Tags = [new Tag(language.Id)],
             };

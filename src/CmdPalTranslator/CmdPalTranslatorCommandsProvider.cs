@@ -20,6 +20,7 @@ public partial class CmdPalTranslatorCommandsProvider : CommandProvider
         _translatorSettingManager = translatorSettingManager;
 
         DisplayName = "Translator";
+        //DisplayName = LocalizationService.Instance.Get("Provider.DisplayName");
         Icon = IconHelpers.FromRelativePath("Assets\\icons\\StoreLogo.png");
         Settings = _translatorSettingManager.CommandSettings;
 
@@ -28,6 +29,8 @@ public partial class CmdPalTranslatorCommandsProvider : CommandProvider
             {
                 Title = "Translator",
                 Subtitle = "Instantly translate text.",
+                //Title = LocalizationService.Instance.Get("Provider.Command.Title"),
+                //Subtitle = LocalizationService.Instance.Get("Provider.Command.Subtitle"),
             },
         ];
     }
