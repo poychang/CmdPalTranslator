@@ -22,6 +22,7 @@ AppPublisher={#PublisherName}
 AppPublisherURL={#PublisherUrl}
 AppSupportURL={#PublisherUrl}/issues
 AppUpdatesURL={#PublisherUrl}/releases
+PrivilegesRequired=lowest
 DefaultDirName={autopf}\{#ExtensionName}
 DefaultGroupName={#AppName}
 DisableProgramGroupPage=yes
