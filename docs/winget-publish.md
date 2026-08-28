@@ -79,4 +79,4 @@ gh workflow run build-and-release-installers.yml --ref main -f version=0.2.3.0 -
 建議設定：
 
 - Repository variable `WINGET_PACKAGE_IDENTIFIER`：填入首次 WinGet PR 最終使用的 PackageIdentifier。
-- Repository secret `WINGET_TOKEN`：建議使用可對 `microsoft/winget-pkgs` 建立 PR 的 GitHub PAT。若未設定，workflow 會退回使用 `GITHUB_TOKEN`，但該 token 可能沒有跨 repo 送 PR 的權限。
+- Repository secret `WINGET_TOKEN`：必須使用可對 `microsoft/winget-pkgs` 建立 PR 的 GitHub PAT；內建的 `GITHUB_TOKEN` 無法跨 repository 提交更新。

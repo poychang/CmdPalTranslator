@@ -17,7 +17,7 @@ env:
   WINGET_PACKAGE_IDENTIFIER: ${{ vars.WINGET_PACKAGE_IDENTIFIER || 'PoyChang.TranslatorforCommandPalette' }}
 
 jobs:
-  update-winget:
+  submit-to-winget:
     if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'CmdPalTranslator-v')
     runs-on: windows-2022
     permissions:
@@ -58,7 +58,7 @@ jobs:
 
       - name: Submit WinGet update
         env:
-          WINGET_TOKEN: ${{ secrets.WINGET_TOKEN || secrets.GITHUB_TOKEN }}
+          WINGET_TOKEN: ${{ secrets.WINGET_TOKEN }}
         run: |
           if ([string]::IsNullOrWhiteSpace($env:WINGET_TOKEN)) {
             throw "Set a WINGET_TOKEN secret with permission to submit to microsoft/winget-pkgs."
