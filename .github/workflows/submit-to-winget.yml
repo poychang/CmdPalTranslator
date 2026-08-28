@@ -1,17 +1,13 @@
-name: Update WinGet Manifest
+name: Submit WinGet Manifest
 
 on:
   release:
     types: [published]
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version number, for example 0.2.3.0.'
-        required: false
-        type: string
       release_tag:
         description: 'Release tag, for example CmdPalTranslator-v0.2.3.0.'
-        required: false
+        required: true
         type: string
 
 env:
@@ -35,15 +31,19 @@ jobs:
         id: release
         run: |
           if ("${{ github.event_name }}" -eq "workflow_dispatch") {
-            if ("${{ inputs.version }}" -eq "" -or "${{ inputs.release_tag }}" -eq "") {
-              throw "Manual runs must provide both version and release_tag."
-            }
-
-            $version = "${{ inputs.version }}"
             $tag = "${{ inputs.release_tag }}"
           } else {
             $tag = "${{ github.event.release.tag_name }}"
-            $version = $tag -replace "^${{ env.EXTENSION_NAME }}-v", ""
+          }
+
+          $tagPrefix = "${{ env.EXTENSION_NAME }}-v"
+          if (-not $tag.StartsWith($tagPrefix)) {
+            throw "Release tag must start with '$tagPrefix'."
+          }
+
+          $version = $tag.Substring($tagPrefix.Length)
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            throw "Release tag must include a version after '$tagPrefix'."
           }
 
           "VERSION=$version" >> $env:GITHUB_OUTPUT

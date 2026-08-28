@@ -1,4 +1,4 @@
-name: Build WinGet Installers
+name: Build and Release Installers
 
 on:
   workflow_dispatch:

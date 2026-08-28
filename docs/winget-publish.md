@@ -58,7 +58,7 @@ wingetcreate new "https://github.com/poychang/CmdPalTranslator/releases/download
 
 ## GitHub Actions 流程
 
-`Build WinGet Installers` workflow 會：
+`Build and Release Installers` workflow 會：
 
 1. 安裝 .NET 10
 2. 安裝 Inno Setup
@@ -71,10 +71,10 @@ wingetcreate new "https://github.com/poychang/CmdPalTranslator/releases/download
 手動觸發範例：
 
 ```powershell
-gh workflow run release-winget.yml --ref main -f version=0.2.3.0 -f create_release=true -f "release_notes=Release notes here"
+gh workflow run build-and-release-installers.yml --ref main -f version=0.2.3.0 -f create_release=true -f "release_notes=Release notes here"
 ```
 
-`Update WinGet Manifest` workflow 會在 GitHub Release published 後執行，使用 `wingetcreate update` 更新既有 WinGet package。這個 workflow 只有在首次 WinGet PR 已合併後才適用。
+`Submit WinGet Manifest` workflow 會在 GitHub Release published 後執行，使用 `wingetcreate update` 更新既有 WinGet package。這個 workflow 只有在首次 WinGet PR 已合併後才適用。
 
 建議設定：
 
