@@ -662,3 +662,4 @@ if ($null -ne $windowsAppRuntimeDependency) {
     Write-Host '  2. If this package uses Windows App SDK, add the matching Microsoft.WindowsAppRuntime.#.# dependency to the .installer.yaml manifest.'
 }
 Write-Host "  3. Confirm the WinGet PackageIdentifier. Current candidate: $appxPackageIdentityName"
+Write-Host '  4. Add Scope: user to the .installer.yaml manifest if it is missing (installer uses PrivilegesRequired=lowest, so it does not need admin rights).'

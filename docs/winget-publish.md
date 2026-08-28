@@ -24,6 +24,7 @@ https://learn.microsoft.com/zh-tw/windows/powertoys/command-palette/publish-exte
 6. 送出 PR 前要檢查 WinGet manifest：
    - 每個 `.locale.*.yaml` 要有 `Tags: windows-commandpalette-extension`
    - `.installer.yaml` 若未自動產生 Windows App Runtime 相依性，補上 `Microsoft.WindowsAppRuntime.1.8`
+   - `.installer.yaml` 若沒有 `Scope: user`，手動補上；因為安裝檔（`setup-template.iss`）使用 `PrivilegesRequired=lowest`，本來就不需要系統管理員權限，加上此欄位可讓 Winget 正確辨識，避免安裝時被要求提升權限
 
 ## 本機手動流程
 
