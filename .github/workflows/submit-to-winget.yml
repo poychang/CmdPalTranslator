@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Release tag, for example CmdPalTranslator-v0.2.3.0.'
+        description: 'Release tag, for example CmdPalTranslator-v0.3.0.0'
         required: true
         type: string
 
@@ -14,7 +14,7 @@ env:
   EXTENSION_NAME: CmdPalTranslator
   GITHUB_USER_NAME: poychang
   GITHUB_REPO: CmdPalTranslator
-  WINGET_PACKAGE_IDENTIFIER: ${{ vars.WINGET_PACKAGE_IDENTIFIER || '25526PoyChang.TranslatorforCommandPalette' }}
+  WINGET_PACKAGE_IDENTIFIER: ${{ vars.WINGET_PACKAGE_IDENTIFIER || 'PoyChang.TranslatorforCommandPalette' }}
 
 jobs:
   update-winget:
@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Get release info
         id: release
