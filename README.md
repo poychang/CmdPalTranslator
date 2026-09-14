@@ -96,6 +96,7 @@ The currently built-in language codes are:
 | `ko` | Korean |
 | `fr` | French |
 | `de` | German |
+| `nl` | Dutch |
 | `es` | Spanish |
 | `it` | Italian |
 | `ru` | Russian |

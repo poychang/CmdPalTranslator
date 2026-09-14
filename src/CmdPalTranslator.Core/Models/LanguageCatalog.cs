@@ -35,6 +35,7 @@
             new("ko", "한국어", "ko", "ko", "ko", "korean"),
             new("fr", "Français", "fr", "fr", "fr", "french"),
             new("de", "Deutsch", "de", "de", "de", "german"),
+            new("nl", "Nederlands", "nl", "nl", "nl", "dutch"),
             new("es", "española", "es", "es", "es", "spanish"),
             new("it", "Italiano", "it", "it", "it", "italian"),
             new("ru", "Русский", "ru", "ru", "ru", "russian"),

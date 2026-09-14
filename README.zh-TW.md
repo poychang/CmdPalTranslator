@@ -96,6 +96,7 @@ Command Palette extension settings 目前提供三個設定：
 | `ko` | Korean |
 | `fr` | French |
 | `de` | German |
+| `nl` | Dutch |
 | `es` | Spanish |
 | `it` | Italian |
 | `ru` | Russian |

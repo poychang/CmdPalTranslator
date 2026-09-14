@@ -1,0 +1,61 @@
+{
+  "_meta.displayName": "Nederlands",
+
+  "Settings.PreferredProvider.Label": "Voorkeursprovider",
+  "Settings.PreferredProvider.Description": "Kies de standaard vertaalprovider.",
+  "Settings.TranslateOperator.Label": "Vertaaloperator",
+  "Settings.TranslateOperator.Description": "Gebruik deze operator in zoekopdrachten om de doeltaal te overschrijven (bijvoorbeeld: hello world >> ja).",
+  "Settings.DisplayLanguage.Label": "Weergavetaal",
+  "Settings.DisplayLanguage.Description": "Kies de taal die wordt gebruikt voor de interface van deze extensie.",
+
+  "Provider.DisplayName": "Vertaler",
+  "Provider.Command.Title": "Vertaler",
+  "Provider.Command.Subtitle": "Vertaal tekst direct.",
+
+  "Page.Main.Title": "Vertaler",
+  "Page.Main.Name": "Openen",
+  "Page.Main.Help.Title": "Typ tekst om te vertalen",
+  "Page.Main.Help.Subtitle": "Gebruikt de vertaalprovider die is ingesteld in de extensie-instellingen.",
+  "Page.Main.Help.TargetLanguage.Title": "Doeltaal",
+  "Page.Main.Help.TargetLanguage.Subtitle": "{0} ({1})",
+  "Page.Main.Help.TargetLanguage.Details.Title": "Doeltaal",
+  "Page.Main.Help.TargetLanguage.Details.Body": "Open de instellingenpagina om de doeltaal te kiezen die wordt gebruikt wanneer de zoekopdracht geen `{0} languageCode` bevat.",
+  "Page.Main.Help.SupportedLanguages.Title": "Ondersteunde talen",
+  "Page.Main.Help.SupportedLanguages.Subtitle": "Open de taalreferentiepagina.",
+  "Page.Main.Help.SupportedLanguages.Details.Title": "Ondersteunde talen",
+  "Page.Main.Help.SupportedLanguages.Details.Body": "Open de taalreferentiepagina om alle ondersteunde talen en hun codes te bekijken.",
+  "Page.Main.Help.SupportedLanguages.Details.TargetLanguages.Key": "Doeltalen",
+  "Page.Main.Help.SupportedLanguages.Details.SpecifyTarget.Key": "Doel opgeven",
+  "Page.Main.Help.SupportedLanguages.Details.SpecifyTarget.Text": "Voeg {0} en de languageCode toe om de standaard doeltaal te overschrijven.\n\rVoorbeeld: hello world {0} zht",
+
+  "Page.Main.Error.TranslationTimedOut": "De vertaling duurde te lang."
+  "Page.Main.Error.TranslationFailed": "{0}-vertaling mislukt",
+  "Page.Main.Error.RequestTimedOut": "De aanvraag heeft een time-out. Probeer het later opnieuw.",
+  "Page.Main.Error.SomethingWrong": "Er is iets misgegaan...",
+  "Page.Main.Error.Details.Query.Key": "Zoekopdracht",
+  "Page.Main.Error.Details.Target.Key": "Doel",
+  "Page.Main.Error.Details.FailedMessage.Key": "Foutmelding",
+
+  "Page.Main.Item.CopySourceText.Title": "Brontekst kopiëren",
+  "Page.Main.Item.OpenIn.Title": "Openen in {0}",
+  "Page.Main.Item.CopiedSourceText": "Brontekst gekopieerd",
+  "Page.Main.Item.CopiedTranslation": "Vertaling gekopieerd",
+  "Page.Main.Item.Details.Provider.Key": "Provider",
+  "Page.Main.Item.Details.LanguagePair.Key": "Taalpaar",
+  "Page.Main.Item.Details.LanguagePair.Text": "{0} naar {1}",
+  "Page.Main.Item.Details.Category.Key": "Categorie",
+  "Page.Main.Item.Details.DefaultCategory": "Vertaling",
+
+  "Page.TargetLanguage.Name": "Vertaalinstellingen",
+  "Page.TargetLanguage.Title": "Doeltaal",
+  "Page.TargetLanguage.Current.Title": "Huidige doeltaal",
+  "Page.TargetLanguage.Current.Subtitle": "{0} ({1})",
+  "Page.TargetLanguage.Current.Details.Title": "Hoe de doeltaal werkt",
+  "Page.TargetLanguage.Current.Details.Body": "Nieuwe vertalingen gebruiken deze taal, tenzij je `{0} languageCode` toevoegt aan de zoekopdracht.\n\rVoorbeeld: `hello world {0} languageCode`",
+  "Page.TargetLanguage.Item.IsCurrent.Body": "Dit is de huidige doeltaal.\n\r Wordt gebruikt wanneer geen `{0} languageCode`-overschrijving is opgegeven.\n\r Voorbeeld zoekopdracht zonder overschrijving: `hello world`",
+  "Page.TargetLanguage.Item.IsNotCurrent.Body": "Stel dit in als doeltaal voor nieuwe vertalingen.\n\r Voorbeeld zoekopdracht met expliciete overschrijving: `hello world {0} {1}`",
+
+  "Page.LanguageReference.Name": "Ondersteunde talen",
+  "Page.LanguageReference.Item.Details.Body": "Gebruik `{0} {1}` als achtervoegsel voor de doeltaal.",
+  "Page.LanguageReference.Item.Details.Example.Key": "Voorbeeld"
+}
