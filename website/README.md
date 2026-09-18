@@ -23,15 +23,9 @@ py -m http.server 8080 --directory website
 ## GitHub Pages 部署
 
 1. 在儲存庫 **Settings → Pages** 將 **Source** 設為 **GitHub Actions**。
-2. 開啟 **Actions**，選取 **Deploy website to GitHub Pages**，按 **Run workflow** 手動執行。
-3. workflow 只會上傳 `website/`，不會將整個儲存庫部署為網站。
-4. 部署完成後，從 workflow summary 的 Pages URL 開啟網站。正式網址確認後，再更新 metadata。
-
-目前 workflow 僅接受 `workflow_dispatch`，不會因 push 自動部署。日後若要在預設分支變更時自動部署，可在 `.github/workflows/deploy-website.yml` 的 `on` 區塊加入：
-
-```yaml
-  push:
-    branches: [main]
-```
+2. `main` 分支中的 `website/` 檔案有變更並推送後，workflow 會自動執行部署。
+3. 也可以開啟 **Actions**，選取 **Deploy website to GitHub Pages**，按 **Run workflow** 手動執行。
+4. workflow 只會上傳 `website/`，不會將整個儲存庫部署為網站。
+5. 部署完成後，從 workflow summary 的 Pages URL 開啟網站。正式網址確認後，再更新 metadata。
 
 正式部署前也請確認 repository 的 Pages 與 Actions 權限政策允許 workflow 使用 `github-pages` environment。
