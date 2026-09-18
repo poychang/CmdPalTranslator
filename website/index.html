@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Translator for Command Palette：在 Windows Command Palette 中快速翻譯文字、指定目標語言並複製結果。">
+  <meta name="theme-color" content="#0b1018">
+  <meta property="og:title" content="Translator for Command Palette">
+  <meta property="og:description" content="把翻譯放進 Windows Command Palette，輸入文字即可取得結果。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/screenshots/01-main-view.png">
+  <title>Translator for Command Palette | 快速翻譯，不離開工作流</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="回到首頁">
+      <img src="assets/favicon.png" alt="Translator for Command Palette 圖示">
+      <span>Translator <small>for Command Palette</small></span>
+    </a>
+    <nav aria-label="主要導覽">
+      <a href="#features">功能</a>
+      <a href="#how-it-works">怎麼用</a>
+      <a href="#faq">常見問題</a>
+      <a class="nav-store" href="https://apps.microsoft.com/detail/9NSHZ9B3KJFW" target="_blank" rel="noopener noreferrer">Microsoft Store <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero section-wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> WINDOWS COMMAND PALETTE EXTENSION</p>
+        <h1 id="hero-title">翻譯，<em>就在手邊。</em></h1>
+        <p class="hero-lede">Translator for Command Palette 把文字翻譯放進 Windows Command Palette。叫出 Translator、輸入文字，結果就會回到你正在工作的地方。</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://apps.microsoft.com/detail/9NSHZ9B3KJFW" target="_blank" rel="noopener noreferrer">從 Microsoft Store 安裝 <span aria-hidden="true">↗</span></a>
+          <a class="button button-quiet" href="https://github.com/poychang/CmdPalTranslator" target="_blank" rel="noopener noreferrer">查看 GitHub 原始碼 <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="hero-note">適用於 Windows 11 · MIT License · 由 Poy Chang 發佈</p>
+      </div>
+      <figure class="hero-visual">
+        <div class="window-chrome"><span></span><span></span><span></span><b>Translator</b><i>⌘</i></div>
+        <img src="assets/screenshots/02-results.png" alt="Command Palette 顯示 apple 的繁體中文翻譯結果">
+        <figcaption>實際畫面：輸入內容後，翻譯結果與語言配對會直接顯示。</figcaption>
+      </figure>
+    </section>
+
+    <section class="proof-strip" aria-label="產品重點">
+      <div><strong>一個命令</strong><span>叫出 Translator</span></div>
+      <div><strong>三個來源</strong><span>Bing · Google · Aliyun</span></div>
+      <div><strong>一套語法</strong><span>text &gt;&gt; languageCode</span></div>
+    </section>
+
+    <section class="section-wrap section" id="features" aria-labelledby="features-title">
+      <div class="section-heading"><p class="eyebrow">WHY IT FITS</p><h2 id="features-title">少一個切換視窗，<br><em>多一點專注。</em></h2></div>
+      <div class="feature-grid">
+        <article class="feature-card feature-card-accent"><span class="feature-number">01</span><h3>Command Palette 原生流程</h3><p>搜尋並執行 <code>Translator</code>，不必另開瀏覽器。輸入框、結果與更多操作都在同一個工作流。</p></article>
+        <article class="feature-card"><span class="feature-number">02</span><h3>目標語言，隨手指定</h3><p>使用預設的 <code>&gt;&gt;</code> 語法覆寫單次翻譯目標，也能在 Target language 頁面保存常用語言。</p></article>
+        <article class="feature-card"><span class="feature-number">03</span><h3>結果不只看，還能帶走</h3><p>翻譯結果可直接複製；更多操作可複製原文，或開啟對應的翻譯服務網頁。</p></article>
+      </div>
+    </section>
+
+    <section class="demo-band" id="how-it-works" aria-labelledby="demo-title">
+      <div class="section-wrap demo-layout">
+        <div class="section-heading"><p class="eyebrow">QUICK START</p><h2 id="demo-title">三步，完成一次翻譯。</h2><p>以下為固定的操作示意，不會呼叫真實翻譯 API。實際結果會依你選擇的 provider 與網路狀況而定。</p></div>
+        <div class="steps">
+          <div class="step"><span>01</span><div><h3>開啟 Translator</h3><p>在 Windows Command Palette 搜尋並執行 <code>Translator</code>。</p></div></div>
+          <div class="step"><span>02</span><div><h3>輸入要翻譯的文字</h3><p>直接輸入，例如 <code>hello world</code>。若未指定語言，會使用已設定的目標語言。</p></div></div>
+          <div class="step"><span>03</span><div><h3>指定目標語言，或直接複製</h3><p>輸入 <code>hello world &gt;&gt; ja</code> 指定日文；在結果上執行 Copy 即可帶走翻譯。</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-wrap section gallery" aria-labelledby="gallery-title">
+      <div class="section-heading inline-heading"><div><p class="eyebrow">SEE IT IN CONTEXT</p><h2 id="gallery-title">熟悉的工具感，<em>清楚的結果。</em></h2></div><p>以下皆為儲存庫中的實際產品畫面。</p></div>
+      <div class="screenshot-grid">
+        <figure><img src="assets/screenshots/01-main-view.png" alt="Translator 初始畫面，顯示輸入提示與目標語言設定"><figcaption>輸入提示與目標語言</figcaption></figure>
+        <figure><img src="assets/screenshots/03-choose-target-language.png" alt="Translator 的目標語言選擇畫面"><figcaption>選擇目標語言</figcaption></figure>
+        <figure><img src="assets/screenshots/04-extension-setting.png" alt="Translator extension settings 設定畫面"><figcaption>Extension settings</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="install-band" aria-labelledby="install-title">
+      <div class="section-wrap install-layout"><div><p class="eyebrow">READY WHEN YOU ARE</p><h2 id="install-title">把下一次翻譯，<br>留在你的工作流裡。</h2></div><div><p>一般使用者只需要 Windows 11、網路連線，以及從 Microsoft Store 安裝。開發者則可依專案文件使用 .NET 10 與 Windows 建置工具。</p><a class="button button-primary" href="https://apps.microsoft.com/detail/9NSHZ9B3KJFW" target="_blank" rel="noopener noreferrer">前往 Microsoft Store <span aria-hidden="true">↗</span></a></div></div>
+    </section>
+
+    <section class="section-wrap section faq" id="faq" aria-labelledby="faq-title">
+      <div class="section-heading"><p class="eyebrow">GOOD TO KNOW</p><h2 id="faq-title">常見問題</h2></div>
+      <div class="faq-list">
+        <details open><summary>需要網路連線嗎？</summary><p>需要。翻譯請求會透過網路送至所選的第三方翻譯服務；應用程式具備 <code>internetClient</code> 能力。</p></details>
+        <details><summary>翻譯結果來自哪裡？</summary><p>目前程式內建 Bing、Google 與 Aliyun 三個 provider，預設使用 Bing，可在 Preferred provider 設定中選擇。</p></details>
+        <details><summary>可以設定預設語言嗎？</summary><p>可以。在翻譯頁面的 Target language 開啟語言設定並選取語言。內建語言包含 English、繁體中文、簡體中文、日文、韓文、法文、德文等。</p></details>
+        <details><summary>我的文字會被儲存嗎？</summary><p>依隱私權文件，應用程式與開發者不保留文字輸入或翻譯結果；翻譯時，文字與語言代碼會直接傳送給你選擇的第三方服務。</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="section-wrap footer-inner"><div><a class="brand" href="#top"><img src="assets/favicon.png" alt=""><span>Translator <small>for Command Palette</small></span></a><p>Windows Command Palette 的翻譯擴充功能。</p></div><nav aria-label="頁尾導覽"><a href="https://github.com/poychang/CmdPalTranslator" target="_blank" rel="noopener noreferrer">GitHub</a><a href="https://github.com/poychang/CmdPalTranslator/issues" target="_blank" rel="noopener noreferrer">問題回報</a><a href="https://github.com/poychang/CmdPalTranslator/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a><a href="../privacy.md">隱私權</a></nav></div></footer>
+</body>
+</html>
