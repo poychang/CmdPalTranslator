@@ -1,6 +1,6 @@
 # CmdPalTranslator 網站
 
-這是 `Translator for Command Palette` 的產品介紹網站，使用原生 HTML 與 CSS，沒有前端框架、套件管理或建置流程。網站內容以繁體中文（台灣）為主，產品名稱與實際介面文字保留英文。
+這是 `Translator for Command Palette` 的產品介紹網站，使用原生 HTML、CSS 與少量 JavaScript，沒有前端框架、套件管理或建置流程。網站以英文為預設語系，使用者可在頁首切換繁體中文（台灣）；產品名稱與實際介面文字保留英文。
 
 ## 本機預覽
 
@@ -18,6 +18,7 @@ py -m http.server 8080 --directory website
 - 實際產品畫面放在 `assets/screenshots/`；若新增操作示意，必須在畫面與文案中明確標示為示意，不可冒充實際截圖。
 - 網站沒有正式網址 metadata。部署到自訂網域或 GitHub Pages 後，才補上 `canonical` 與正式 `og:url`。
 - 連結與素材使用相對路徑，確保網站部署在 GitHub Pages 的專案子路徑時仍可載入。
+- 語系切換使用瀏覽器的 `localStorage` 保存偏好；停用 JavaScript 時仍會顯示完整英文內容。
 
 ## GitHub Pages 部署
 
