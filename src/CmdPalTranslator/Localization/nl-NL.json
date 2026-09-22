@@ -28,7 +28,7 @@
   "Page.Main.Help.SupportedLanguages.Details.SpecifyTarget.Key": "Doel opgeven",
   "Page.Main.Help.SupportedLanguages.Details.SpecifyTarget.Text": "Voeg {0} en de languageCode toe om de standaard doeltaal te overschrijven.\n\rVoorbeeld: hello world {0} zht",
 
-  "Page.Main.Error.TranslationTimedOut": "De vertaling duurde te lang."
+  "Page.Main.Error.TranslationTimedOut": "De vertaling duurde te lang.",
   "Page.Main.Error.TranslationFailed": "{0}-vertaling mislukt",
   "Page.Main.Error.RequestTimedOut": "De aanvraag heeft een time-out. Probeer het later opnieuw.",
   "Page.Main.Error.SomethingWrong": "Er is iets misgegaan...",
