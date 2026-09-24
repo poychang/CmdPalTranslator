@@ -36,6 +36,10 @@
 
 安裝後開啟 Windows Command Palette，搜尋並執行 `Translator`。
 
+> [!IMPORTANT]
+> 請只使用單一來源安裝擴充套件（WinGet EXE 安裝程式 **或** MSIX bundle）。如果兩種都安裝，可能會在 Command Palette 擴充套件設定中出現重複的 `Translator` 項目。
+> 若更新後出現重複項目，請先移除兩份安裝，再重新安裝其中一種來源即可。
+
 直接輸入文字即可翻譯：
 
 ```text
