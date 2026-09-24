@@ -36,6 +36,10 @@ The project has been upgraded to `.NET 10`. The main app is packaged as an MSIX 
 
 After installation, open Windows Command Palette, then search for and run `Translator`.
 
+> [!IMPORTANT]
+> Install the extension from one channel only (WinGet EXE installer **or** MSIX bundle). Installing both can create duplicate `Translator` entries in Command Palette extension settings.
+> If duplicate entries appear after an update, uninstall both copies, then install only one channel again.
+
 Enter text directly to translate it:
 
 ```text
